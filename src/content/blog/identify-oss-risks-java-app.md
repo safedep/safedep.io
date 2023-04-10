@@ -111,6 +111,75 @@ Identify dependencies with potentially restrictive OSS license
 vet query --from /tmp/dcj-dump --filter 'licenses.exists(p, p == "GPL-2.0")'
 ```
 
+Products output
+
+TODO: Add a risky lib in DCJ
+
+```text
+Filter evaluated with 0 out of 140 uniquely matched and 0 error(s) across 1 manifest(s)
+┌───────────┬─────────┬─────────┬────────┐
+│ ECOSYSTEM │ PACKAGE │ VERSION │ SOURCE │
+├───────────┼─────────┼─────────┼────────┤
+└───────────┴─────────┴─────────┴────────┘
+```
+
+Identify libraries that are potentially unpopular based on Github stars
+
+```bash
+vet query --from /tmp/dcj-dump --filter 'projects.exists(p, (p.type == "GITHUB") && (p.stars < 10))'
+```
+
+Products output
+
+```text
+Filter evaluated with 1 out of 140 uniquely matched and 0 error(s) across 1 manifest(s)
+┌───────────┬───────────────────────────────────────┬─────────┬─────────────────────────────────────────────────────┐
+│ ECOSYSTEM │ PACKAGE                               │ VERSION │ SOURCE                                              │
+├───────────┼───────────────────────────────────────┼─────────┼─────────────────────────────────────────────────────┤
+│ Maven     │ com.sun.istack:istack-commons-runtime │ 3.0.12  │ https://github.com/eclipse-ee4j/jaxb-istack-commons │
+└───────────┴───────────────────────────────────────┴─────────┴─────────────────────────────────────────────────────┘
+```
+
+Identify potentially unmaintained libraries as per [OpenSSF Scorecard](#)
+
+```bash
+vet query --from /tmp/dcj-dump --filter 'scorecard.scores.Maintained == 0'
+```
+
+Produces output
+
+```text
+Filter evaluated with 16 out of 140 uniquely matched and 0 error(s) across 1 manifest(s)
+┌───────────┬─────────────────────────────────────────────┬─────────────┬────────────────────────────────────────────────────────┐
+│ ECOSYSTEM │ PACKAGE                                     │ VERSION     │ SOURCE                                                 │
+├───────────┼─────────────────────────────────────────────┼─────────────┼────────────────────────────────────────────────────────┤
+│ Maven     │ io.github.openfeign.form:feign-form-spring  │ 3.8.0       │ https://github.com/openfeign/feign-form                │
+│ Maven     │ io.github.openfeign.form:feign-form         │ 3.8.0       │ https://github.com/openfeign/feign-form                │
+│ Maven     │ org.apiguardian:apiguardian-api             │ 1.1.2       │ https://github.com/apiguardian-team/apiguardian        │
+│ Maven     │ org.opentest4j:opentest4j                   │ 1.2.0       │ https://github.com/ota4j-team/opentest4j               │
+│ Maven     │ org.jsoup:jsoup                             │ 1.15.4      │ https://github.com/jhy/jsoup                           │
+│ Maven     │ com.fasterxml:classmate                     │ 1.5.1       │ https://github.com/fasterxml/java-classmate            │
+│ Maven     │ com.sun.istack:istack-commons-runtime       │ 3.0.12      │ https://github.com/eclipse-ee4j/jaxb-istack-commons    │
+│ Maven     │ jakarta.annotation:jakarta.annotation-api   │ 1.3.5       │ https://github.com/eclipse-ee4j/common-annotations-api │
+│ Maven     │ jakarta.validation:jakarta.validation-api   │ 2.0.2       │ https://github.com/eclipse-ee4j/beanvalidation-api     │
+│ Maven     │ org.hamcrest:hamcrest                       │ 2.2         │ https://github.com/hamcrest/javahamcrest               │
+│ Maven     │ com.github.stephenc.jcip:jcip-annotations   │ 1.0-1       │ https://github.com/stephenc/jcip-annotations           │
+│ Maven     │ jakarta.xml.bind:jakarta.xml.bind-api       │ 2.3.3       │ https://github.com/eclipse-ee4j/jaxb-api               │
+│ Maven     │ org.atteo:evo-inflector                     │ 1.3         │ https://github.com/atteo/evo-inflector                 │
+│ Maven     │ jakarta.transaction:jakarta.transaction-api │ 1.3.3       │ https://github.com/eclipse-ee4j/jta-api                │
+│ Maven     │ org.jboss.logging:jboss-logging             │ 3.4.3.Final │ https://github.com/jboss-logging/jboss-logging         │
+│ Maven     │ org.xmlunit:xmlunit-core                    │ 2.9.0       │ https://github.com/xmlunit/xmlunit                     │
+└───────────┴─────────────────────────────────────────────┴─────────────┴────────────────────────────────────────────────────────┘
+```
+
 ## Whats next?
 
+This post covered introductory scenario on getting started with `vet`
+especially for a Java app. Refer to [advanced usages](https://docs.safedep.io/category/-advanced-usage) on how to use policy as code
+to setup security guard rails in CI/CD with `vet`
+
+### Need help?
+
+* Join our [Discord](https://rebrand.ly/safedep-community)
+* Start a [Github Discussion](https://github.com/safedep/vet/discussions)
 
