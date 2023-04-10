@@ -79,7 +79,7 @@ vet scan --json-dump-dir /tmp/dcj-dump
 > You can optionally using `--transitive` argument to enable transitive
 > dependency resolution during scan
 
-TODO: Post output image here
+![](/images/vet-dcj-summary.png)
 
 `vet` uses an opinionated workflow to identify and prioritised risky OSS
 libraries identified in the project. However the [query workflow](https://docs.safedep.io/advanced/build-your-own-querie)
@@ -111,9 +111,7 @@ Identify dependencies with potentially restrictive OSS license
 vet query --from /tmp/dcj-dump --filter 'licenses.exists(p, p == "GPL-2.0")'
 ```
 
-Products output
-
-TODO: Add a risky lib in DCJ
+Produces output
 
 ```text
 Filter evaluated with 0 out of 140 uniquely matched and 0 error(s) across 1 manifest(s)
@@ -129,7 +127,7 @@ Identify libraries that are potentially unpopular based on Github stars
 vet query --from /tmp/dcj-dump --filter 'projects.exists(p, (p.type == "GITHUB") && (p.stars < 10))'
 ```
 
-Products output
+Produces output
 
 ```text
 Filter evaluated with 1 out of 140 uniquely matched and 0 error(s) across 1 manifest(s)
