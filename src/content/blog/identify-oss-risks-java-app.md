@@ -4,7 +4,7 @@ title: "Identify OSS Supply Chain Risks in Java Apps using vet"
 snippet: "Any modern Java application using popular frameworks like Spring extensively depends on external libraries from the open sources. In this blog we learn to identify security risks in OSS dependencies in Java applications using vet"
 publishDate: "2023-04-10 18:11"
 image: {
-  src: "images/identifying-oss-suply-chain-risks-in-java-apps-using-safedep-vet.png",
+  src: "/images/identifying-oss-suply-chain-risks-in-java-apps-using-safedep-vet.png",
   alt: "Identify OSS risks in Java app"
 }
 category: "SafeDep"
