@@ -14,12 +14,12 @@ tags: [SafeDep, vet, OSS, Security, Java, Maven, Gradle]
 
 ![Identify Risks in Java App](/images/identifying-oss-suply-chain-risks-in-java-apps-using-safedep-vet.png)
 
-## What is vet?
+## 🤔 What is vet?
 
 `vet` is a tool for identifying risks in OSS supply chain. Refer to
 [quickstart](https://docs.safedep.io/quick-start) for instructions to setup `vet` in your system.
 
-## How to setup vet?
+## 🤖 How to setup vet?
 
 > You can skip this section if you already have `vet` setup and configured
 
@@ -55,7 +55,7 @@ Verify setup and API key
 vet auth verify
 ```
 
-## Analysing Java App
+## ⚙️ Analysing Java App
 
 > The instructions here assumes `vet` is installed and setup with an API key.
 
@@ -95,7 +95,7 @@ vet query --from /tmp/dcj-dump --filter 'vulns.critical.exists(p, true) || vulns
 
 Produces output
 
-```text
+```plaintext
 ┌───────────┬───────────────────────────────────────────────────┬─────────┬────────────────────────────────────────────────────────────┐
 │ ECOSYSTEM │ PACKAGE                                           │ VERSION │ SOURCE                                                     │
 ├───────────┼───────────────────────────────────────────────────┼─────────┼────────────────────────────────────────────────────────────┤
@@ -172,14 +172,13 @@ Filter evaluated with 16 out of 140 uniquely matched and 0 error(s) across 1 man
 └───────────┴─────────────────────────────────────────────┴─────────────┴────────────────────────────────────────────────────────┘
 ```
 
-## Whats next?
+## ⚡️ Whats next?
 
 This post covered introductory scenario on getting started with `vet`
 especially for a Java app. Refer to [advanced usages](https://docs.safedep.io/category/-advanced-usage) on how to use policy as code
 to setup security guard rails in CI/CD with `vet`
 
-### Need help?
+### 🙌 Need help?
 
 * Join our [Discord](https://rebrand.ly/safedep-community)
 * Start a [Github Discussion](https://github.com/safedep/vet/discussions)
-
