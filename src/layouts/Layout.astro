@@ -6,16 +6,19 @@ import "@fontsource/inter/variable.css";
 
 export interface Props {
   title: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
+const { title, description = 'SafeDep is establishing trust in open source software supply chain.', image, imageAlt = "SafeDep Homepage" } = Astro.props;
+
 const resolvedImageWithDomain = new URL(
-  "/opengraph.jpg",
+  image || "/opengraph.jpg",
   Astro.site
 ).toString();
-
-const { title } = Astro.props;
 
 const makeTitle = title
   ? title + " | " + "SafeDep"
@@ -34,7 +37,7 @@ const makeTitle = title
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
     <SEO
       title={makeTitle}
-      description="SafeDep is establishing trust in open source software supply chain."
+      description={description}
       canonical={canonicalURL}
       twitter={{
         creator: "@safedepio",
@@ -45,11 +48,11 @@ const makeTitle = title
         basic: {
           url: canonicalURL,
           type: "website",
-          title: `SafeDep - Establishing trust in open source software supply chain`,
+          title: makeTitle,
           image: resolvedImageWithDomain,
         },
         image: {
-          alt: "SafeDep Homepage",
+          alt: imageAlt,
         },
       }}
     />
