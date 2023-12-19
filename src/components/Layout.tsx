@@ -6,9 +6,11 @@ import TopNavigationBar from "./TopNavigationBar";
 const Layout: React.FC = () => {
   return (
     <>
-      <TopNavigationBar />
-      <Outlet />
-      <FooterSection />
+      <div className="font-sans bg-white text-gray-800">
+        <TopNavigationBar />
+        <Outlet />
+        <FooterSection />
+      </div>
     </>
   );
 };

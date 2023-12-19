@@ -6,7 +6,7 @@ import { HERO_PRIMARY_MESSAGE, HERO_SECONDARY_MESSAGE } from "../Constants";
 const Home: React.FC = () => {
   return (
     <>
-      <div className="font-sans bg-white text-gray-800">
+      <div>
         <HeroSection
           primaryMessage={HERO_PRIMARY_MESSAGE}
           secondaryMessage={HERO_SECONDARY_MESSAGE}
