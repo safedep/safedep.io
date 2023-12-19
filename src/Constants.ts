@@ -1,3 +1,6 @@
+// Brand information
+export const BRAND_NAME = "SafeDep";
+
 // Hero Section
 export const HERO_PRIMARY_MESSAGE =
   "Establish Trust in Open Source Software Supply Chain";
