@@ -13,7 +13,8 @@ const navigationLinks = [
   },
   {
     name: "Blog",
-    href: "#",
+    href: "https://safedep.substack.com/",
+    target: "_blank",
   },
 ];
 
@@ -40,7 +41,12 @@ const TopNavigationBar: React.FC = () => (
       <div className="flex space-x-4 mt-4 md:mt-0">
         {navigationLinks.map((link, index) => {
           return (
-            <a href={link.href} key={index} className="hover:text-blue-300">
+            <a
+              href={link.href}
+              target={link.target}
+              key={index}
+              className="hover:text-blue-300"
+            >
               {link.name}
             </a>
           );

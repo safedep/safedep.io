@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { BRAND_ADDRESS, BRAND_COPYRIGHT, BRAND_NAME } from "../Constants";
 
 const FooterSection: React.FC = () => (
@@ -10,9 +11,9 @@ const FooterSection: React.FC = () => (
           <p className="text-sm whitespace-pre-wrap">{BRAND_ADDRESS}</p>
         </div>
         <div className="flex space-x-4">
-          <a href="#" className="hover:text-blue-300">
+          <Link to="about" className="hover:text-blue-300">
             About
-          </a>
+          </Link>
           <a href="#" className="hover:text-blue-300">
             Security
           </a>
