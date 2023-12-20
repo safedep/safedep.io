@@ -16,7 +16,7 @@ const HeroSection: React.FC<HeroSectionProps> = (props) => (
       <p className="text-lg md:text-xl lg:text-2xl mb-8">
         {props.secondaryMessage}
       </p>
-      <div className="flex space-x-4 justify-center">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center">
         <a
           href={props.primaryLink}
           className="bg-blue-500 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-blue-600 transition duration-300 ease-in-out"
