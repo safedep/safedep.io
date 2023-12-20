@@ -1,4 +1,5 @@
 import React from "react";
+import HeroSectionBackground from "./HeroSectionBackground.png";
 
 interface HeroSectionProps {
   primaryMessage: string;
@@ -10,9 +11,15 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = (props) => (
-  <section className="h-screen flex items-center bg-gradient-to-r from-blue-50 to-blue-100 text-gray-800">
+  <section
+    className="h-screen flex items-center text-gray-800"
+    style={{
+      backgroundImage: `url(${HeroSectionBackground})`,
+      backgroundSize: "cover",
+    }}
+  >
     <div className="container mx-auto text-center">
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 white">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 white lg:px-48 md:px-16">
         {props.primaryMessage}
       </h1>
       <p className="text-lg md:text-xl lg:text-2xl mb-8">
