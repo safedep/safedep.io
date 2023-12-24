@@ -2,6 +2,7 @@ import React from "react";
 import { HERO_PRIMARY_MESSAGE, HERO_SECONDARY_MESSAGE } from "../Constants";
 import LogosSection from "../components/BrandLogoSection";
 import HeroSection from "../components/HeroSection";
+import TechnologySection from "../components/TechnologySection";
 
 const Home: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
         />
 
         <LogosSection />
+        <TechnologySection />
       </div>
     </>
   );

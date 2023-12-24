@@ -22,7 +22,7 @@ const HeroSection: React.FC<HeroSectionProps> = (props) => (
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 white lg:px-48 md:px-16">
         {props.primaryMessage}
       </h1>
-      <p className="text-lg md:text-xl lg:text-2xl mb-8">
+      <p className="text-lg md:text-xl lg:text-2xl mb-8 text-gray-500 font-mono lg:px-64 md:px-32">
         {props.secondaryMessage}
       </p>
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center">
