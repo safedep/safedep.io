@@ -8,3 +8,7 @@ export const HERO_PRIMARY_MESSAGE =
   "Establishing Trust in Open Source Software Supply Chain";
 export const HERO_SECONDARY_MESSAGE =
   "Open Source Software is everywhere. We help you identify and mitigate the risks inherited from your OSS software supply chain.";
+
+// Section names for internal reference
+export const TechnologySectionName = "section-technology";
+export const BrandSectionName = "section-brand";
