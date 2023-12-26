@@ -78,7 +78,7 @@ const AboutSection: React.FC = () => {
                   <div className="flex">
                     <p className="text-xl font-semibold p-6">{founder.name}</p>
                   </div>
-                  <div className="flex">
+                  <div className="flex text-left">
                     <p className="text-xl p-6">{founder.profile}</p>
                   </div>
                 </div>
