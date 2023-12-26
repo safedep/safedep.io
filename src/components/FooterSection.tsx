@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import { BRAND_ADDRESS, BRAND_COPYRIGHT, BRAND_NAME } from "../Constants";
 
 const FooterSection: React.FC = () => (
@@ -11,14 +11,13 @@ const FooterSection: React.FC = () => (
           <p className="text-sm whitespace-pre-wrap">{BRAND_ADDRESS}</p>
         </div>
         <div className="flex space-x-4">
-          <Link to="about" className="hover:text-blue-300">
-            About
-          </Link>
           <a href="#" className="hover:text-blue-300">
-            Security
+            <FaExternalLinkAlt className="inline-block pr-1" />
+            Terms and Condition
           </a>
           <a href="#" className="hover:text-blue-300">
-            Policy
+            <FaExternalLinkAlt className="inline-block pr-1" />
+            Privacy Policy
           </a>
         </div>
       </div>

@@ -1,4 +1,6 @@
 import React from "react";
+import { FaExternalLinkAlt, FaGithub, FaIndustry } from "react-icons/fa";
+import { HERO_SECTION_NAME } from "../Constants";
 import HeroSectionBackground from "./HeroSectionBackground.png";
 
 interface HeroSectionProps {
@@ -12,6 +14,7 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = (props) => (
   <section
+    id={HERO_SECTION_NAME}
     className="h-screen flex items-center text-gray-800"
     style={{
       backgroundImage: `url(${HeroSectionBackground})`,
@@ -30,13 +33,23 @@ const HeroSection: React.FC<HeroSectionProps> = (props) => (
           href={props.primaryLink}
           className="bg-blue-500 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-blue-600 transition duration-300 ease-in-out"
         >
+          <FaExternalLinkAlt className="inline-block pr-1" />
           {props.primaryButtonName}
         </a>
         <a
           href={props.secondaryLink}
           className="bg-blue-700 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-blue-800 border border-white transition duration-300 ease-in-out"
         >
+          <FaIndustry className="inline-block pr-1" />
           {props.secondaryButtonName}
+        </a>
+        <a
+          href="https://github.com/apps/safedep"
+          target="_blank"
+          className="bg-blue-700 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-blue-800 border border-white transition duration-300 ease-in-out"
+          rel="noreferrer"
+        >
+          <FaGithub className="inline-block pr-1" /> Start for Free
         </a>
       </div>
     </div>

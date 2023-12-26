@@ -12,3 +12,5 @@ export const HERO_SECONDARY_MESSAGE =
 // Section names for internal reference
 export const TECHNOLOGY_SECTION_NAME = "section-technology";
 export const BRAND_SECTION_NAME = "section-brand";
+export const ABOUT_SECTION_NAME = "section-about";
+export const HERO_SECTION_NAME = "section-hero";

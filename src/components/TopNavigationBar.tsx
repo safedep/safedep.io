@@ -4,7 +4,11 @@ import clsx from "clsx";
 import React, { Fragment } from "react";
 import { FaGithub, FaIdBadge, FaPhone } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { BRAND_NAME, TECHNOLOGY_SECTION_NAME } from "../Constants";
+import {
+  BRAND_NAME,
+  HERO_SECTION_NAME,
+  TECHNOLOGY_SECTION_NAME,
+} from "../Constants";
 
 const navigationLinks = [
   {
@@ -48,7 +52,14 @@ const TopNavigationBar: React.FC = () => {
         <div className="flex items-center">
           <FaIdBadge className="inline-block pr-1" />
           <p className="text-xl font-semibold">
-            <Link to={"/"}>{BRAND_NAME}</Link>
+            <Link
+              to={"#"}
+              onClick={() => {
+                scrollToSectionName(HERO_SECTION_NAME);
+              }}
+            >
+              {BRAND_NAME}
+            </Link>
           </p>
         </div>
         <div className="flex space-x-4 mt-4 md:mt-0">
