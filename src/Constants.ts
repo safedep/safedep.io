@@ -10,5 +10,5 @@ export const HERO_SECONDARY_MESSAGE =
   "Open Source Software is everywhere. We help you identify and mitigate the risks inherited from your OSS software supply chain.";
 
 // Section names for internal reference
-export const TechnologySectionName = "section-technology";
-export const BrandSectionName = "section-brand";
+export const TECHNOLOGY_SECTION_NAME = "section-technology";
+export const BRAND_SECTION_NAME = "section-brand";

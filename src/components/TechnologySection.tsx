@@ -1,8 +1,8 @@
 import React from "react";
-import { TechnologySectionName } from "../Constants";
+import { TECHNOLOGY_SECTION_NAME } from "../Constants";
 
 const TechnologySection: React.FC = () => (
-  <section className="py-16 bg-slate-100" id={TechnologySectionName}>
+  <section className="py-16 bg-slate-100" id={TECHNOLOGY_SECTION_NAME}>
     <div className="container text-center mx-auto">
       <h2 className="text-3xl font-semibold mb-8">Technology</h2>
       <div className="grid lg:grid-cols-2 md:grid-flow-row gap-8">
@@ -26,9 +26,7 @@ const TechnologySection: React.FC = () => (
             </p>
           </div>
           <div className="mb-12">
-            <h3 className="font-semibold mb-4 text-2xl">
-              Malicious Package Detection
-            </h3>
+            <h3 className="font-semibold mb-4 text-2xl">Attack Detection</h3>
             <p className="text-gray-500 font-mono text-left">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry&apos;s standard dummy

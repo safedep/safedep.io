@@ -4,12 +4,12 @@ import clsx from "clsx";
 import React, { Fragment } from "react";
 import { FaGithub, FaIdBadge, FaPhone } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { BRAND_NAME, TechnologySectionName } from "../Constants";
+import { BRAND_NAME, TECHNOLOGY_SECTION_NAME } from "../Constants";
 
 const navigationLinks = [
   {
     name: "Technology",
-    href: TechnologySectionName,
+    href: TECHNOLOGY_SECTION_NAME,
     scroll: true,
   },
   {
