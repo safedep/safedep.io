@@ -6,6 +6,10 @@ export const headerData = {
       text: 'Homes',
       links: [
         {
+          text: 'Default',
+          href: getPermalink('/homes/default'),
+        },
+        {
           text: 'SaaS',
           href: getPermalink('/homes/saas'),
         },
@@ -115,7 +119,10 @@ export const headerData = {
       href: '#',
     },
   ],
-  actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
+  actions: [
+    { text: 'Register', href: '#', target: '_blank' },
+    // { text: 'GitHub', href: 'https://github.com/safedep/vet', target: '_blank' }
+  ],
 };
 
 export const footerData = {
