@@ -1,7 +1,7 @@
 ---
 draft: false
 name: "Abhisek Datta"
-title: "Founder"
+title: "Co-Founder"
 avatar: {
     src: "abhisek-datta.jpg",
     alt: "Abhisek Datta"

@@ -1,6 +1,4 @@
 ---
-import { Picture } from "@astrojs/image/components";
-// import heroImage from "assets/hero.png";
 import heroImage from "assets/vet-logo.png";
 import { Image } from "@astrojs/image/components";
 import Link from "@components/ui/link.astro";
@@ -10,28 +8,17 @@ import { Icon } from "astro-icon";
 <main
   class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
   <div class="py-6 md:order-1 hidden md:block">
-    <!-- <Picture
-      src={heroImage}
-      alt="SafeDep vet"
-      widths={[200, 400, 600]}
-      aspectRatio="4:3"
-      sizes="(max-width: 800px) 100vw, 620px"
-      loading="eager"
-      format="avif"
-    /> -->
     <Image src={heroImage} alt="SafeDep vet Architecture" />
-
   </div>
   <div>
     <h1
       class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
-      Establishing trust in open source software supply chain
+      Trust and safety for open source software consumers
     </h1>
-    <!-- <p class="text-lg mt-4 text-slate-600 max-w-xl">
-      SafeDep is a starter template for startups, marketing websites & landing
-      pages.<wbr /> Built with Astro.build and TailwindCSS. You can quickly create
-      any website with this starter.
-    </p> -->
+    <p class="text-lg mt-4 text-slate-600 max-w-xl">
+      SafeDep helps software development teams to vet open source dependencies
+      before use. Eliminate the risk of vulnerable and malicious dependencies.
+    </p>
     <div class="mt-6 flex flex-col sm:flex-row gap-3">
       <Link
         href="#"
@@ -40,7 +27,6 @@ import { Icon } from "astro-icon";
         class="flex gap-1 items-center justify-center"
         rel="noopener">
         <Icon class="text-white w-5 h-5" name="bi:arrow-up-right-circle-fill" />
-
         Get started
       </Link>
       <Link
@@ -54,9 +40,5 @@ import { Icon } from "astro-icon";
         GitHub Repo
       </Link>
     </div>
-
-    <div class="mt-6 flex flex-col sm:flex-row gap-3">
-    <a href="https://www.producthunt.com/posts/safedep-vet?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-safedep&#0045;vet" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=386732&theme=light" alt="SafeDep&#0032;Vet - Identify&#0032;open&#0032;source&#0032;risks | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-  </div>
   </div>
 </main>
