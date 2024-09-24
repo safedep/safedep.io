@@ -7,11 +7,11 @@ import Hero from '~/components/widgets/Hero.astro';
 import Brands from '~/components/widgets/Brands.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import Features from '~/components/widgets/Features.astro';
-import Features3 from '~/components/widgets/Features3.astro';
 import Stats from '~/components/widgets/Stats.astro';
 
 import { Image } from 'astro:assets';
-import SafeDepProductConcept from '../../public/images/safedep-product-concept-1.svg';
+import SafeDepProductConcept from '~/assets/images/safedep-product-concept-2.svg';
+import Integrations from '~/components/widgets/Integrations.astro';
 
 const metadata = {
   title: 'SafeDep',
@@ -42,7 +42,7 @@ const metadata = {
 
     <Fragment slot="subtitle">
       <span class="font-semibold">SafeDep</span> helps security engineering teams build
-      policy driven guardrails for OSS components. Ship products faster by leveraging OSS
+      policy driven guardrails against risky OSS components. Ship faster by leveraging OSS
       .. without <span class="text-accent dark:text-white highlight">the inherited risks.</span>
     </Fragment>
 
@@ -56,8 +56,8 @@ const metadata = {
   <!-- Stats Widget ****************** -->
 
   <Stats
-    title="Usage"
-    subtitle="Our open source project <strong>vet</strong> is extensively used by security and engineering teams to automate policy driven vetting of OSS dependencies."
+    title="Loved by Security Engineers"
+    subtitle="Our open source project <strong>vet</strong> is used by security and engineering teams to automate policy driven vetting of OSS dependencies in CI/CD."
     stats={[
       { title: 'Container Downloads', amount: '26K+' },
       { title: 'GitHub Stars', amount: '200+' },
@@ -68,15 +68,16 @@ const metadata = {
 
   <!-- Brands Widget ****************** -->
 
-  <Brands
+  <Integrations
+    title="Integrations and Support"
+    subtitle="SafeDep integrates seamlessly with popular CI/CD platforms including GitHub Actions, GitLab CI, Jenkins, and more. Supports wide range of ecosystems"
+  />
+
+  <!-- <Brands
     title="Integrations and Support"
     subtitle="SafeDep integrates seamlessly with popular CI/CD platforms including GitHub Actions, GitLab CI, Jenkins, and more. Supports wide range of ecosystems"
     icons={[]}
     images={[
-      {
-        src: 'https://cdn.pixabay.com/photo/2021/12/06/13/48/visa-6850402_1280.png',
-        alt: 'Visa',
-      },
       {
         src: 'https://cdn.pixabay.com/photo/2013/10/01/10/29/ebay-189064_1280.png',
         alt: 'Ebay',
@@ -107,7 +108,7 @@ const metadata = {
         alt: 'Yahoo',
       },
     ]}
-  />
+  /> -->
 
   <!-- Features Widget *************** -->
 
@@ -196,56 +197,6 @@ const metadata = {
     </Fragment>
   </FAQs>
 
-  <!-- Features3 Widget ************** -->
-
-  <Features3
-    title="Get in Touch"
-    subtitle="Evaluate SafeDep, try for free and ask for features, shaping our product"
-    columns={4}
-    items={[
-      {
-        title: 'Phone',
-        icon: 'tabler:phone',
-        callToAction: {
-          target: '_blank',
-          text: 'Call us',
-          href: '/',
-          variant: 'link',
-        },
-      },
-      {
-        title: 'Email',
-        icon: 'tabler:mail',
-        callToAction: {
-          target: '_blank',
-          text: 'Write to us',
-          href: '/',
-          variant: 'link',
-        },
-      },
-      {
-        title: 'Chat with sales',
-        icon: 'tabler:message-circle',
-        callToAction: {
-          target: '_blank',
-          text: 'Start chatting',
-          href: '/',
-          variant: 'link',
-        },
-      },
-      {
-        title: 'Chat with support',
-        icon: 'tabler:message-circle',
-        callToAction: {
-          target: '_blank',
-          text: 'Start chatting',
-          href: '/',
-          variant: 'link',
-        },
-      },
-    ]}
-  />
-
   <!-- CallToAction Widget *********** -->
 
   <CallToAction
@@ -254,12 +205,12 @@ const metadata = {
         variant: 'primary',
         target: '_blank',
         text: 'Book a Demo',
-        href: 'https://github.com/safedep/vet',
+        href: 'https://calendly.com/abhisek-safedep/30min',
         icon: 'tabler:rocket',
       },
     ]}
   >
-    <Fragment slot="title">Safeguard your OSS Components</Fragment>
+    <Fragment slot="title">Protect against OSS Attacks</Fragment>
 
     <Fragment slot="subtitle">
       Rollout a developer first OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails.

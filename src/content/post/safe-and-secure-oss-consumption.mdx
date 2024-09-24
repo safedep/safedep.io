@@ -1,0 +1,121 @@
+---
+publishDate: 2024-09-15T00:00:00Z
+title: 'Safe and Secure Consumption of Open Source Libraries'
+excerpt: Open Source software is the foundation of modern software projects. Any software written today consists of 70-90% of open source code in form of libraries and other components.
+image: /images/safe-secure-oss-1.png
+tags:
+  - vet
+  - guardrails
+---
+
+Open Source software is the foundation of modern software projects. Any software written today [consists of 70-90% of open source code](https://www.linuxfoundation.org/blog/blog/a-summary-of-census-ii-open-source-software-application-libraries-the-world-depends-on) in form of libraries and other components. These open source libraries often comes with security risks and introduce technical debt over time in consumer software projects. These risks include
+
+- Vulnerability
+- Malware
+- Unmaintained / unpopular projects
+- License
+
+In this post, we will look at how we can use [vet](https://github.com/safedep/vet), an open source tool for vetting open source libraries before use by software consumers.
+
+Full Disclosure: I am the creator of `vet`. You can follow the GitHub project at [https://github.com/safedep/vet](https://github.com/safedep/vet)
+
+## TL;DR
+
+Note: Examples in this post are created by using `vet` to scan [https://github.com/safedep/demo-client-java](https://github.com/safedep/demo-client-java) which is a Java app with intentionally older version of libraries
+
+- Install `vet` by following [documentation on installation](https://docs.safedep.io/installation)
+- If you are using `homebrew`, you can install it easily
+
+```
+brew tap safedep/tap
+brew install safedep/tap/vet
+```
+
+- Scan your project source code for vulnerabilities and other risks
+
+```
+vet scan -D /path/to/source
+```
+
+The default configuration should scan your package manifest (e.g. `package-lock.json`, `gradle.lockfile`, `pom.xml`) and identify the most risky open source libraries that your software depends on. Upgrading these libraries usually reduce the risk of vulnerabilities.
+
+![vet Default Scan Result](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tj758fjmzg6w9ygupppe.png)
+
+Instead of scanning entire source directory, you can scan specific package manifests as well. This is useful for monorepo or to avoid noise of `vet` picking up documentation or test data related sub-modules
+
+```
+vet scan --lockfiles gradle.lockfile --lockfiles ui/package-lock.json
+```
+
+## Filters
+
+Like most other security tools, `vet` by default uses an opinionated approach to identifying "risk" which may not be suitable for all consumers. The `filters` feature of `vet` allows consumers to identify the risky OSS libraries that they care about.
+
+- Identify only libraries that has a critical vulnerability
+
+```
+vet scan -D /path/to/source --filter 'vulns.critical.exists(p, true)'
+```
+
+![Find vulnerable dependencies](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/msc72gcqj1v1345njyni.png)
+
+- Identify libraries that are unmaintained
+
+```
+vet scan -D /path/to/source --filter 'scorecard.scores.Maintained == 0'
+```
+
+![Find unmaintained dependencies](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/arkcou1l3qz3q1p1vj0v.png)
+
+Scorecard checks are based on [OpenSSF Scorecard Project](https://scorecard.dev/)
+
+- Find libraries with a specific license
+
+```
+vet scan -D /path/to/source --filter 'licenses.exists(p, p == "MIT")'
+```
+
+For a full list of filtering capabilities, refer to the [documentation](https://docs.safedep.io/advanced/filtering)
+
+## Reporting
+
+Mitigation, fixing, response or integration with other tools requires additional information which can be obtained using various [supported reporting format](https://docs.safedep.io/reporting).
+
+Common use-cases include
+
+- Exporting risky libraries as CSV report
+
+```
+vet scan -D /path/to/source --filter 'vulns.critical.exists(p, true)' --report-csv report.csv
+```
+
+- Exporting risky libraries as SARIF report
+
+```
+vet scan -D /path/to/source --filter 'vulns.critical.exists(p, true)' --report-sarif report.sarif
+```
+
+## Policy as Code
+
+The filters can be combined together into YAML document to achieve policy as code capability with `vet`. It can be used to build a guard rail in CI/CD against introducing risky OSS libraries.
+
+[Example Policy](https://github.com/safedep/vet/blob/main/samples/filter-suites/fs-generic.yml)
+
+```
+vet scan -D /path/to/source --filter-suite policy.yml --filter-fail
+```
+
+Policy violations will trigger a non-zero exit code in `vet` with error such as
+
+```
+scan failed due to error: CEL Filter Suite analyzer raised an event to fail with: failed due to filter suite match on demo-client-java/gradle.lockfile
+```
+
+This is useful for CI integration where the build step is failed based on exit code. Refer to [policy as code documentation](https://docs.safedep.io/advanced/polic-as-code) for more details.
+
+## Conclusion
+
+Consuming OSS libraries require security vetting. [vet](https://github.com/safedep/vet) project goal is to make the process of OSS library vetting easy and automated while providing the necessary controls and customization for wider adoption. 
+
+[vet](https://github.com/safedep/vet) is a community driven project and welcomes community participation and contribution. Report bugs or ask for new feature using [GitHub issue](https://github.com/safedep/vet/issues) and join us on [community Discord](https://docs.safedep.io/community).
+
