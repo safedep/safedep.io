@@ -1,17 +1,17 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 
-import Hero from '~/components/widgets/Hero.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero from '~/components/widgets/Hero.astro';
 
-import Features2 from '~/components/widgets/Features2.astro';
-import Features from '~/components/widgets/Features.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import Features3 from '~/components/widgets/Features3.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
 import Brands from '~/components/widgets/Brands.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+import Stats from '~/components/widgets/Stats.astro';
 
-import { YouTube } from 'astro-embed';
+import { Image } from 'astro:assets';
+import SafeDepProductConcept from '../../public/images/safedep-product-concept-1.svg';
 
 const metadata = {
   title: 'SafeDep',
@@ -47,32 +47,17 @@ const metadata = {
     </Fragment>
 
     <Fragment slot="image">
-      <YouTube id="gxBkghlglTg" title="Astro just Launched.... Could it be the ultimate web framework?" />
-      <style is:inline>
-        lite-youtube {
-          margin: 0 auto;
-          max-width: 100%;
-        }
-      </style>
+      <Image
+        src={SafeDepProductConcept}
+        alt="SafeDep Product Concept" />
     </Fragment>
   </Hero>
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="About us"
-    subtitle="We believe in the magic of turning dreams into stunning realities. Founded by passionate developers with a shared vision, we set out to simplify the website creation process. Our templates bring together the innovation of Astro 4.0 and the versatility of Tailwind CSS, enabling you to express your unique brand identity like never before."
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
 
   <!-- Stats Widget ****************** -->
 
   <Stats
     title="Usage"
-    subtitle="Our open source project <strong>vet</strong> is extensively used by security & engineering teams to achieve policy driven vetting of OSS dependencies."
+    subtitle="Our open source project <strong>vet</strong> is extensively used by security and engineering teams to automate policy driven vetting of OSS dependencies."
     stats={[
       { title: 'Container Downloads', amount: '26K+' },
       { title: 'GitHub Stars', amount: '200+' },
@@ -171,15 +156,16 @@ const metadata = {
   <!-- FAQs Widget ******************* -->
 
   <FAQs
+    id="faq"
     title="Frequently Asked Questions"
     items={[
       {
-        title: 'What are landing page templates?',
+        title: 'What is Software Composition Analysis (SCA)?',
         description:
           'Landing page templates are pre-designed web page layouts that are specifically created to serve as a foundation for building effective landing pages. These templates are designed to capture the attention of visitors and guide them towards a specific action or goal, such as signing up for a newsletter, making a purchase, or downloading a resource.',
       },
       {
-        title: 'Why should I use a template?',
+        title: 'How do I rollout an OSS Governance program?',
         description:
           'Some of the advantages are that they provide a ready-to-use structure,  saving you significant time. Are designed with user-friendliness in mind and provide a cost-effective alternative, saving you money while still delivering a quality result.',
       },
