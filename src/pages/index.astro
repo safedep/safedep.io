@@ -4,7 +4,6 @@ import Layout from '~/layouts/PageLayout.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Hero from '~/components/widgets/Hero.astro';
 
-import Brands from '~/components/widgets/Brands.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import Features from '~/components/widgets/Features.astro';
 import Stats from '~/components/widgets/Stats.astro';
@@ -163,32 +162,32 @@ const metadata = {
       {
         title: 'What is Software Composition Analysis (SCA)?',
         description:
-          'Landing page templates are pre-designed web page layouts that are specifically created to serve as a foundation for building effective landing pages. These templates are designed to capture the attention of visitors and guide them towards a specific action or goal, such as signing up for a newsletter, making a purchase, or downloading a resource.',
+          'SCA is the process of identify the various components that make up a software artifact. Typically SCA tools identify OSS dependencies and their vulnerabilities by matching versions against known vulnerabilities. SCA tools are known to be noisy and ineffecient due to lack of contextual risk identification. Next-gen SCA tools attempts to eliminate noise through reachability analysis.',
       },
       {
-        title: 'How do I rollout an OSS Governance program?',
+        title: 'Do I need proactive guardrails against risky OSS components?',
         description:
-          'Some of the advantages are that they provide a ready-to-use structure,  saving you significant time. Are designed with user-friendliness in mind and provide a cost-effective alternative, saving you money while still delivering a quality result.',
+          'You need proactive guardrails against risky OSS components. Fixing risky OSS components typically involves upgrading to a patched version when available or migrating to a safer dependency. This is notoriously hard in large codebases. Hence proactive guardrails must be put in place to ensure unmaintained or untrustworthy OSS dependencies are not introduced in the first place.',
       },
       {
-        title: 'Can I preview templates before buying?',
+        title: 'How is SafeDep different from convention SCA?',
         description:
-          'Yes, the templates allow you to preview them before making a purchase. There is a "Demo" button associated with each template.',
+          'SafeDep aggregates OSS security metadata and determines safety of OSS components not just based on vulnerabilities but also on other important attributes such as licensing, popularity, OpenSSF scorecard, malicious intent, and more. SafeDep also provides policy as code to enforce your opinionated security guardrails.',
       },
       {
-        title: 'Do I need technical skills to use a template?',
+        title: 'What if a critical vulnerability found in an unmaintained OSS dependency?',
         description:
-          'Advanced technical skills are not required to use a template, but having a basic understanding of web navigation and familiarity with using online tools can still be beneficial. If you have more specific customization needs, you might need to consult guides or reach out to customer support for assistance.',
+          'You will have to analyse and fix the vulnerability in-house. Alternatively, SafeDep can help you provide a patched and backward compatible version of OSS package mitigating critical vulnerabilities.',
       },
       {
-        title: 'Can I use the template on multiple websites?',
+        title: 'How do I deploy vet and SafeDep Cloud?',
         description:
-          'No, the template comes with a single-use license, meaning you can use the template on one website or project only. Using the template on additional websites would require purchasing additional licenses.',
+          '<a href="https://github.com/safedep/vet" target="_blank">vet</a> is free and open source. You can get started for free. SafeDep helps deploy, manage and operate vet at scale, across 1000+ repositories. SafeDep is a multi-tenant cloud service. However, it can also be self-hosted on-premises for meeting compliance requirements',
       },
       {
-        title: 'What if I need help with customization?',
+        title: 'What is SafeDep "developer first"?',
         description:
-          "The templates provides a comprehensive step-by-step guide that walk you through the customization process. If you still have doubts, you can reach out to our customer support team. They can answer your questions, provide guidance on customization, and address any issues you're facing.",
+          "We believe the future of cyber security is close collaboration between security and engineering teams. These teams are likely to build organization and platform specific security solutions. SafeDep intends to help security engineering teams to achieve safe and trusted OSS guarantees for their internal developer platform.",
       },
     ]}
   >
