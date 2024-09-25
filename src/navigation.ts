@@ -2,7 +2,7 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
 export const bookADemoLink = 'https://calendly.com/abhisek-safedep/30min';
 export const joinWaitListLink = '#';
-export const registerLink = '#';
+export const registerLink = 'https://getwaitlist.com/waitlist/20724';
 export const safedepGitHubOrgLink = 'https://github.com/safedep';
 export const safedepVetGitHubLink = 'https://github.com/safedep/vet';
 export const mainCallToActionTitle = 'Protect against OSS Attacks';
@@ -19,7 +19,7 @@ export const headerData = {
         },
         {
           text: 'Govern',
-          href: '#'
+          href: getPermalink('/solution/govern'),
         },
         {
           text: 'Fix',

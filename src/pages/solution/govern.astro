@@ -4,11 +4,11 @@ import Layout from '~/layouts/PageLayout.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Hero2 from '~/components/widgets/Hero2.astro';
 import { bookADemoLink, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
-import SolutionIdentifyImage from '~/assets/images/solution-identify-1.svg';
+import SolutionGovernImage from '~/assets/images/solution-govern-1.svg';
 import Features from '~/components/widgets/Features.astro';
 
 const metadata = {
-  title: 'Identify Open Source Risks',
+  title: 'Govern Open Source Risks with Guardrails',
 };
 ---
 
@@ -16,20 +16,20 @@ const metadata = {
   <!-- Hero2 Widget ******************* -->
 
   <Hero2
-    tagline="Identify Open Source Risks"
-    title="What are the risks in my OSS Supply Chain?"
-    subtitle="70-90% of any modern applications constitute open source components. Risky OSS components can introduce security vulnerabilities, compliance issues, and operational risks."
+    tagline="Govern Open Source Usage"
+    title="Prevent Open Source Risks with Security Guardrails"
+    subtitle="Not every risky open source component has a fix, especially those that are unmaintained. Proactive security guardrails to prevent potentially risky OSS components from being included in a project is the best defense."
     actions={[
       { variant: 'primary', text: 'Book a Demo', href: bookADemoLink, icon: 'tabler:square-rounded-arrow-right' },
       { text: 'Learn more', href: '#features' },
     ]}
     image={{
-      src: SolutionIdentifyImage,
+      src: SolutionGovernImage,
       alt: 'Children telling a story. Long-form Sales Landing Page demo',
     }}
   />
 
-  <Features
+  <!-- <Features
     id="features"
     tagline="Identify Open Source Risks"
     title="Build your OSS Inventory with SafeDep"
@@ -60,7 +60,7 @@ const metadata = {
         icon: 'tabler:rocket',
       },
     ]}
-  />
+  /> -->
 
   <CallToAction
     actions={[
