@@ -6,6 +6,7 @@ import FAQs from '~/components/widgets/FAQs.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import Features3 from '~/components/widgets/Features3.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import { bookADemoLink, safedepVetGitHubLink } from '~/navigation';
 
 const metadata = {
   title: 'Pricing',
@@ -17,8 +18,8 @@ const metadata = {
 
   <HeroText
     tagline="Pricing"
-    title="Stellar Pricing for Every Journey"
-    subtitle="Choose the perfect plan that aligns with your cosmic goals."
+    title="Simple pricing plans for every need"
+    subtitle="Choose the plan that aligns with your needs."
   />
 
   <!-- Pricing Widget ******************* -->
@@ -28,84 +29,92 @@ const metadata = {
     subtitle="Only pay for what you need"
     prices={[
       {
-        title: 'basic',
-        subtitle: 'Optimal choice for personal use',
-        price: 29,
+        title: 'free',
+        subtitle: 'Identify OSS Risks',
+        price: '0',
         period: 'per month',
         items: [
           {
-            description: 'Etiam in libero, et volutpat',
+            description: 'Open Source SCA',
           },
           {
-            description: 'Aenean ac nunc dolor tristique',
+            description: 'CI/CD Integration',
           },
           {
-            description: 'Cras scelerisque accumsan lib',
+            description: 'Policy as Code (CEL)',
           },
           {
-            description: 'In hac habitasse',
+            description: 'Security Guardrails',
+          },
+          {
+            description: 'JSON / CSV / .. reporting',
           },
         ],
         callToAction: {
           target: '_blank',
-          text: 'Get started',
-          href: '#',
+          text: 'Get Started',
+          href: safedepVetGitHubLink,
         },
       },
       {
         title: 'standard',
-        subtitle: 'Optimal choice for small teams',
-        price: 69,
+        subtitle: 'Identify and Govern OSS Risks',
+        price: '..',
         period: 'Per Month',
         items: [
           {
-            description: 'Proin vel laoreet',
+            description: 'SDK and API access',
           },
           {
-            description: 'Ut efficitur habitasse egestas',
+            description: 'Central Policy Management',
           },
           {
-            description: 'Volutpat hac curabitur',
+            description: 'SBOM, SaaSBOM, CBOM',
           },
           {
-            description: 'Pellentesque blandit ut nibh',
+            description: 'Inventory and Risk Dashboard',
           },
           {
-            description: 'Donec fringilla sem',
+            description: 'SSO / Platform integration',
           },
         ],
         callToAction: {
           target: '_blank',
-          text: 'Get started',
-          href: '#',
+          text: 'Talk to us',
+          href: bookADemoLink,
         },
         hasRibbon: true,
         ribbonTitle: 'popular',
       },
       {
-        title: 'premium',
-        subtitle: 'Optimal choice for companies',
-        price: 199,
+        title: 'enterprise',
+        subtitle: 'Mitigate OSS Risks',
+        price: ' .. ',
         period: 'Per Month',
         items: [
           {
-            description: 'Curabitur suscipit risus',
+            description: 'NIST / SSDF Compliance',
           },
           {
-            description: 'Aliquam habitasse malesuada',
+            description: 'Custom / Backported Fix',
           },
           {
-            description: 'Suspendisse sit amet blandit',
+            description: 'Malware Protection',
           },
           {
-            description: 'Suspendisse auctor blandit dui',
+            description: 'Trusted Build with Provenance',
+          },
+          {
+            description: 'On-premise Deployment',
           },
         ],
         callToAction: {
           target: '_blank',
-          text: 'Get started',
-          href: '#',
+          text: 'Talk to us',
+          href: bookADemoLink,
         },
+        hasRibbon: true,
+        ribbonTitle: 'compliance+',
       },
     ]}
   />

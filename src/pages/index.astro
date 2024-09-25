@@ -11,6 +11,7 @@ import Stats from '~/components/widgets/Stats.astro';
 import { Image } from 'astro:assets';
 import SafeDepProductConcept from '~/assets/images/safedep-product-concept-2.svg';
 import Integrations from '~/components/widgets/Integrations.astro';
+import { bookADemoLink, joinWaitListLink, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
 
 const metadata = {
   title: 'SafeDep',
@@ -27,7 +28,7 @@ const metadata = {
         variant: 'primary',
         target: '_blank',
         text: 'Join Waitlist',
-        href: '#',
+        href: joinWaitListLink,
         icon: 'tabler:comet',
       },
       { text: 'Learn more', href: '#features' },
@@ -204,15 +205,15 @@ const metadata = {
         variant: 'primary',
         target: '_blank',
         text: 'Book a Demo',
-        href: 'https://calendly.com/abhisek-safedep/30min',
+        href: bookADemoLink,
         icon: 'tabler:rocket',
       },
     ]}
   >
-    <Fragment slot="title">Protect against OSS Attacks</Fragment>
+    <Fragment slot="title">{mainCallToActionTitle}</Fragment>
 
     <Fragment slot="subtitle">
-      Rollout a developer first OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails.
+      {mainCallToActionText}
     </Fragment>
   </CallToAction>
 </Layout>

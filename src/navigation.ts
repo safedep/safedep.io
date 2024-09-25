@@ -1,5 +1,13 @@
 import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
+export const bookADemoLink = 'https://calendly.com/abhisek-safedep/30min';
+export const joinWaitListLink = '#';
+export const registerLink = '#';
+export const safedepGitHubOrgLink = 'https://github.com/safedep';
+export const safedepVetGitHubLink = 'https://github.com/safedep/vet';
+export const mainCallToActionTitle = 'Protect against OSS Attacks';
+export const mainCallToActionText = 'Rollout a developer first OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails.';
+
 export const headerData = {
   links: [
     {
@@ -7,7 +15,7 @@ export const headerData = {
       links: [
         {
           text: 'Identify',
-          href: '#'
+          href: getPermalink('/solution/identify'),
         },
         {
           text: 'Govern',
@@ -124,29 +132,34 @@ export const headerData = {
     //   ],
     // },
     {
+      text: 'Pricing',
+      href: getPermalink('/pricing'),
+    },
+    {
       text: 'Blog',
-      links: [
-        {
-          text: 'Blog List',
-          href: getBlogPermalink(),
-        },
-        // {
-        //   text: 'Article',
-        //   href: getPermalink('get-started-website-with-astro-tailwind-css', 'post'),
-        // },
-        // {
-        //   text: 'Article (with MDX)',
-        //   href: getPermalink('markdown-elements-demo-post', 'post'),
-        // },
-        // {
-        //   text: 'Category Page',
-        //   href: getPermalink('tutorials', 'category'),
-        // },
-        // {
-        //   text: 'Tag Page',
-        //   href: getPermalink('astro', 'tag'),
-        // },
-      ],
+      href: getBlogPermalink(),
+      // links: [
+      //   {
+      //     text: 'Blog List',
+      //     href: getBlogPermalink(),
+      //   },
+      //   {
+      //     text: 'Article',
+      //     href: getPermalink('get-started-website-with-astro-tailwind-css', 'post'),
+      //   },
+      //   {
+      //     text: 'Article (with MDX)',
+      //     href: getPermalink('markdown-elements-demo-post', 'post'),
+      //   },
+      //   {
+      //     text: 'Category Page',
+      //     href: getPermalink('tutorials', 'category'),
+      //   },
+      //   {
+      //     text: 'Tag Page',
+      //     href: getPermalink('astro', 'tag'),
+      //   },
+      // ],
     },
     // {
     //   text: 'Widgets',
@@ -154,8 +167,8 @@ export const headerData = {
     // },
   ],
   actions: [
-    { text: 'Register', href: '#', target: '_blank' },
-    { text: 'Book a Demo', href: 'https://calendly.com/abhisek-safedep/30min', target: '_blank' },
+    { text: 'Register', href: registerLink, target: '_blank' },
+    { text: 'Book a Demo', href: bookADemoLink, target: '_blank' },
     // { text: 'GitHub', href: 'https://github.com/safedep/vet', target: '_blank' }
   ],
 };
