@@ -2,7 +2,9 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
 export const bookADemoLink = 'https://calendly.com/abhisek-safedep/30min';
 export const joinWaitListLink = '#';
-export const registerLink = 'https://getwaitlist.com/waitlist/20724';
+// export const registerLink = 'https://getwaitlist.com/waitlist/20724';
+export const registerLink = getPermalink('/register');
+export const registerLinkTarget = '';
 export const safedepGitHubOrgLink = 'https://github.com/safedep';
 export const safedepVetGitHubLink = 'https://github.com/safedep/vet';
 export const mainCallToActionTitle = 'Protect against OSS Attacks';
@@ -167,7 +169,7 @@ export const headerData = {
     // },
   ],
   actions: [
-    { text: 'Register', href: registerLink, target: '_blank' },
+    { text: 'Register', href: registerLink, target: registerLinkTarget },
     { text: 'Book a Demo', href: bookADemoLink, target: '_blank' },
     // { text: 'GitHub', href: 'https://github.com/safedep/vet', target: '_blank' }
   ],
