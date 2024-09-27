@@ -16,7 +16,7 @@ metadata:
     index: true
     follow: true
   openGraph:
-    site_name: SafeDep
+    site_name: SafeDep - Safe and Trusted OSS
     images:
       - url: '~/assets/images/default.png'
         width: 1200
