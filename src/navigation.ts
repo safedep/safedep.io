@@ -25,7 +25,7 @@ export const headerData = {
         },
         {
           text: 'Fix',
-          href: '#'
+          href: getPermalink('/solution/fix'),
         },
       ],
     },
