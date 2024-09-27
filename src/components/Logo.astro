@@ -1,0 +1,19 @@
+---
+import { SITE } from 'astrowind:config';
+import { Image } from 'astro:assets';
+import logo from '../../public/logo.svg';
+---
+
+<span
+  class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white"
+>
+
+  <div class="flex">
+    <div class="w-7 mr-2">
+      <Image src={logo} alt="SafeDep logo" />
+    </div>
+    <div class="ml-auto">
+      <span class="text-primary dark:text-white highlight">{SITE?.name}</span>
+    </div>
+  </div>
+</span>

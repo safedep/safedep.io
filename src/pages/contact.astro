@@ -1,44 +1,79 @@
 ---
-import { Icon } from "astro-icon";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/container.astro";
-import Sectionhead from "@components/sectionhead.astro";
-import Button from "@components/ui/button.astro";
-import Contactform from "@components/contactform.astro";
+import Layout from '~/layouts/PageLayout.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+import ContactUs from '~/components/widgets/Contact.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+
+const metadata = {
+  title: 'Contact',
+};
 ---
 
-<Layout title="Contact">
-  <Container>
-    <Sectionhead>
-      <Fragment slot="title">Contact</Fragment>
-      <Fragment slot="desc">We are a here to help.</Fragment>
-    </Sectionhead>
+<Layout metadata={metadata}>
+  <!-- HeroText Widget ******************* -->
 
-    <div class="grid md:grid-cols-2 gap-10 mx-auto max-w-4xl mt-16">
-      <div>
-        <h2 class="font-medium text-2xl text-gray-800">Contact SafeDep</h2>
-        <p class="text-lg leading-relaxed text-slate-500 mt-3">
-          Have something to say? We are here to help.
-        </p>
-        <div class="mt-5">
-          <div class="flex items-center mt-2 space-x-2 text-gray-600">
-            <Icon class="text-gray-400 w-4 h-4" name="uil:map-marker" />
-            <span>Digital, Everywhere</span>
-          </div><div class="flex items-center mt-2 space-x-2 text-gray-600">
-            <Icon class="text-gray-400 w-4 h-4" name="uil:envelope" /><a
-              href="mailto:contact@safedep.io"
-              >contact@safedep.io</a
-            >
-          </div><div class="flex items-center mt-2 space-x-2 text-gray-600">
-            <!-- <Icon class="text-gray-400 w-4 h-4" name="uil:phone" /><a
-              href="tel:+1 (987) 4587 899">+1 (987) 4587 899</a
-            > -->
-          </div>
-        </div>
-      </div>
-      <div>
-        <Contactform />
-      </div>
-    </div>
-  </Container>
+  <HeroText tagline="Contact" title="Let's Connect!" />
+
+  <ContactUs
+    id="form"
+    title="Drop us a message today!"
+    subtitle="For quicker answers, explore our FAQs section. You may find the solution you're looking  for right there! If not, our support team is delighted to help you."
+    inputs={[
+      {
+        type: 'text',
+        name: 'name',
+        label: 'Name',
+      },
+      {
+        type: 'email',
+        name: 'email',
+        label: 'Email',
+      },
+    ]}
+    textarea={{
+      label: 'Message',
+    }}
+    disclaimer={{
+      label:
+        'By submitting this contact form, you acknowledge and agree to the collection of your personal information.',
+    }}
+    description="Our support team typically responds within 24 business hours."
+  />
+
+  <!-- Features2 Widget ************** -->
+
+  <Features2
+    title="We are here to help!"
+    items={[
+      {
+        title: 'General support',
+        description: `Chat with us for inquiries related to account management, website navigation, payment issues, accessing purchased templates or general questions about the website's functionality.`,
+      },
+      {
+        title: 'Contact sales',
+        description:
+          'Chat with us for questions about purchases, customization options, licensing for commercial use, inquiries about specific template, etc.',
+      },
+      {
+        title: 'Technical support',
+        description:
+          'Chat with us when facing issues like template installation, problems editing difficulties, compatibility issues with software or download errors, or other technical challenges related to using the templates.',
+      },
+      {
+        title: 'Phone',
+        description: '+1 (234) 567-890',
+        icon: 'tabler:headset',
+      },
+      {
+        title: 'Email',
+        description: 'contact@support.com',
+        icon: 'tabler:mail',
+      },
+      {
+        title: 'Location',
+        description: '1234 Lorem Ipsum St, 12345, Miami, EEUU',
+        icon: 'tabler:map-pin',
+      },
+    ]}
+  />
 </Layout>

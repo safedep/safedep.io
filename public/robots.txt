@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://safedep.io/sitemap-index.xml
+Disallow:

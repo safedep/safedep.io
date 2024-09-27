@@ -1,0 +1,83 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
+import { bookADemoLink, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
+import SolutionIdentifyImage from '~/assets/images/solution-identify-1.svg';
+import Features from '~/components/widgets/Features.astro';
+
+const metadata = {
+  title: 'Identify Open Source Risks',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero2 Widget ******************* -->
+
+  <Hero2
+    tagline="Identify Open Source Risks"
+    title="What are the risks in my OSS Supply Chain?"
+    subtitle="70-90% of any modern applications constitute open source components. Risky OSS components can introduce security vulnerabilities, compliance issues, and operational risks."
+    actions={[
+      { variant: 'primary', text: 'Book a Demo', href: bookADemoLink, icon: 'tabler:square-rounded-arrow-right' },
+      { text: 'Learn more', href: '#features' },
+    ]}
+    image={{
+      src: SolutionIdentifyImage,
+      alt: 'Children telling a story. Long-form Sales Landing Page demo',
+    }}
+  />
+
+  <Features
+    id="features"
+    tagline="Identify Open Source Risks"
+    title="Build your OSS Inventory with SafeDep"
+    subtitle="Any cyber security risk identification and governance program starts with building an accurate and upto-date inventory. For OSS, this means knowing what components are in use, where they are used, and what risks they introduce."
+    items={[
+      {
+        title: 'Scan and Build Inventory',
+        description:
+          'SafeDep scans your source code repositories, package manifests to build an accurate inventory of OSS components. Export inventory to CycloneDX SBOM for regulatory compliance.',
+        icon: 'tabler:brand-tailwind',
+      },
+      {
+        title: 'OSS Intelligence',
+        description:
+          'SafeDep leverages open source security metadata from deps.dev, OSV, NVD, EPSS and internally built GitHub repository metadata index.',
+        icon: 'tabler:components',
+      },
+      {
+        title: 'Easy Deployment',
+        description:
+          'SafeDep can be deployed as a GitHub Action, GitLab CI pipeline, Jenkins pipeline or as a standalone CLI tool. Inventory built by these integrations are aggregated for central query, policy enforcement and alerting.',
+        icon: 'tabler:list-check',
+      },
+      {
+        title: 'Accuracy',
+        description:
+          'SafeDep code analysis engine correlates identified OSS components with actual usage in source code. This ensures that only used components are reported in the inventory thereby reducing false positives.',
+        icon: 'tabler:rocket',
+      },
+    ]}
+  />
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        target: '_blank',
+        text: 'Book a Demo',
+        href: bookADemoLink,
+        icon: 'tabler:rocket',
+      },
+    ]}
+  >
+    <Fragment slot="title">{mainCallToActionTitle}</Fragment>
+
+    <Fragment slot="subtitle">
+      {mainCallToActionText}
+    </Fragment>
+  </CallToAction>
+
+</Layout>

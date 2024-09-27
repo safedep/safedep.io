@@ -1,82 +1,48 @@
 ---
-import { SEO } from "astro-seo";
-import Footer from "@components/footer.astro";
-import Navbar from "@components/navbar/navbar.astro";
-import "@fontsource/inter/variable.css";
+import '~/assets/styles/tailwind.css';
+
+import { I18N } from 'astrowind:config';
+
+import CommonMeta from '~/components/common/CommonMeta.astro';
+import Favicons from '~/components/Favicons.astro';
+import CustomStyles from '~/components/CustomStyles.astro';
+import ApplyColorMode from '~/components/common/ApplyColorMode.astro';
+import Metadata from '~/components/common/Metadata.astro';
+import SiteVerification from '~/components/common/SiteVerification.astro';
+import Analytics from '~/components/common/Analytics.astro';
+import BasicScripts from '~/components/common/BasicScripts.astro';
+
+// Comment the line below to disable View Transitions
+import { ViewTransitions } from 'astro:transitions';
+
+import type { MetaData as MetaDataType } from '~/types';
 
 export interface Props {
-  title: string;
-  description?: string;
-  image?: string;
-  imageAlt?: string;
+  metadata?: MetaDataType;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-
-const { title, description = 'SafeDep is establishing trust in open source software supply chain.', image, imageAlt = "SafeDep Homepage" } = Astro.props;
-
-const resolvedImageWithDomain = new URL(
-  image || "/opengraph.jpg",
-  Astro.site
-).toString();
-
-const makeTitle = title
-  ? title + " | " + "SafeDep"
-  : "SafeDep - Establishing trust in open source software supply chain";
+const { metadata = {} } = Astro.props;
+const { language, textDirection } = I18N;
 ---
 
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang={language} dir={textDirection} class="2xl:text-[20px]">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
-    <link rel="icon" type="image/ico" href="/favicon.ico" />
-    <meta name="generator" content={Astro.generator} />
+    <CommonMeta />
+    <Favicons />
+    <CustomStyles />
+    <ApplyColorMode />
+    <Metadata {...metadata} />
+    <SiteVerification />
+    <Analytics />
 
-    <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
-    <SEO
-      title={makeTitle}
-      description={description}
-      canonical={canonicalURL}
-      twitter={{
-        creator: "@safedepio",
-        site: "@safedepio",
-        card: "summary_large_image",
-      }}
-      openGraph={{
-        basic: {
-          url: canonicalURL,
-          type: "website",
-          title: makeTitle,
-          image: resolvedImageWithDomain,
-        },
-        image: {
-          alt: imageAlt,
-        },
-      }}
-    />
+    <!-- Comment the line below to disable View Transitions -->
+    <ViewTransitions fallback="swap" />
   </head>
-  <!-- Google tag (gtag.js) -->
-  <script type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-35RRJQMJ5Q"></script>
-  <script type="text/partytown">
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-35RRJQMJ5Q');
-  </script>
-  <script src="https://my.heyform.net/embed?v=2022.5.1"></script>
-  <body>
-    <Navbar />
+
+  <body class="antialiased text-default bg-page tracking-tight">
     <slot />
-    <Footer />
-    <style is:global>
-      /* Improve Page speed */
-      /* https://css-tricks.com/almanac/properties/c/content-visibility/ */
-      img {
-        content-visibility: auto;
-      }
-    </style>
-    <div class="heyform" data-id="6lDcg1vD" data-mode="2" data-button-text="Launch Form"></div>
+
+    <BasicScripts />
   </body>
 </html>

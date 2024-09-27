@@ -1,18 +1,219 @@
 ---
-import Container from "@components/container.astro";
-import Cta from "@components/cta.astro";
-import Features from "@components/features.astro";
-import Footer from "@components/footer.astro";
-import Hero from "@components/hero.astro";
-import Logos from "@components/logos.astro";
-import Layout from "@layouts/Layout.astro";
+import Layout from '~/layouts/PageLayout.astro';
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero from '~/components/widgets/Hero.astro';
+
+import FAQs from '~/components/widgets/FAQs.astro';
+import Features from '~/components/widgets/Features.astro';
+import Stats from '~/components/widgets/Stats.astro';
+
+import { Image } from 'astro:assets';
+import SafeDepProductConcept from '~/assets/images/safedep-product-concept-2.svg';
+import Integrations from '~/components/widgets/Integrations.astro';
+import { bookADemoLink, joinWaitListLink, joinWaitListLinkTarget, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
+
+const metadata = {
+  title: 'SafeDep',
+};
 ---
 
-<Layout title="">
-  <Container>
-    <Hero />
-    <Features />
-    <!-- <Logos /> -->
-    <Cta />
-  </Container>
+<Layout metadata={metadata}>
+  <!-- Hero Widget ******************* -->
+
+  <Hero
+    tagline="#vet OSS with #SafeDep"
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Join Waitlist',
+        href: joinWaitListLink,
+        target: joinWaitListLinkTarget,
+        icon: 'tabler:comet',
+      },
+      { text: 'Learn more', href: '#features' },
+    ]}
+  >
+    <Fragment slot="title">
+      <span class="text-accent dark:text-white highlight">Safe</span> and
+      <span class="text-accent dark:text-white highlight">Trusted</span> OSS for
+      Security Engineering Teams
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      <span class="font-semibold">SafeDep</span> helps security engineering teams build
+      policy driven guardrails against risky OSS components. Ship faster by leveraging OSS
+      .. without <span class="text-accent dark:text-white highlight">the inherited risks.</span>
+    </Fragment>
+
+    <Fragment slot="image">
+      <Image
+        src={SafeDepProductConcept}
+        alt="SafeDep Product Concept" />
+    </Fragment>
+  </Hero>
+
+  <!-- Stats Widget ****************** -->
+
+  <Stats
+    title="Loved by Security Engineers"
+    subtitle="Our open source project <strong>vet</strong> is used by security and engineering teams to automate policy driven vetting of OSS dependencies in CI/CD."
+    stats={[
+      { title: 'Container Downloads', amount: '26K+' },
+      { title: 'GitHub Stars', amount: '200+' },
+      // { title: 'User Ratings', amount: '4.8' },
+      // { title: 'Satisfied Clients', amount: '116K' },
+    ]}
+  />
+
+  <!-- Brands Widget ****************** -->
+
+  <Integrations
+    title="Integrations and Support"
+    subtitle="SafeDep integrates seamlessly with popular CI/CD platforms including GitHub Actions, GitLab CI, Jenkins, and more. Supports wide range of ecosystems"
+  />
+
+  <!-- <Brands
+    title="Integrations and Support"
+    subtitle="SafeDep integrates seamlessly with popular CI/CD platforms including GitHub Actions, GitLab CI, Jenkins, and more. Supports wide range of ecosystems"
+    icons={[]}
+    images={[
+      {
+        src: 'https://cdn.pixabay.com/photo/2013/10/01/10/29/ebay-189064_1280.png',
+        alt: 'Ebay',
+      },
+
+      {
+        src: 'https://cdn.pixabay.com/photo/2015/04/13/17/45/icon-720944_1280.png',
+        alt: 'Youtube',
+      },
+      {
+        src: 'https://cdn.pixabay.com/photo/2013/02/12/09/07/microsoft-80658_1280.png',
+        alt: 'Microsoft',
+      },
+      {
+        src: 'https://cdn.pixabay.com/photo/2015/04/23/17/41/node-js-736399_1280.png',
+        alt: 'Node JS',
+      },
+      {
+        src: 'https://cdn.pixabay.com/photo/2015/10/31/12/54/google-1015751_1280.png',
+        alt: 'Google',
+      },
+      {
+        src: 'https://cdn.pixabay.com/photo/2021/12/06/13/45/meta-6850393_1280.png',
+        alt: 'Meta',
+      },
+      {
+        src: 'https://cdn.pixabay.com/photo/2013/01/29/22/53/yahoo-76684_1280.png',
+        alt: 'Yahoo',
+      },
+    ]}
+  /> -->
+
+  <!-- Features Widget *************** -->
+
+  <Features
+    id="features"
+    title="Developer First"
+    subtitle="SafeDep help security engineering teams rollout an OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails within your developer platform without friction."
+    columns={3}
+    items={[
+      {
+        title: 'Seamless Deployment',
+        description:
+          'Easily deploy using GitHub Action, GitLab CI, Jenkins, or any other CI/CD platform of your choice.',
+        icon: 'tabler:artboard',
+      },
+      {
+        title: 'Continuous Inventory',
+        description: 'Continuously build SBOM, CBOM, SaaSBOM to maintain a fresh inventory of OSS components.',
+        icon: 'tabler:picture-in-picture',
+      },
+      {
+        title: 'Identify OSS Risks',
+        description:
+          'Identify risky OSS components using codified definition of contextual risk for your organization.',
+        icon: 'tabler:adjustments-horizontal',
+      },
+      {
+        title: 'Policy as Code',
+        description: 'Automate organizational OSS policy as code to enforce security guardrails.',
+        icon: 'tabler:rocket',
+      },
+      {
+        title: 'Stay Compliant',
+        description:
+          'Block risky OSS components from being introduced in code while maintaining operational control.',
+        icon: 'tabler:arrows-right-left',
+      },
+      {
+        title: 'Malware Protection',
+        description: 'Protect against malicious OSS components, typosquatting, and supply chain attacks.',
+        icon: 'tabler:plug-connected',
+      },
+    ]}
+  />
+
+  <!-- FAQs Widget ******************* -->
+
+  <FAQs
+    id="faq"
+    title="Frequently Asked Questions"
+    items={[
+      {
+        title: 'What is Software Composition Analysis (SCA)?',
+        description:
+          'SCA is the process of identifying various components that make up a software artifact. Typically SCA tools identify OSS dependencies and their vulnerabilities by matching versions against known vulnerabilities. SCA tools are known to be noisy and inefficient due to lack of contextual risk identification. Next-gen SCA tools attempt to eliminate noise through reachability analysis.',
+      },
+      {
+        title: 'Do I need proactive guardrails against risky OSS components?',
+        description:
+          'You need proactive guardrails against risky OSS components. Fixing risky OSS components typically involves upgrading to a patched version when available or migrating to a safer dependency. This is notoriously hard in large codebases. Hence proactive guardrails must be put in place to ensure unmaintained or untrustworthy OSS dependencies are not introduced in the first place.',
+      },
+      {
+        title: 'How is SafeDep different from conventional SCA?',
+        description:
+          'SafeDep aggregates OSS security metadata and determines safety of OSS components not just based on vulnerabilities but also on other important attributes such as licensing, popularity, OpenSSF scorecard, malicious intent, and more. SafeDep also provides policy as code to enforce your opinionated security guardrails.',
+      },
+      {
+        title: 'What if a critical vulnerability found in an unmaintained OSS dependency?',
+        description:
+          'You will have to analyse and fix the vulnerability in-house. Alternatively, SafeDep can help you provide a patched and backward compatible version of OSS package mitigating critical vulnerabilities.',
+      },
+      {
+        title: 'How do I deploy vet and SafeDep Cloud?',
+        description:
+          '<a href="https://github.com/safedep/vet" target="_blank">vet</a> is free and open source. You can get started for free. SafeDep helps deploy, manage and operate vet at scale, across 1000+ repositories. SafeDep is a multi-tenant cloud service. However, it can also be self-hosted on-premises for meeting compliance requirements',
+      },
+      {
+        title: 'Why is SafeDep "developer first"?',
+        description:
+          "We believe the future of cyber security is close collaboration between security and engineering teams. These teams are likely to build organization and platform specific security solutions. SafeDep intends to help security engineering teams to achieve safe and trusted OSS guarantees for their internal developer platform.",
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </FAQs>
+
+  <!-- CallToAction Widget *********** -->
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        target: '_blank',
+        text: 'Book a Demo',
+        href: bookADemoLink,
+        icon: 'tabler:rocket',
+      },
+    ]}
+  >
+    <Fragment slot="title">{mainCallToActionTitle}</Fragment>
+
+    <Fragment slot="subtitle">
+      {mainCallToActionText}
+    </Fragment>
+  </CallToAction>
 </Layout>

@@ -1,0 +1,81 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import SolutionFixImage from '~/assets/images/solution-fix-1.svg';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
+import { bookADemoLink, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
+
+const metadata = {
+  title: 'Govern Open Source Risks with Guardrails',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero2 Widget ******************* -->
+
+  <Hero2
+    tagline="Closing the cyber security loop"
+    title="Fix Open Source Risk",
+    subtitle="Transform vulnerable and untrustworthy OSS components into secure and trusted ones. Fix vulnerabilities, enforce policies and prevent risky components from being included in your software projects.",
+    actions={[
+      { variant: 'primary', text: 'Talk to us', href: bookADemoLink, target: '_blank', icon: 'tabler:square-rounded-arrow-right' },
+    ]}
+    image={{
+      src: SolutionFixImage,
+      alt: 'Children telling a story. Long-form Sales Landing Page demo',
+    }}
+  />
+
+  <!-- <Features
+    id="features"
+    tagline="Govern Open Source Risks"
+    title="Prevent Risky Open Source Components"
+    subtitle="Any cyber security risk identification and governance program starts with building an accurate and upto-date inventory. For OSS, this means knowing what components are in use, where they are used, and what risks they introduce."
+    items={[
+      {
+        title: 'Policy as Code',
+        description:
+          'Roll out a OSS governance program with policy as code. Customize as per your organization risk profile and compliance requirements.',
+        icon: 'tabler:brand-tailwind',
+      },
+      {
+        title: 'Central Policy Management',
+        description:
+          'Control plane for managing, testing, staging and deploying policies across your software projects. Centralized policy management ensures consistent policy enforcement and governance.',
+        icon: 'tabler:components',
+      },
+      {
+        title: 'Alerting and Enforcement',
+        description:
+          'Leverage vet to enforce policies in CI/CD pipelines. Central visibility and query of violations across all projects.',
+        icon: 'tabler:list-check',
+      },
+      {
+        title: 'Compliance',
+        description:
+          'Comply with regulatory requirements by enforcing policies that prevent usage of risky OSS components. Export policy violations to CycloneDX SBOM for regulatory compliance.',
+        icon: 'tabler:rocket',
+      },
+    ]}
+  /> -->
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        target: '_blank',
+        text: 'Book a Demo',
+        href: bookADemoLink,
+        icon: 'tabler:rocket',
+      },
+    ]}
+  >
+    <Fragment slot="title">{mainCallToActionTitle}</Fragment>
+
+    <Fragment slot="subtitle">
+      {mainCallToActionText}
+    </Fragment>
+  </CallToAction>
+
+</Layout>
