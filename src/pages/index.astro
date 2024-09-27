@@ -11,7 +11,7 @@ import Stats from '~/components/widgets/Stats.astro';
 import { Image } from 'astro:assets';
 import SafeDepProductConcept from '~/assets/images/safedep-product-concept-2.svg';
 import Integrations from '~/components/widgets/Integrations.astro';
-import { bookADemoLink, joinWaitListLink, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
+import { bookADemoLink, joinWaitListLink, joinWaitListLinkTarget, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
 
 const metadata = {
   title: 'SafeDep',
@@ -26,9 +26,9 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        target: '_blank',
         text: 'Join Waitlist',
         href: joinWaitListLink,
+        target: joinWaitListLinkTarget,
         icon: 'tabler:comet',
       },
       { text: 'Learn more', href: '#features' },
@@ -115,7 +115,7 @@ const metadata = {
   <Features
     id="features"
     title="Developer First"
-    subtitle="SafeDep is designed to help security engineering teams rollout a developer first OSS governance and risk mitigation program. Leveraging policy as code to enforce your opinionated security guardrails."
+    subtitle="SafeDep help security engineering teams rollout an OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails within your developer platform without friction."
     columns={3}
     items={[
       {
@@ -141,7 +141,7 @@ const metadata = {
         icon: 'tabler:rocket',
       },
       {
-        title: 'Security Guardrails',
+        title: 'Stay Compliant',
         description:
           'Block risky OSS components from being introduced in code while maintaining operational control.',
         icon: 'tabler:arrows-right-left',
@@ -163,7 +163,7 @@ const metadata = {
       {
         title: 'What is Software Composition Analysis (SCA)?',
         description:
-          'SCA is the process of identify the various components that make up a software artifact. Typically SCA tools identify OSS dependencies and their vulnerabilities by matching versions against known vulnerabilities. SCA tools are known to be noisy and ineffecient due to lack of contextual risk identification. Next-gen SCA tools attempts to eliminate noise through reachability analysis.',
+          'SCA is the process of identifying various components that make up a software artifact. Typically SCA tools identify OSS dependencies and their vulnerabilities by matching versions against known vulnerabilities. SCA tools are known to be noisy and inefficient due to lack of contextual risk identification. Next-gen SCA tools attempt to eliminate noise through reachability analysis.',
       },
       {
         title: 'Do I need proactive guardrails against risky OSS components?',
@@ -171,7 +171,7 @@ const metadata = {
           'You need proactive guardrails against risky OSS components. Fixing risky OSS components typically involves upgrading to a patched version when available or migrating to a safer dependency. This is notoriously hard in large codebases. Hence proactive guardrails must be put in place to ensure unmaintained or untrustworthy OSS dependencies are not introduced in the first place.',
       },
       {
-        title: 'How is SafeDep different from convention SCA?',
+        title: 'How is SafeDep different from conventional SCA?',
         description:
           'SafeDep aggregates OSS security metadata and determines safety of OSS components not just based on vulnerabilities but also on other important attributes such as licensing, popularity, OpenSSF scorecard, malicious intent, and more. SafeDep also provides policy as code to enforce your opinionated security guardrails.',
       },
@@ -186,7 +186,7 @@ const metadata = {
           '<a href="https://github.com/safedep/vet" target="_blank">vet</a> is free and open source. You can get started for free. SafeDep helps deploy, manage and operate vet at scale, across 1000+ repositories. SafeDep is a multi-tenant cloud service. However, it can also be self-hosted on-premises for meeting compliance requirements',
       },
       {
-        title: 'What is SafeDep "developer first"?',
+        title: 'Why is SafeDep "developer first"?',
         description:
           "We believe the future of cyber security is close collaboration between security and engineering teams. These teams are likely to build organization and platform specific security solutions. SafeDep intends to help security engineering teams to achieve safe and trusted OSS guarantees for their internal developer platform.",
       },

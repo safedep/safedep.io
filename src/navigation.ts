@@ -1,14 +1,19 @@
 import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
 export const bookADemoLink = 'https://calendly.com/abhisek-safedep/30min';
-export const joinWaitListLink = '#';
-// export const registerLink = 'https://getwaitlist.com/waitlist/20724';
 export const registerLink = getPermalink('/register');
+export const joinWaitListLink = registerLink;
+export const joinWaitListLinkTarget = '';
 export const registerLinkTarget = '';
 export const safedepGitHubOrgLink = 'https://github.com/safedep';
 export const safedepVetGitHubLink = 'https://github.com/safedep/vet';
 export const mainCallToActionTitle = 'Protect against OSS Attacks';
 export const mainCallToActionText = 'Rollout a developer first OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails.';
+export const mainDocumentationLink = 'https://docs.safedep.io';
+export const apiDocumentationLink = mainDocumentationLink;
+export const sdkDocumentationLink = mainDocumentationLink;
+export const partnershipLink = 'mailto:hello@safedep.io?subject=Partnership';
+export const communityForumLink = 'https://github.com/safedep/vet/discussions';
 
 export const headerData = {
   links: [
@@ -34,15 +39,15 @@ export const headerData = {
       links: [
         {
           text: 'Documentation',
-          href: '#'
+          href: mainDocumentationLink,
         },
         {
           text: 'SDK',
-          href: '#'
+          href: sdkDocumentationLink,
         },
         {
           text: 'API',
-          href: '#'
+          href: apiDocumentationLink,
         },
       ]
     },
@@ -180,45 +185,35 @@ export const footerData = {
     {
       title: 'Product',
       links: [
-        { text: 'Features', href: '#' },
-        { text: 'Security', href: '#' },
-        { text: 'Team', href: '#' },
-        { text: 'Enterprise', href: '#' },
-        { text: 'Customer stories', href: '#' },
-        { text: 'Pricing', href: '#' },
-        { text: 'Resources', href: '#' },
+        { text: 'Features', href: '/#features' },
+        { text: 'Pricing', href: getPermalink('/pricing') },
       ],
     },
     {
       title: 'Platform',
       links: [
-        { text: 'Developer API', href: '#' },
-        { text: 'Partners', href: '#' },
-        { text: 'Atom', href: '#' },
-        { text: 'Electron', href: '#' },
-        { text: 'AstroWind Desktop', href: '#' },
+        { text: 'Developer API', href: apiDocumentationLink },
+        { text: 'Partners', href: partnershipLink },
       ],
     },
     {
       title: 'Support',
       links: [
-        { text: 'Docs', href: '#' },
-        { text: 'Community Forum', href: '#' },
-        { text: 'Professional Services', href: '#' },
-        { text: 'Skills', href: '#' },
-        { text: 'Status', href: '#' },
+        { text: 'Docs', href: mainDocumentationLink },
+        { text: 'Community Forum', href: communityForumLink },
+        { text: 'Professional Services', href: bookADemoLink },
       ],
     },
     {
       title: 'Company',
       links: [
         { text: 'About', href: '#' },
-        { text: 'Blog', href: '#' },
-        { text: 'Careers', href: '#' },
-        { text: 'Press', href: '#' },
-        { text: 'Inclusion', href: '#' },
-        { text: 'Social Impact', href: '#' },
-        { text: 'Shop', href: '#' },
+        { text: 'Blog', href: getBlogPermalink() },
+        // { text: 'Careers', href: '#' },
+        // { text: 'Press', href: '#' },
+        // { text: 'Inclusion', href: '#' },
+        // { text: 'Social Impact', href: '#' },
+        // { text: 'Shop', href: '#' },
       ],
     },
   ],
@@ -227,7 +222,7 @@ export const footerData = {
     { text: 'Privacy Policy', href: getPermalink('/privacy') },
   ],
   socialLinks: [
-    { ariaLabel: 'X', icon: 'tabler:brand-x', href: '#' },
+    { ariaLabel: 'YT', icon: 'tabler:brand-youtube', href: 'https://youtube.com/@safedep' },
     { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/company/safedep/' },
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/safedep/vet' },
