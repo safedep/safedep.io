@@ -1,17 +1,17 @@
 site:
   name: SafeDep
-  site: 'https://astrowind.vercel.app'
+  site: 'https://safedep.io'
   base: '/'
   trailingSlash: false
 
-  googleSiteVerificationId: 
+  googleSiteVerificationId:
 
 # Default SEO metadata
 metadata:
   title:
     default: SafeDep
     template: '%s — Safe and Trusted OSS'
-  description: "\U0001F680 Identify, govern and fix open source vulnerabilities in your codebase."
+  description: "\U0001F680 Identify, govern and fix open source risks in your codebase."
   robots:
     index: true
     follow: true
@@ -23,8 +23,8 @@ metadata:
         height: 628
     type: website
   twitter:
-    handle: '@onwidget'
-    site: '@onwidget'
+    handle: '@safedepio'
+    site: '@safedepio'
     cardType: summary_large_image
 
 i18n:
@@ -66,7 +66,7 @@ apps:
 analytics:
   vendors:
     googleAnalytics:
-      id: null # or "G-XXXXXXXXXX"
+      id: 'G-GK2PHGS1ZP'
 
 ui:
   theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
