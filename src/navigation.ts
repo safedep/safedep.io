@@ -175,7 +175,7 @@ export const headerData = {
   ],
   actions: [
     { text: 'Register', href: registerLink, target: registerLinkTarget },
-    { text: 'Book a Demo', href: bookADemoLink, target: '_blank' },
+    { text: 'Book a Demo', href: bookADemoLink, target: '_blank', variant: 'primary' },
     // { text: 'GitHub', href: 'https://github.com/safedep/vet', target: '_blank' }
   ],
 };
