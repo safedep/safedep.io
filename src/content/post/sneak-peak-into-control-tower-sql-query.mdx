@@ -1,0 +1,37 @@
+---
+publishDate: 2024-09-30T00:00:00Z
+title: 'Sneak Peak into SafeDep Cloud Development and SQL Queries'
+excerpt: Software Bill of Material (SBOM) provides an inventory of all software components. However, they are useful only when a flexible query interface is built on top.
+image: /images/bip-cotrol-tower-sql.png
+tags:
+  - vet
+  - sbom
+  - safedep-cloud
+---
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { YouTube } from "astro-embed";
+import { registerLink } from '~/navigation';
+
+Software Bill of Material (SBOM) provides an inventory of all software components. However, they are useful only when a flexible query interface is built on top. In this post, we provide a `#build-in-public` preview of what we are building at SafeDep. We believe a flexible query interface on top of BOM solves important use-cases for OSS risk management and software supply chain security.
+
+
+<YouTube id="https://youtu.be/u3dFwMbGUEk" />
+
+<CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        target: '',
+        text: 'Register',
+        href: registerLink,
+        icon: 'tabler:rocket',
+      },
+    ]}
+  >
+    <Fragment slot="title">Register for SafeDep Cloud</Fragment>
+
+    <Fragment slot="subtitle">
+      Leverage the power of SafeDep cloud to build an organization wide SBOM, export as CycloneDX and execute flexible queries to discover actionable risks.
+    </Fragment>
+  </CallToAction>
