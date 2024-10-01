@@ -14,6 +14,7 @@ export const apiDocumentationLink = mainDocumentationLink;
 export const sdkDocumentationLink = mainDocumentationLink;
 export const partnershipLink = 'mailto:hello@safedep.io?subject=Partnership';
 export const communityForumLink = 'https://github.com/safedep/vet/discussions';
+export const inheritedRiskForOssLink = getPermalink('why-oss-risks-larger-than-sca')
 
 export const headerData = {
   links: [
