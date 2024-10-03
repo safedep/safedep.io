@@ -11,7 +11,9 @@ import Stats from '~/components/widgets/Stats.astro';
 import { Image } from 'astro:assets';
 import SafeDepProductConcept from '~/assets/images/safedep-product-concept-2.svg';
 import Integrations from '~/components/widgets/Integrations.astro';
-import { bookADemoLink, joinWaitListLink, joinWaitListLinkTarget, mainCallToActionText, mainCallToActionTitle } from '~/navigation';
+import { bookADemoLink, joinWaitListLink, 
+  joinWaitListLinkTarget, mainCallToActionText, 
+  mainCallToActionTitle, inheritedRiskForOssLink } from '~/navigation';
 
 const metadata = {
   title: 'SafeDep',
@@ -43,7 +45,7 @@ const metadata = {
     <Fragment slot="subtitle">
       <span class="font-semibold">SafeDep</span> helps security engineering teams build
       policy driven guardrails against risky OSS components. Ship faster by leveraging OSS
-      .. without <span class="text-accent dark:text-white highlight">the inherited risks.</span>
+      .. without <span class="text-accent dark:text-white highlight">the <a href={inheritedRiskForOssLink}>inherited risks.</a></span>
     </Fragment>
 
     <Fragment slot="image">
