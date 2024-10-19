@@ -1,0 +1,41 @@
+---
+publishDate: 2024-10-18T00:00:00Z
+title: 'SQL Query Interface over SBOM using SafeDep Cloud'
+excerpt: This is a '#buildinpublic' update for SafeDep Cloud Development. UI often becomes a bottleneck for developer tools causing friction. We want to overcome it by providing an SQL query interface of SBOM and security metadata.
+image: /images/bip-safedep-cloud-sql.png
+tags:
+  - vet
+  - sbom
+  - sql
+  - cloud
+---
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { YouTube } from "astro-embed";
+import { registerLink } from '~/navigation';
+
+Developer experience is often specialized. Apart from providing domain specific use-cases, ease of getting started and ample documentation, flexibility of use especially with custom integration is important. This allows developer and security engineers, who are often subject matter experts to use a solution as per their requirement instead of compromising and following the workflows enforced by the product. This is a key focus at [SafeDep](#) in our product development efforts. We want to provide the best experience to security and platform engineers in protecting themselves against malicious, vulnerable and risky open source components. 
+
+To enable this, we shipped a key building block required to *find what you need*. Instead of being restricted by UI and Tables, engineers can use their familiar SQL query language to find and export security risk related information from [SafeDep Cloud](#). Here is a quick `#build-in-public` demo of this feature.
+
+<YouTube id="https://youtu.be/ayRmXVXC1VY" />
+
+[SafeDep Cloud](#) is current at invite-only preview stage. You can register and get invited to our early adopter program.
+
+<CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        target: '',
+        text: 'Register',
+        href: registerLink,
+        icon: 'tabler:rocket',
+      },
+    ]}
+  >
+  <Fragment slot="title">Register for SafeDep Cloud</Fragment>
+
+  <Fragment slot="subtitle">
+    Leverage the power of SafeDep cloud to build an organization wide SBOM, export as CycloneDX and execute flexible queries to discover actionable risks.
+  </Fragment>
+</CallToAction>
