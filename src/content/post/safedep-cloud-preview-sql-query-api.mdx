@@ -18,9 +18,54 @@ Developer experience is often specialized. Apart from providing domain specific 
 
 To enable this, we shipped a key building block required to *find what you need*. Instead of being restricted by UI and Tables, engineers can use their familiar SQL query language to find and export security risk related information from [SafeDep Cloud](#). Here is a quick `#build-in-public` demo of this feature.
 
+## Example
+
+Let's find all the repositories on-boarded into SafeDep Cloud using [vet](https://github.com/safedep/vet)
+
+```shell
+vet cloud query execute --sql \
+  "select projects.name, projects.version from projects"
+```
+
+This produces
+
+```shell
+Query returned 3 results
+┌───────────────────────────────────────────┬──────────────────┐
+│ PROJECTS.NAME                             │ PROJECTS.VERSION │
+├───────────────────────────────────────────┼──────────────────┤
+│ https://github.com/safedep/vet .git       │ main             │
+├───────────────────────────────────────────┼──────────────────┤
+│ https://github.com/safedep/api.git        │ main             │
+├───────────────────────────────────────────┼──────────────────┤
+│ https://github.com/safedep/control.git    │ main             │
+└───────────────────────────────────────────┴──────────────────┘         
+```
+
+> Leaking private repositories :-O
+
+You can also use complex queries to filter across an organization wide SBOM
+
+```sql
+select vulnerabilities.cve_id, vulnerabilities.summary from projects 
+  where projects.name = 'safedep/demo-client-java' 
+  and projects.version = 'v1.2.3' 
+  and vulnerabilities.risk = 'CRITICAL'
+```
+
+Queries can be exported to file as CSV or Markdown
+
+```shell
+vet cloud query --sql $SQL --csv /path/to/out.csv
+```
+
+## Build in Public Update
+
+If you like what you see so far, check out a development walkthrough of what we are building at [#SafeDep](#)
+
 <YouTube id="https://youtu.be/ayRmXVXC1VY" />
 
-[SafeDep Cloud](#) is current at invite-only preview stage. You can register and get invited to our early adopter program.
+[SafeDep Cloud](#) is currently at invite-only preview stage. You can register and get invited to our early adopter program.
 
 <CallToAction
     actions={[
