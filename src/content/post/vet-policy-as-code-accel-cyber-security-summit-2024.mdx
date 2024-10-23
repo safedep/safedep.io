@@ -1,0 +1,24 @@
+---
+publishDate: 2024-10-22T00:00:00Z
+title: 'How a Security Team use Policy as Code for Open Source Security'
+image: /images/pac-ftw-1.png
+excerpt: This is a talk given at Accel Cyber Security Summit 2024 about securing the open source software supply chain using SafeDep vet. This talk highlights a case study of using policy as code for setting up guardrails
+tags:
+  - vet
+  - sbom
+  - sql
+  - cloud
+---
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { YouTube } from "astro-embed";
+import { registerLink } from '~/navigation';
+
+SBOM is being mandated in certain regulated industries, especially for tracking open source dependencies. However the usefulness of SBOM, which is basically an inventory, is the tooling and use-cases around it. Conventional SCA tools are notorious for false positives and noise. Ability to prevent insecure or risky open source components proactively is required to maintain a healthy and trustworthy open source software supply chain. In this talk, we look at how to use [vet](https://github.com/safedep/vet) for establishing security guardrails against risky OSS components. We also look at a case study of how a security team leverage `vet's` policy as code feature for enforcing opinionated security policies.
+
+<YouTube id="https://www.youtube.com/watch?v=912dnDXrRQg" 
+  className="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+/>
+
+
+
