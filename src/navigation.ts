@@ -1,5 +1,6 @@
 import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
+export const discordNeverExpireLink = 'https://discord.gg/kAGEj25dCn'
 export const bookADemoLink = 'https://calendly.com/abhisek-safedep/30min';
 export const registerLink = getPermalink('/register');
 export const joinWaitListLink = registerLink;
@@ -210,6 +211,7 @@ export const footerData = {
       links: [
         { text: 'About', href: '#' },
         { text: 'Blog', href: getBlogPermalink() },
+        { text: 'Contact', href: getPermalink('/contact') },
         // { text: 'Careers', href: '#' },
         // { text: 'Press', href: '#' },
         // { text: 'Inclusion', href: '#' },
