@@ -196,7 +196,7 @@ The payload checks if the file requested for transfer is greater than 25MB. If
 so, it fetches configuration from `https://api.gofile.io/getServer` and uploads
 to `https://{server}.gofile.io/uploadFile` using Python `requests` library.
 When we tried to access the URL, we get a `404 Not Found` response, indicating
-the application is geo-fenced.
+the application is probably geo-fenced or checks for some request attribute.
 
 ## Conclusion
 
