@@ -24,15 +24,15 @@ export const headerData = {
       text: 'Solution',
       links: [
         {
-          text: 'Identify',
+          text: 'Identify Open Source Risks',
           href: getPermalink('/solution/identify'),
         },
         {
-          text: 'Govern',
+          text: 'Protect Against Open Source Risks',
           href: getPermalink('/solution/govern'),
         },
         {
-          text: 'Fix',
+          text: 'Fix Open Source Risks',
           href: getPermalink('/solution/fix'),
         },
       ],
@@ -235,7 +235,7 @@ export const footerData = {
   footNote: `
     <small>
       Crafted by SafeDep.
-      Built with <a href="https://astro.build/themes/details/astrowind/" target="_blank">AstroWind</a>. 
+      Built with <a href="https://astro.build/themes/details/astrowind/" target="_blank">AstroWind</a>.
     </small>
   `,
 };
