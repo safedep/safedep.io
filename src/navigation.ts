@@ -16,6 +16,7 @@ export const sdkDocumentationLink = mainDocumentationLink;
 export const partnershipLink = 'mailto:hello@safedep.io?subject=Partnership';
 export const communityForumLink = 'https://github.com/safedep/vet/discussions';
 export const inheritedRiskForOssLink = getPermalink('why-oss-risks-larger-than-sca')
+export const careersNotionSiteLink = 'https://safedep-inc.notion.site/Careers-at-SafeDep-11e61d70b23680d7b98dcbdb6c710d55';
 
 export const headerData = {
   links: [
@@ -212,6 +213,7 @@ export const footerData = {
         { text: 'About', href: '#' },
         { text: 'Blog', href: getBlogPermalink() },
         { text: 'Contact', href: getPermalink('/contact') },
+        { text: 'Jobs', href: getPermalink('/jobs') },
         // { text: 'Careers', href: '#' },
         // { text: 'Press', href: '#' },
         // { text: 'Inclusion', href: '#' },

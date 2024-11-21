@@ -1,0 +1,24 @@
+---
+import Hero from '~/components/widgets/Hero.astro';
+import Layout from '~/layouts/PageLayout.astro';
+import { careersNotionSiteLink } from '~/navigation';
+
+const metadata = {
+  title: 'Jobs at SafeDep',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero Widget ******************* -->
+
+  <Hero
+    tagline="#Careers"
+    title="Join the Team"
+    subtitle="We are on a mission to protect software development teams from risky open source components. We are remote-first and open source. Join the team to make it happen."
+    actions={[{ variant: 'primary', target: '_blank', text: 'Apply Now', href: careersNotionSiteLink }]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
+      alt: 'Careers Hero Image',
+    }}
+  />
+</Layout>
