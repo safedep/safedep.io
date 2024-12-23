@@ -2,7 +2,7 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
 export const discordNeverExpireLink = 'https://discord.gg/kAGEj25dCn'
 export const bookADemoLink = 'https://calendly.com/abhisek-safedep/30min';
-export const registerLink = getPermalink('/register');
+export const registerLink = 'https://platform.safedep.io';
 export const joinWaitListLink = registerLink;
 export const joinWaitListLinkTarget = '';
 export const registerLinkTarget = '';
@@ -177,7 +177,7 @@ export const headerData = {
     // },
   ],
   actions: [
-    { text: 'Register', href: registerLink, target: registerLinkTarget },
+    { text: 'Login', href: registerLink, target: registerLinkTarget },
     { text: 'Book a Demo', href: bookADemoLink, target: '_blank', variant: 'primary' },
     // { text: 'GitHub', href: 'https://github.com/safedep/vet', target: '_blank' }
   ],
@@ -210,11 +210,10 @@ export const footerData = {
     {
       title: 'Company',
       links: [
-        { text: 'About', href: '#' },
+        { text: 'About', href: getPermalink('/about') },
         { text: 'Blog', href: getBlogPermalink() },
         { text: 'Contact', href: getPermalink('/contact') },
-        { text: 'Jobs', href: getPermalink('/jobs') },
-        // { text: 'Careers', href: '#' },
+        { text: 'Careers', href: careersNotionSiteLink },
         // { text: 'Press', href: '#' },
         // { text: 'Inclusion', href: '#' },
         // { text: 'Social Impact', href: '#' },
