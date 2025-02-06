@@ -11,8 +11,8 @@ export const safedepVetGitHubLink = 'https://github.com/safedep/vet';
 export const mainCallToActionTitle = 'Protect against OSS Attacks';
 export const mainCallToActionText = 'Rollout a developer first OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails.';
 export const mainDocumentationLink = 'https://docs.safedep.io';
-export const apiDocumentationLink = mainDocumentationLink;
-export const sdkDocumentationLink = mainDocumentationLink;
+export const apiDocumentationLink = 'https://docs.safedep.io/guides/insights-api-using-typescript';
+export const sdkDocumentationLink = 'https://docs.safedep.io/guides/insights-api-using-typescript';
 export const partnershipLink = 'mailto:hello@safedep.io?subject=Partnership';
 export const communityForumLink = 'https://github.com/safedep/vet/discussions';
 export const inheritedRiskForOssLink = getPermalink('why-oss-risks-larger-than-sca')
@@ -177,8 +177,8 @@ export const headerData = {
     // },
   ],
   actions: [
-    { text: 'Login', href: registerLink, target: registerLinkTarget },
-    { text: 'Book a Demo', href: bookADemoLink, target: '_blank', variant: 'primary' },
+    { text: 'Platform', href: registerLink, target: registerLinkTarget },
+    { text: 'Talk to a Founder', href: bookADemoLink, target: '_blank', variant: 'primary' },
     // { text: 'GitHub', href: 'https://github.com/safedep/vet', target: '_blank' }
   ],
 };
