@@ -37,13 +37,15 @@ const metadata = {
     ]}
   >
     <Fragment slot="title">
-      Protect against <span class="text-accent dark:text-white highlight">Malicious</span> and
-      <span class="text-accent dark:text-white highlight">Vulnerable</span> Open Source <span class="px-2 bg-yellow-300">Code</span>
+      <span class="font-normal font-stretch-expanded">
+      Protect against <span class="font-semibold">Malicious</span> and
+      <span class="font-semibold">Vulnerable</span> Open Source <span class="px-2 bg-yellow-300 dark:text-black">Code</span>
+      </span>
     </Fragment>
 
     <Fragment slot="subtitle">
       SafeDep scans open source code for vulnerabilities and malware helping <br className="sm:hidden" />
-      <span class="p-1 bg-yellow-300 text-wrap">security engineering</span> teams to proactively mitigate
+      <span class="p-1 bg-yellow-300 dark:text-black text-wrap">security engineering</span> teams to proactively mitigate
       <span class="text-accent dark:text-white highlight"><a href={inheritedRiskForOssLink}>inherited OSS risks</a></span>
     </Fragment>
 

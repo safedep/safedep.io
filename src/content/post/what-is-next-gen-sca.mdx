@@ -1,0 +1,122 @@
+---
+publishDate: 2025-02-06T00:00:00Z
+title: 'What is Next Generation Software Composition Analysis?'
+image: /images/next-gen-sca-what-1.png
+excerpt: Software Composition Analysis has been there for a while. But the problems associated with open source vulnerabilities persist. Next-gen SCA is the promised solution. What is it and how does it work?
+tags:
+  - sca
+  - nextgen-sca
+  - reachability
+  - ossrisk
+  - guide
+---
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+## History of SCA
+
+Software Composition Analysis (SCA) has been there for a while, dating back to
+early 2000. This makes it a technology over two decades old. Blackduck
+dominated the enterprise SCA market and OWASP Dependency Check filling the gap
+for open source alternatives. Building SCA tools was considered a laborious and
+resource intensive task of the past because of the lack of standardised
+vulnerability databases suitable for consumption by tools. While NVD was the
+goto database, it lacked appropriate enrichment information that would enable
+an SCA tool to effectively match CVEs against OSS components (libraries) identified in
+a code base.
+
+## What is the problem?
+
+Traditional software composition analysis (SCA) works by identifying 3rd party
+libraries by either reading package manifest files such as `pom.xml`,
+`package-lock.json` or in rare cases by analysing source code or binary to
+identify such external dependencies. These tools then match the identified
+libraries with publicly known vulnerabilities (CVE) by querying public
+databases such as [NVD](https://nvd.nist.gov/) database with library name and version and reporting all
+matched vulnerabilities. This approach results in a *LOT* of noise and is mostly
+unusable due to the alert fatigue in software with reasonable size. This is
+because, fundamentally
+
+1. A vulnerability is found in some code in a library
+2. The vulnerable code belongs to a function in the library
+3. Everything else in the library is *NOT* vulnerable
+
+This means, it’s not the library (version) that is vulnerable but a set of
+functions within a library version that is vulnerable. So effectively, a given
+application, depending on a 3rd party library version with known
+vulnerabilities, is actually vulnerable only if <u>it directly or indirectly calls
+a vulnerable code in a function exposed by the 3rd party library</u>. If this is
+not true, then the given application cannot be considered vulnerable to
+vulnerabilities impacting a given library version that it depends upon.
+
+To summarise, we can assert that a given application is vulnerable to vulnerabilities in 3rd party library versions that it depends on only if it directly or indirectly uses the vulnerable code in the library, not just by depending on it for non-vulnerable code in the library.
+
+This is what is lacking in conventional SCA tools. They cause tremendous alert fatigue by continuously dumping large number of issues by matching component versions with vulnerability databases. This is the reason why the problem of SCA needs to be revisited.
+
+## What is Next-gen SCA
+
+The next generation SCA tools come with the promise of actually solving the
+problem of vulnerability remediation and not just identification. This means,
+the goal is not just to identify and dump a large number of vulnerabilities for
+security & engineering teams to deal with which many a times causes alert
+fatigue. Instead impact the most important metric in cyber security management
+i.e. reduce vulnerability count in a given application.
+
+
+## What is the promise of Next-gen SCA
+
+Next gen SCA tools *promises* to make it practically useful. This means the tools
+
+1. Reduce noise by eliminating non-impacting vulnerabilities
+2. Improve outcome by helping in fixing vulnerabilities with actual impact
+3. Proactively protect against introducing malicious code from OSS
+
+### Enter Reachability
+
+The #1 problem with conventional SCA tools are its lack of 1st party code
+context. Matching library versions with public vulnerability databases leads to
+high false positive rate thus reduced productivity for the users. This is the
+problem that reachability analysis in SCA tools aim to solve by introducing 1st
+party code context while identifying issues.
+
+Reachability is a classic compiler concept that involves identifying a [basic
+block](https://en.wikipedia.org/wiki/Basic_block) of code that is reachable in
+a control flow graph. If they are not, they can be safely eliminated to avoid
+unnecessary machine code generation and bloating the executable binary. This
+concept has been extended in SCA tools to
+
+> Identify if a vulnerable function in a 3rd party library is reachable from 1st party code.
+
+This makes sense because a CVE in a 3rd party library is impacting a given application only if the vulnerable code is reachability in it. Reachability analysis helps in eliminating non-impacting vulnerabilities in 3rd party libraries hence significantly reduce unnecessary effort in fixing the same.
+
+### Malicious Code Scanning
+
+Vulnerability identification and remediation assumes “someone” has actually scanned, identified, and responsibly disclosed a vulnerability in an open source package. As long as this “assumption” holds true, better reachability analysis can improve upon the problem of SCA. But vulnerable code is not the only problem. In fact, vulnerabilities occur due to unintentional mistakes in code. Malicious open source, which has been on a tremendous rise in real world software supply chain attacks, are intentional and have a much higher likelihood of breach. The problem of intentional malicious code has shifted the norm in conventional SCA from looking at 1st party code for context and public databases for vulnerability information. The shift is towards a need to actually look at OSS code and identify if it has any malicious intent to cause harm.
+
+## Challenges and way forward
+
+Vulnerabilities and malicious code are top two problems related to OSS security today. There are however multiple problems in achieve these reliability
+
+### Whole Program Call Graph
+
+Function reachability analysis requires building a Call Graph across 1st party and 3rd party code which includes OSS libraries. Call Graph construction is approximate and makes multiple use-case specific trade-offs. It is not possible to build an accurate call graph modelling all possible function calls at runtime. While next-gen SCA tools with reachability does help prioritise reachable vulnerabilities that should be fixed, critical vulnerabilities that are not found to be reachable through static analysis are approximate at best. In real life, keeping unfixed critical vulnerabilities based on static reachability analysis is not always an acceptable risk.
+
+### Vulnerable Function Signature
+
+Function reachability analysis requires accurate information about the function that is vulnerable in a given CVE. This information is not always available. This leads to commercial vendors maintaining private enrichment data that may not always be accurate
+
+### Malicious Code Detection
+
+It is not possible to classify a program as malicious or not due to Rice’s Theorem. A given piece of code is malicious only in context. For example, an HTTP call observed in a cryptographic library that is expected to only perform computational operation is potentially malicious. However the same behaviour is not malicious in a SaaS SDK.
+
+## Take away
+
+To summarize, if you are looking for next-gen SCA tools, consider the following
+
+1. Should be code aware and contextual in identifying 3rd party risks
+2. Should go beyond CVEs and consider trustworthiness of OSS packages
+3. Should go beyond CVEs and actually analyse OSS code
+4. Should be able to identify malicious code in OSS packages
+5. Should be policy driven enabling context specific adoption
+
+

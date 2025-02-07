@@ -1,0 +1,51 @@
+---
+publishDate: 2025-02-07T00:00:00Z
+title: 'Eliminating SCA Noise using Dependency Usage Evidence'
+image: /images/code-dep-usage-evidence-1.png
+excerpt: SafeDep Code Analysis framework augments vet, our free and open source tool with code context.
+tags:
+  - sca
+  - nextgen-sca
+  - code-analysis
+  - guide
+---
+
+import { YouTube } from "astro-embed";
+
+A 3rd party dependency may be referenced in a package manifest such as
+`requirements.txt` or `package-lock.json` but not actually used in code.
+Vulnerabilities or other risks in such packages are not useful. Most SCA tools
+today lack the code context information preventing them from distinguishing
+between dependencies that are actually used in the codebase and those that are
+not. SafeDep Code Analysis framework augments vet, our free and open source tool with code
+context. This allows us to eliminate false positives and noise by considering
+the actual usage of a dependency in the codebase. In this article, we will look
+at how we can use dependency usage evidence to eliminate noise in SCA.
+
+## Getting Started
+
+Ensure you have [vet](https://github.com/safedep/vet) `1.9.2+` installed in
+your system. For help with installation, refer to the [vet Installation Guide](https://docs.safedep.io/quickstart).
+
+### Create Code Analysis Database
+
+Analyse your code base to create a code analysis database:
+
+```bash
+vet code scan --app /path/to/code --db /tmp/code.db
+```
+
+### Run `vet` Scan with Code Analysis Database
+
+Run `vet` scan with code analysis database to augment `vet` results with
+code context information:
+
+```bash
+vet scan -D /path/to/repository --code /tmp/code.db
+```
+
+### Demo
+
+<YouTube id="https://youtu.be/yFUuMMAsnfI"
+  className="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700" />
+
