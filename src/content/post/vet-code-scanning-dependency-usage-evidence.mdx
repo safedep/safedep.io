@@ -17,7 +17,7 @@ A 3rd party dependency may be referenced in a package manifest such as
 Vulnerabilities or other risks in such packages are not useful. Most SCA tools
 today lack the code context information preventing them from distinguishing
 between dependencies that are actually used in the codebase and those that are
-not. SafeDep Code Analysis framework augments vet, our free and open source tool with code
+not. SafeDep Code Analysis framework augments [vet](https://github.com/safedep/vet), our free and open source tool with code
 context. This allows us to eliminate false positives and noise by considering
 the actual usage of a dependency in the codebase. In this article, we will look
 at how we can use dependency usage evidence to eliminate noise in SCA.

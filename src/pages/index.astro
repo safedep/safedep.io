@@ -13,7 +13,7 @@ import SafeDepProductConcept from '~/assets/images/safedep-product-concept-5.svg
 import Integrations from '~/components/widgets/Integrations.astro';
 import { bookADemoLink, joinWaitListLink,
   joinWaitListLinkTarget, mainCallToActionText,
-  mainCallToActionTitle, inheritedRiskForOssLink } from '~/navigation';
+  mainCallToActionTitle, inheritedRiskForOssLink, registerLink } from '~/navigation';
 
 const metadata = {
   title: 'SafeDep',
@@ -28,8 +28,8 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Talk to a Founder',
-        href: bookADemoLink,
+        text: 'Try for Free',
+        href: registerLink,
         target: '_blank',
         icon: 'tabler:comet',
       },
@@ -37,9 +37,9 @@ const metadata = {
     ]}
   >
     <Fragment slot="title">
-      <span class="font-normal font-stretch-expanded">
+      <span class="font-normal font-stretch-expanded tracking-tight">
       Protect against <span class="font-semibold">Malicious</span> and
-      <span class="font-semibold">Vulnerable</span> Open Source <span class="px-2 bg-yellow-300 dark:text-black">Code</span>
+      <span class="font-semibold">Vulnerable</span> Open Source <span class="px-1 py-0 bg-yellow-300 dark:text-black">Code</span>
       </span>
     </Fragment>
 

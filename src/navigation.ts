@@ -17,6 +17,7 @@ export const partnershipLink = 'mailto:hello@safedep.io?subject=Partnership';
 export const communityForumLink = 'https://github.com/safedep/vet/discussions';
 export const inheritedRiskForOssLink = getPermalink('why-oss-risks-larger-than-sca')
 export const careersNotionSiteLink = 'https://safedep-inc.notion.site/Careers-at-SafeDep-11e61d70b23680d7b98dcbdb6c710d55';
+export const openSourceLink = 'https://github.com/safedep/vet';
 
 export const headerData = {
   links: [
@@ -146,6 +147,10 @@ export const headerData = {
       href: getPermalink('/pricing'),
     },
     {
+      text: 'OSS',
+      href: openSourceLink,
+    },
+    {
       text: 'Blog',
       href: getBlogPermalink(),
       // links: [
@@ -177,7 +182,7 @@ export const headerData = {
     // },
   ],
   actions: [
-    { text: 'Try for Free', href: registerLink, target: registerLinkTarget },
+    { text: 'Login', href: registerLink, target: registerLinkTarget },
     { text: 'Talk to a Founder', href: bookADemoLink, target: '_blank', variant: 'primary' },
     // { text: 'GitHub', href: 'https://github.com/safedep/vet', target: '_blank' }
   ],
