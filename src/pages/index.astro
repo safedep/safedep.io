@@ -7,6 +7,7 @@ import Hero from '~/components/widgets/Hero.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import Features from '~/components/widgets/Features.astro';
 import Stats from '~/components/widgets/Stats.astro';
+import Headline from '~/components/ui/Headline.astro';
 
 import { Image } from 'astro:assets';
 import SafeDepProductConcept from '~/assets/images/safedep-product-concept-5.svg';
@@ -51,10 +52,37 @@ const metadata = {
 
     <Fragment slot="image">
       <Image
-        src={SafeDepProductConcept}
-        alt="SafeDep Product Concept" />
+        src={"/images/vet-demo.gif"}
+        alt="SafeDep Vet Demo"
+        class="mx-auto rounded-md w-full"
+        widths={[400, 768, 1024, 2040]}
+        sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+        loading="eager"
+        width={1024}
+        height={576}
+      />
     </Fragment>
   </Hero>
+
+  <!-- Product concept section -->
+  <div class="justify-center">
+    <Headline title="Establish Trust on OSS Supply Chain" tagline={"Custom Policy as Code"} subtitle={
+      "Build your own open source risk management program using SafeDep." +
+      " Enforce your opinionated security guardrails within your developer platform without friction"
+    } />
+    <div class="relative m-auto max-w-5xl">
+      <Image
+        class="mx-auto rounded-md w-full"
+        widths={[400, 768, 1024, 2040]}
+        sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+        loading="eager"
+        width={1024}
+        height={576}
+        src={SafeDepProductConcept}
+        alt="SafeDep Product Concept"
+      />
+    </div>
+  </div>
 
   <!-- Stats Widget ****************** -->
 
