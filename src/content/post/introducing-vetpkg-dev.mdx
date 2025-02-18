@@ -1,0 +1,60 @@
+---
+publishDate: 2025-02-18T00:00:00Z
+title: 'Introducing vetpkg.dev - Open Source Component Security Dashboard'
+image: /images/vetpkg.png
+excerpt: Introducing vetpkg.dev - Built using SafeDep API to provide an easy to use visibility of open source component security information.
+tags:
+  - sca
+  - nextgen-sca
+  - reachability
+  - ossrisk
+  - guide
+---
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+## Introducing vetpkg.dev
+
+[vetpkg.dev](https://vetpkg.dev) is a free service that provides visibility
+into the security of open source components. It is built using the [SafeDep
+Cloud API](https://docs.safedep.io/cloud)
+to provide an easy to use interface for developers to check the security of
+their open source dependencies before using them in their projects.
+
+## Why did we build vetpkg.dev?
+
+As the developers of [vet](https://github.com/safedep/vet), we often felt the
+need for customizing security metadata visualization for open source
+components. We wanted to mash up public and private data sources to provide
+easy access to aggregated security data. We expect that this information will
+help developers and security engineers make better decisions about the open
+source components before using them in their projects.
+
+Using `vetpkg.dev`, we want to provide a simple and easy-to-use interface for
+having a single source of truth for open source component security information
+including [malicious code
+analysis](https://docs.safedep.io/cloud/malware-analysis) results.
+
+## How to use vetpkg.dev?
+
+Using `vetpkg.dev` is simple. You can search for an open source component by
+its ecosystem, name and version. For example, navigate to the following URL
+
+- https://vetpkg.dev/v/npm/express/4.17.1
+
+You can also search for specific component by navigating to [vetpkg.dev](https://vetpkg.dev)
+
+## How does vetpkg.dev work?
+
+`vetpkg.dev` uses the SafeDep Cloud API to fetch security information about open
+source components. This includes information about known vulnerabilities, licenses,
+project metadata, malicious code analysis results and more. It uses [SafeDep
+Insights API](https://docs.safedep.io/guides/insights-api-using-typescript) to
+fetch the required information.
+
+## Example
+
+The source of screenshot below is available [here](https://vetpkg.dev/v/npm/express/4.17.1)
+
+![](/images/vetpkg-dev-example.png)
+
