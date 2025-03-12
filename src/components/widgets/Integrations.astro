@@ -24,39 +24,37 @@ const {
   classes = {},
   bg = await Astro.slots.render('bg'),
 } = Astro.props;
+
+const brands = [
+  { src: GitHubImage, alt: 'GitHub', width: 80, height: 80 },
+  { src: GitlabImage, alt: 'Gitlab', width: 80, height: 80 },
+  { src: JenkinsImage, alt: 'Jenkins', width: 80, height: 100 },
+  { src: DockerImage, alt: 'Docker', width: 80, height: 80 },
+  { src: NpmImage, alt: 'NPM', width: 80, height: 80 },
+  { src: RubyImage, alt: 'Ruby', width: 80, height: 80 },
+  { src: JavaImage, alt: 'Java', width: 80, height: 80 },
+  { src: GoImage, alt: 'Golang', width: 120, height: 80 },
+  { src: PythonImage, alt: 'Python', width: 80, height: 80 },
+];
 ---
 
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-6xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
 
   <div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={GitHubImage} alt="GitHub" class="max-h-full" width={80} height={80} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={GitlabImage} alt="Gitlab" class="max-h-full" width={80} height={80} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-    <Image src={JenkinsImage} alt="Jenkins" class="max-h-full" width={80} height={100} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={DockerImage} alt="Docker" class="max-h-full" width={80} height={80} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={NpmImage} alt="NPM" class="max-h-full" width={80} height={80} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={RubyImage} alt="Ruby" class="max-h-full" width={80} height={80} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={JavaImage} alt="Java" class="max-h-full" width={80} height={80} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={GoImage} alt="Golang" class="max-h-full" width={120} height={80} layout="fixed" />
-    </div>
-    <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-      <Image src={PythonImage} alt="Python" class="max-h-full" width={80} height={80} layout="fixed" />
-    </div>
+    {
+      brands.map((brand) => (
+        <div class="flex justify-center items-center col-span-1 my-2 lg:my-4 py-3 px-5 rounded-md bg-gray-300 shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105">
+          <Image
+            src={brand.src}
+            alt={brand.alt}
+            class="max-h-full"
+            width={brand.width}
+            height={brand.height}
+            layout="fixed"
+          />
+        </div>
+      ))
+    }
   </div>
 </WidgetWrapper>
-
