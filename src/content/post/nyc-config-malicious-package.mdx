@@ -1,0 +1,35 @@
+---
+publishDate: 2025-03-13T00:00:00Z
+title: 'Typosquatt alert ! Malicious npm Package: nyc-config'
+image: /images/nyc-config-malicious-package.jpeg
+excerpt: Possible typosquatting against @istanbuljs/load-nyc-config with ~25M weekly downloads.
+tags:
+  - npm
+  - malware
+  - typosquatting
+  - open-source security
+---
+
+Recently, we discovered a malicious npm package [nyc-config](https://www.npmjs.com/package/nyc-config) in our internal Open Source Software (OSS) package monitoring dashboard. It involved sending user system data to external domains. It is a possible typosquatt attack against the widely adopted [@istanbuljs/load-nyc-config](https://www.npmjs.com/package/@istanbuljs/load-nyc-config), which boasts ~25M weekly downloads.
+
+## Discovery and Analysis
+
+Our automated malware analysis flagged the `nyc-config` package as malicious due to System Information Exfiltration. Upon manual inspection, we observed that the package's `package.json` file contained a `preinstall` script designed to execute the `index.js` file during installation step itself. This script was crafted to gather sensitive system information such as:
+
+- Hostname
+- Operating system details
+- Local and public IP addresses
+- Username
+- Current working directory
+
+The collected data was then exfiltrated to remote servers controlled by the attacker.
+
+You can view the analysis here - https://platform.safedep.io/community/malysis/01JP01T1WQPNGAG516NDS9A6ST
+
+## Community Engagement
+
+Recognizing the severity of this threat, we promptly reported our findings to the Open Source Security Foundation (OSSF) - https://github.com/ossf/malicious-packages/pull/839
+
+## Conclusion
+
+This incident underscores the critical importance of being cautious when incorporating third-party packages, ensuring they originate from trusted sources. By staying vigilant and fostering collaborative efforts, we can collectively mitigate the risks posed by malicious actors and fortify the security of our development environments.

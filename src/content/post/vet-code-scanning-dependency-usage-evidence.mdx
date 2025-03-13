@@ -10,7 +10,7 @@ tags:
   - guide
 ---
 
-import { YouTube } from "astro-embed";
+import { YouTube } from 'astro-embed';
 
 A 3rd party dependency may be referenced in a package manifest such as
 `requirements.txt` or `package-lock.json` but not actually used in code.
@@ -46,6 +46,7 @@ vet scan -D /path/to/repository --code /tmp/code.db
 
 ### Demo
 
-<YouTube id="https://youtu.be/yFUuMMAsnfI"
-  className="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700" />
-
+<YouTube
+  id="https://youtu.be/yFUuMMAsnfI"
+  className="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+/>

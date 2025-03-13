@@ -33,13 +33,13 @@ libraries by either reading package manifest files such as `pom.xml`,
 identify such external dependencies. These tools then match the identified
 libraries with publicly known vulnerabilities (CVE) by querying public
 databases such as [NVD](https://nvd.nist.gov/) database with library name and version and reporting all
-matched vulnerabilities. This approach results in a *LOT* of noise and is mostly
+matched vulnerabilities. This approach results in a _LOT_ of noise and is mostly
 unusable due to the alert fatigue in software with reasonable size. This is
 because, fundamentally
 
 1. A vulnerability is found in some code in a library
 2. The vulnerable code belongs to a function in the library
-3. Everything else in the library is *NOT* vulnerable
+3. Everything else in the library is _NOT_ vulnerable
 
 This means, it’s not the library (version) that is vulnerable but a set of
 functions within a library version that is vulnerable. So effectively, a given
@@ -62,10 +62,9 @@ security & engineering teams to deal with which many a times causes alert
 fatigue. Instead impact the most important metric in cyber security management
 i.e. reduce vulnerability count in a given application.
 
-
 ## What is the promise of Next-gen SCA
 
-Next gen SCA tools *promises* to make it practically useful. This means the tools
+Next gen SCA tools _promises_ to make it practically useful. This means the tools
 
 1. Reduce noise by eliminating non-impacting vulnerabilities
 2. Improve outcome by helping in fixing vulnerabilities with actual impact
@@ -118,5 +117,3 @@ To summarize, if you are looking for next-gen SCA tools, consider the following
 3. Should go beyond CVEs and actually analyse OSS code
 4. Should be able to identify malicious code in OSS packages
 5. Should be policy driven enabling context specific adoption
-
-

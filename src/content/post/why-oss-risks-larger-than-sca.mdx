@@ -28,9 +28,7 @@ To build and ship software to your customers. Fast. Imagine having to build fram
 
 Almost certainly yes. If we just focus on organizations shipping software products to their customers, then there is, most likely, a heavy dependency on OSS in the form of libraries, container images and other platform software. Even if your organization has a policy of not using open source components (very rare!), you are still inheriting and thus using open source components from your commercial software vendors who in turn depend on OSS.
 
-<Image
-  src={Img1P3P}
-  alt="1P and 3P OSS Relationship" />
+<Image src={Img1P3P} alt="1P and 3P OSS Relationship" />
 
 Even if you are building a custom software development framework over an HTTP router or Servlet, you are still leveraging open source in forms of protocol &amp; service adapters, cryptography and other libraries.
 
@@ -42,7 +40,7 @@ This is really the value of OSS to the software development industry. If you are
 
 ## Is OSS Risky?
 
-No. Open Source ecosystem is not the problem. In fact it is a critical resource for global economy today. The greatest strength that led to the success of OSS is its decentralized, volunteer and community working model. The key idea behind OSS is building something to solve one's own needs and having it evolve with the community extending it to solve their own needs. 
+No. Open Source ecosystem is not the problem. In fact it is a critical resource for global economy today. The greatest strength that led to the success of OSS is its decentralized, volunteer and community working model. The key idea behind OSS is building something to solve one's own needs and having it evolve with the community extending it to solve their own needs.
 
 Trust and security for OSS is however a [Tragedy of Commons](https://en.wikipedia.org/wiki/Tragedy_of_the_commons) situation. The incentive model of the OSS ecosystem and the economic platform supporting it does not always align when it comes to enterprise security requirements. After all, a volunteer offering a software to the community is not obliged to follow the security requirements of a large enterprise. This is really the vulnerability that has been exploited in [Open Source Software Supply Chain Attacks](https://slsa.dev/spec/v1.0/threats-overview).
 
@@ -64,7 +62,7 @@ The [xz backdoor](https://securelist.com/xz-backdoor-story-part-1/112354/), [Led
 
 #### Attack Vectors for Supplying Malicious OSS
 
-Attack vectors observed in real life OSS supply chain attacks are documented in [SLSA Threat Model](https://slsa.dev/spec/v1.0/threats-overview), [CNCF Supply Chain Compromises](https://tag-security.cncf.io/community/catalog/compromises/) among others. 
+Attack vectors observed in real life OSS supply chain attacks are documented in [SLSA Threat Model](https://slsa.dev/spec/v1.0/threats-overview), [CNCF Supply Chain Compromises](https://tag-security.cncf.io/community/catalog/compromises/) among others.
 Notable attack patterns involve
 
 | Attack Vector                | Description                                                                                                                  | Notable Incident                |
@@ -85,21 +83,19 @@ Vulnerabilities are unintentional side-effects of software bugs that are inevita
 
 Malicious OSS is a larger threat than vulnerabilities because of the direct impact. This is evident by analyzing [CNCF Supply Chain Compromises](https://tag-security.cncf.io/community/catalog/compromises/). Outdated dependencies only account for `1.2%` of the compromises while publishing infrastructure compromise and malicious maintainers contribute to `30%` of compromises among tracked incidents.
 
-<Image
-  src={SupplyChainCompromiseChart}
-  alt="1P and 3P OSS Relationship" />
+<Image src={SupplyChainCompromiseChart} alt="1P and 3P OSS Relationship" />
 
 ## What is Software Composition Analysis (SCA)?
 
 SCA tools identify the composition of a software artifact, particularly it’s 3rd party dependencies and their vulnerabilities. Typically they rely on a vulnerability databases such as [NVD](https://nvd.nist.gov/) or [OSV](https://osv.dev/). The process involves matching discovered components by coordinates aka. package versions with a vulnerability database to identify vulnerable components. These classes of tools have evolved over the years with code analysis capabilities to reduce noise and eliminate false positives.
 
-### Next-Gen: Reachability 
+### Next-Gen: Reachability
 
 An OSS library is not vulnerable in its entirety, some code block within a function can be vulnerable. An application using a vulnerable version of an OSS library is impacted only if there is a [reachable path](https://en.wikipedia.org/wiki/Reachability) from the host application to the vulnerable function in the library. This is easier said than done due to complexities involved in whole program call graph generation and lack of precise vulnerable function symbols in security advisories. Next-gen SCA tools performs reachability analysis to identify evidence of exploitability to help prioritize fixing and eliminate noise.
 
 ### Does SCA Solve OSS Risks?
 
-Partially. SCA has been *attempting* to solve the problem of vulnerable OSS components for more than a decade now. High noise and precision gaps in early SCA tools did not solve the problem effectively. Next-gen SCA tools aim to solve that through code analysis. However, SCA tools **do not protect against malicious OSS** and software supply chain attacks that arise due to complexity and vulnerability in any of the systems involved in software delivery within and outside an enterprise.
+Partially. SCA has been _attempting_ to solve the problem of vulnerable OSS components for more than a decade now. High noise and precision gaps in early SCA tools did not solve the problem effectively. Next-gen SCA tools aim to solve that through code analysis. However, SCA tools **do not protect against malicious OSS** and software supply chain attacks that arise due to complexity and vulnerability in any of the systems involved in software delivery within and outside an enterprise.
 
 | Risk                        | SCA     | Gap                                                                                   |
 | --------------------------- | ------- | ------------------------------------------------------------------------------------- |

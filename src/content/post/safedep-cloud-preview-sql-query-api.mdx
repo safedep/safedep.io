@@ -11,12 +11,12 @@ tags:
 ---
 
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import { YouTube } from "astro-embed";
+import { YouTube } from 'astro-embed';
 import { registerLink } from '~/navigation';
 
-Developer experience is often specialized. Apart from providing domain specific use-cases, ease of getting started and ample documentation, flexibility of use especially with custom integration is important. This allows developer and security engineers, who are often subject matter experts to use a solution as per their requirement instead of compromising and following the workflows enforced by the product. This is a key focus at [SafeDep](#) in our product development efforts. We want to provide the best experience to security and platform engineers in protecting themselves against malicious, vulnerable and risky open source components. 
+Developer experience is often specialized. Apart from providing domain specific use-cases, ease of getting started and ample documentation, flexibility of use especially with custom integration is important. This allows developer and security engineers, who are often subject matter experts to use a solution as per their requirement instead of compromising and following the workflows enforced by the product. This is a key focus at [SafeDep](#) in our product development efforts. We want to provide the best experience to security and platform engineers in protecting themselves against malicious, vulnerable and risky open source components.
 
-To enable this, we shipped a key building block required to *find what you need*. Instead of being restricted by UI and Tables, engineers can use their familiar SQL query language to find and export security risk related information from [SafeDep Cloud](#). Here is a quick `#build-in-public` demo of this feature.
+To enable this, we shipped a key building block required to _find what you need_. Instead of being restricted by UI and Tables, engineers can use their familiar SQL query language to find and export security risk related information from [SafeDep Cloud](#). Here is a quick `#build-in-public` demo of this feature.
 
 ## Example
 
@@ -39,7 +39,7 @@ Query returned 3 results
 │ https://github.com/safedep/api.git        │ main             │
 ├───────────────────────────────────────────┼──────────────────┤
 │ https://github.com/safedep/control.git    │ main             │
-└───────────────────────────────────────────┴──────────────────┘         
+└───────────────────────────────────────────┴──────────────────┘
 ```
 
 > Leaking private repositories :-O
@@ -47,9 +47,9 @@ Query returned 3 results
 You can also use complex queries to filter across an organization wide SBOM
 
 ```sql
-select vulnerabilities.cve_id, vulnerabilities.summary from projects 
-  where projects.name = 'safedep/demo-client-java' 
-  and projects.version = 'v1.2.3' 
+select vulnerabilities.cve_id, vulnerabilities.summary from projects
+  where projects.name = 'safedep/demo-client-java'
+  and projects.version = 'v1.2.3'
   and vulnerabilities.risk = 'CRITICAL'
 ```
 
