@@ -1,3 +1,4 @@
+import type { Props } from './components/widgets/Header.astro';
 import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
 export const discordNeverExpireLink = 'https://discord.gg/kAGEj25dCn'
@@ -19,7 +20,7 @@ export const inheritedRiskForOssLink = getPermalink('why-oss-risks-larger-than-s
 export const careersNotionSiteLink = 'https://safedep-inc.notion.site/Careers-at-SafeDep-11e61d70b23680d7b98dcbdb6c710d55';
 export const openSourceLink = 'https://github.com/safedep/vet';
 
-export const headerData = {
+export const headerData: Props = {
   links: [
     {
       text: 'Solution',
