@@ -9,40 +9,38 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-
   <!-- Features2 Widget ************** -->
 
   <div class="items-center flex flex-col">
     <Features2
-    title="We are here to help!"
-    items={[
-      {
-        title: 'Email',
-        description: 'hello@safedep.io',
-        icon: 'tabler:mail',
-      },
-      {
-        title: 'Meet',
-        description: 'Schedule a meeting with our engineers',
-        callToAction: {
-          text: 'Schedule a meeting',
-          href: bookADemoLink,
+      title="We are here to help!"
+      items={[
+        {
+          title: 'Email',
+          description: 'hello@safedep.io',
+          icon: 'tabler:mail',
+        },
+        {
+          title: 'Meet',
+          description: 'Schedule a meeting with our engineers',
+          callToAction: {
+            text: 'Schedule a meeting',
+            href: bookADemoLink,
+            icon: 'tabler:calendar-event',
+          },
           icon: 'tabler:calendar-event',
         },
-        icon: 'tabler:calendar-event',
-      },
-      {
-        title: 'Community',
-        description: 'Join the open source community',
-        callToAction: {
-          text: 'Join Discord',
-          href: discordNeverExpireLink,
-          icon: 'tabler:brand-discord',
+        {
+          title: 'Community',
+          description: 'Join the open source community',
+          callToAction: {
+            text: 'Join Discord',
+            href: discordNeverExpireLink,
+            icon: 'tabler:brand-discord',
+          },
+          icon: 'tabler:calendar-event',
         },
-        icon: 'tabler:calendar-event',
-      },
-    ]}
-  />
+      ]}
+    />
   </div>
-  
 </Layout>

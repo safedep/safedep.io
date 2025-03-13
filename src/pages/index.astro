@@ -12,8 +12,13 @@ import Headline from '~/components/ui/Headline.astro';
 import { Image } from 'astro:assets';
 import SafeDepProductConcept from '~/assets/images/safedep-product-concept-5.svg';
 import Integrations from '~/components/widgets/Integrations.astro';
-import { bookADemoLink, mainCallToActionText,
-  mainCallToActionTitle, inheritedRiskForOssLink, registerLink } from '~/navigation';
+import {
+  bookADemoLink,
+  mainCallToActionText,
+  mainCallToActionTitle,
+  inheritedRiskForOssLink,
+  registerLink,
+} from '~/navigation';
 
 const metadata = {
   title: 'SafeDep',
@@ -38,20 +43,24 @@ const metadata = {
   >
     <Fragment slot="title">
       <span class="font-normal font-stretch-expanded tracking-tight">
-      Protect against <span class="font-semibold">Malicious</span> and
-      <span class="font-semibold">Vulnerable</span> Open Source <span class="px-1 py-0 bg-yellow-300 dark:text-black">Code</span>
+        Protect against <span class="font-semibold">Malicious</span> and
+        <span class="font-semibold">Vulnerable</span> Open Source <span class="px-1 py-0 bg-yellow-300 dark:text-black"
+          >Code</span
+        >
       </span>
     </Fragment>
 
     <Fragment slot="subtitle">
       SafeDep continuously scans open source code for vulnerabilities and malware helping
       <span class="p-1 bg-yellow-300 dark:text-black text-wrap">security engineering</span> teams to proactively mitigate
-      <span class="text-accent dark:text-white highlight"><a href={inheritedRiskForOssLink}>inherited OSS risks</a></span>
+      <span class="text-accent dark:text-white highlight"
+        ><a href={inheritedRiskForOssLink}>inherited OSS risks</a></span
+      >
     </Fragment>
 
     <Fragment slot="image">
       <Image
-        src={"/images/vet-demo.gif"}
+        src={'/images/vet-demo.gif'}
         alt="SafeDep Vet Demo"
         class="mx-auto rounded-md w-full"
         widths={[400, 768, 1024, 2040]}
@@ -65,20 +74,25 @@ const metadata = {
 
   <!-- API examples -->
   <div class="justify-center pb-8">
-    <Headline title="Developer Platform Native" tagline="#API #First" subtitle="SafeDep provides a HTTP/JSON and gRPC API for security engineers to integrate OSS risk management into internal developer platform using multi-language SDKs" />
+    <Headline
+      title="Developer Platform Native"
+      tagline="#API #First"
+      subtitle="SafeDep provides a HTTP/JSON and gRPC API for security engineers to integrate OSS risk management into internal developer platform using multi-language SDKs"
+    />
     <img src="/images/api-demo-1-ts.svg" alt="SafeDep API Example" class="mx-auto rounded-md" />
     <div class="flex pt-4 justify-center">
       <a href={registerLink} target="_blank" class="btn btn-primary">Get API Access</a>
     </div>
   </div>
 
-
   <!-- Product concept section -->
   <div class="justify-center">
-    <Headline title="Establish Trust on OSS Supply Chain" tagline={"Custom Policy as Code"} subtitle={
-      "Build your own open source risk management program using SafeDep." +
-      " Enforce your opinionated security guardrails within your developer platform without friction"
-    } />
+    <Headline
+      title="Establish Trust on OSS Supply Chain"
+      tagline={'Custom Policy as Code'}
+      subtitle={'Build your own open source risk management program using SafeDep.' +
+        ' Enforce your opinionated security guardrails within your developer platform without friction'}
+    />
     <div class="relative m-auto max-w-5xl">
       <Image
         class="mx-auto rounded-md w-full"
@@ -182,8 +196,7 @@ const metadata = {
       },
       {
         title: 'Stay Compliant',
-        description:
-          'Block risky OSS components from being introduced in code while maintaining operational control.',
+        description: 'Block risky OSS components from being introduced in code while maintaining operational control.',
         icon: 'tabler:arrows-right-left',
       },
       {
@@ -228,7 +241,7 @@ const metadata = {
       {
         title: 'Why is SafeDep "developer first"?',
         description:
-          "We believe the future of cyber security is close collaboration between security and engineering teams. These teams are likely to build organization and platform specific security solutions. SafeDep intends to help security engineering teams to achieve safe and trusted OSS guarantees for their internal developer platform.",
+          'We believe the future of cyber security is close collaboration between security and engineering teams. These teams are likely to build organization and platform specific security solutions. SafeDep intends to help security engineering teams to achieve safe and trusted OSS guarantees for their internal developer platform.',
       },
     ]}
   >

