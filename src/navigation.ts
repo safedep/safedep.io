@@ -1,6 +1,7 @@
+import type { Props } from './components/widgets/Header.astro';
 import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
-export const discordNeverExpireLink = 'https://discord.gg/kAGEj25dCn'
+export const discordNeverExpireLink = 'https://discord.gg/kAGEj25dCn';
 export const bookADemoLink = 'https://calendly.com/abhisek-safedep/30min';
 export const registerLink = 'https://platform.safedep.io';
 export const joinWaitListLink = registerLink;
@@ -9,17 +10,19 @@ export const registerLinkTarget = '';
 export const safedepGitHubOrgLink = 'https://github.com/safedep';
 export const safedepVetGitHubLink = 'https://github.com/safedep/vet';
 export const mainCallToActionTitle = 'Protect against OSS Attacks';
-export const mainCallToActionText = 'Rollout a developer first OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails.';
+export const mainCallToActionText =
+  'Rollout a developer first OSS governance and risk mitigation program. Leverage policy as code to enforce your opinionated security guardrails.';
 export const mainDocumentationLink = 'https://docs.safedep.io';
 export const apiDocumentationLink = 'https://docs.safedep.io/guides/insights-api-using-typescript';
 export const sdkDocumentationLink = 'https://docs.safedep.io/guides/insights-api-using-typescript';
 export const partnershipLink = 'mailto:hello@safedep.io?subject=Partnership';
 export const communityForumLink = 'https://github.com/safedep/vet/discussions';
-export const inheritedRiskForOssLink = getPermalink('why-oss-risks-larger-than-sca')
-export const careersNotionSiteLink = 'https://safedep-inc.notion.site/Careers-at-SafeDep-11e61d70b23680d7b98dcbdb6c710d55';
+export const inheritedRiskForOssLink = getPermalink('why-oss-risks-larger-than-sca');
+export const careersNotionSiteLink =
+  'https://safedep-inc.notion.site/Careers-at-SafeDep-11e61d70b23680d7b98dcbdb6c710d55';
 export const openSourceLink = 'https://github.com/safedep/vet';
 
-export const headerData = {
+export const headerData: Props = {
   links: [
     {
       text: 'Solution',
@@ -53,7 +56,7 @@ export const headerData = {
           text: 'API',
           href: apiDocumentationLink,
         },
-      ]
+      ],
     },
     // {
     //   text: 'Homes',

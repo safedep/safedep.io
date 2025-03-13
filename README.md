@@ -19,5 +19,3 @@ Build static site
 ```shell
 npm run build
 ```
-
-

