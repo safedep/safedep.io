@@ -5,7 +5,7 @@ export interface Post {
   /** A unique ID number that identifies a post. */
   id: string;
 
-  /** A post’s unique slug – part of the post’s URL based on its name, i.e. a post called “My Sample Page” has a slug “my-sample-page”. */
+  /** A post's unique slug – part of the post's URL based on its name, i.e. a post called "My Sample Page" has a slug "my-sample-page". */
   slug: string;
 
   /**  */
@@ -28,7 +28,7 @@ export interface Post {
   /**  */
   tags?: Taxonomy[];
   /**  */
-  author?: string;
+  author?: string | Author;
 
   /**  */
   metadata?: MetaData;
@@ -121,9 +121,22 @@ interface TeamMember {
   classes?: Record<string, string>;
 }
 
-interface Social {
+export interface Social {
   icon?: string;
   href?: string;
+}
+
+export interface Author {
+  /** Author's name - required */
+  name: string;
+  /** Author's photo - can be a static image path or a full URL (starting with http://, https://, or //) */
+  photo?: string;
+  /** URL to author's LinkedIn profile */
+  linkedin?: string;
+  /** URL to author's Twitter/X profile */
+  twitter?: string;
+  /** URL to author's GitHub profile */
+  github?: string;
 }
 
 export interface Stat {
