@@ -2,7 +2,7 @@
 publishDate: 2025-03-28T00:00:00Z
 title: 'Agentic Workflows for Malicious Package Analysis'
 image: /images/agentic-workflow-malicious-package-analysis.png
-excerpt: Experiments with agentic workflows for malicious package analysis built using a Claude Desktop, Model Context Protocol (MCP) server, static code analysis and SafeDep Cloud API tools.
+excerpt: Experiments with agentic workflows for malicious package analysis built using Claude Desktop, Model Context Protocol (MCP) server, static code analysis and SafeDep Cloud API tools.
 tags:
   - npm
   - malware
@@ -12,7 +12,7 @@ At [SafeDep](https://safedep.io) we operate a large scale malicious package scan
 
 ## Agentic Workflows
 
-False positive is a common problem of any tool that employs static code analysis. Particularly for malicious package analysis, our goal is to reduce false positives to minimize the efforts required in manual triage. Towards this, we built an experimental [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that can help an MCP Client like [Claude Desktop](https://docs.anthropic.com/) to perform an additional layer of analysis for packages that are classified as malicious by our real-time scanning infrastructure. Particularly, we wanted to give the LLM access to all the tools and resources that we employ in our analysis pipeline. This includes
+False positive is a common problem of any tool that employs static code analysis. Particularly for malicious package analysis, our goal is to reduce false positives to minimize the efforts required in manual triage. Towards this, we built an experimental [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that can help an MCP Clients like [Claude Desktop](https://docs.anthropic.com/) to perform an additional layer of analysis for packages that are classified as malicious by our real-time scanning infrastructure. Particularly, we wanted to give the LLM access to all the tools and resources that we employ in our analysis pipeline. This includes
 
 - Static code analysis tools (AST query, search etc.)
 - Code capability analysis engine
@@ -22,13 +22,17 @@ False positive is a common problem of any tool that employs static code analysis
 - GitHub API
 - Prompt template with our guidance for each ecosystem
 
-![](/images/malysis-agentic-workflow.png)
+A simplified architecture of the setup is shown below.
+
+![Agentic Workflow](/images/malysis-agentic-workflow.png)
 
 While the results are promising and exciting for us but there is a long way to go to productionize this. For example, our automated systems that monitor public package registries use statically coded workflows and operate at < 10% time cost of the agentic execution currently. It also minimizes LLM calls by leveraging static code analysis and opinionated rules to scale much better.
 
 ## Example Analysis
 
 Given below is an unedited result of Claude Desktop running our agentic workflow for a malicious package flagged by our real-time scanning infrastructure. Typically it requires us to manually triage the package and then provide a detailed analysis.
+
+**NOTE:** If you believe `ok-script` is wrongly flagged as malicious, please drop us a note with supporting evidences to `hello@safedep.io`.
 
 ### 🚨 Security Analysis: ok-script 0.0.504 🚨
 
