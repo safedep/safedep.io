@@ -1,0 +1,157 @@
+---
+publishDate: 2025-03-28T00:00:00Z
+title: 'Agentic Workflows for Malicious Package Analysis'
+image: /images/agentic-workflow-malicious-package-analysis.png
+excerpt: Experiments with agentic workflows for malicious package analysis built using a Claude Desktop, Model Context Protocol (MCP) server, static code analysis and SafeDep Cloud API tools.
+tags:
+  - npm
+  - malware
+---
+
+At [SafeDep](https://safedep.io) we operate a large scale malicious package scanning infrastructure. Using it, we continuously monitor `npm` and `pypi` package registries for malicious packages. Unlike vulnerabilities, malicious packages are not reported voluntarily by developers, so we need real-time detection. We perform this analysis using a combination of static code analysis and LLM based analysis. Learn more on [how to use malicious package analysis](https://docs.safedep.io/cloud/malware-analysis) with [vet](https://github.com/safedep/vet).
+
+## Agentic Workflows
+
+False positive is a common problem of any tool that employs static code analysis. Particularly for malicious package analysis, our goal is to reduce false positives to minimize the efforts required in manual triage. Towards this, we built an experimental [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that can help an MCP Client like [Claude Desktop](https://docs.anthropic.com/) to perform an additional layer of analysis for packages that are classified as malicious by our real-time scanning infrastructure. Particularly, we wanted to give the LLM access to all the tools and resources that we employ in our analysis pipeline. This includes
+
+- Static code analysis tools (AST query, search etc.)
+- Code capability analysis engine
+- YARA forge rule matching tool
+- [SafeDep Insights API](https://docs.safedep.io/guides/insights-api-using-typescript)
+- Package registry adapters (tools)
+- GitHub API
+- Prompt template with our guidance for each ecosystem
+
+![](/images/malysis-agentic-workflow.png)
+
+While the results are promising and exciting for us but there is a long way to go to productionize this. For example, our automated systems that monitor public package registries use statically coded workflows and operate at < 10% time cost of the agentic execution currently. It also minimizes LLM calls by leveraging static code analysis and opinionated rules to scale much better.
+
+## Example Analysis
+
+Given below is an unedited result of Claude Desktop running our agentic workflow for a malicious package flagged by our real-time scanning infrastructure. Typically it requires us to manually triage the package and then provide a detailed analysis.
+
+### 🚨 Security Analysis: ok-script 0.0.504 🚨
+
+#### ❗ Executive Summary
+
+**ok-script 0.0.504** exhibits strong indicators of malicious intent, including obfuscated functionality, suspicious binary components, and potentially harmful system manipulation capabilities.
+
+#### 📊 Package Overview
+
+| Attribute | Value |
+|-----------|-------|
+| Package Name | ok-script |
+| Version | 0.0.504 |
+| Repository | https://github.com/ok-oldking/ok-script |
+| Risk Level | 🔴 **HIGH** |
+
+#### 🔍 Key Findings
+
+##### 📁 Suspicious Binary Files
+- 🚩 **Disguised Binary Executable** detected:
+  - `ok/__init__.cp312-win_amd64.pyd` (2.7MB)
+  - File classified as `application/vnd.microsoft.portable-executable` with extension `.exe`
+  - Loaded at package import time via the `__init__.py` file
+
+##### 🔄 Dangerous Auto-Update Mechanism
+- 🚩 The package contains a sophisticated auto-update system (`GitUpdater.py`) that:
+  - Downloads code from remote repositories autonomously
+  - Executes code in new virtual environments
+  - Can kill processes and modify system PATH values
+  - Manipulates file ownership using Windows APIs
+
+```python
+# Suspicious process termination code from GitUpdater.py
+def wait_kill_pid(pid):
+    process = psutil.Process(pid)
+    process.terminate()
+    process.wait(timeout=30)
+    logger.info(f'kill process {pid} exists {psutil.pid_exists(pid)}')
+```
+
+##### 💻 System Manipulation Capabilities
+- 🚩 **Admin Detection**: Functions to check for administrator privileges
+- 🚩 **System Control**: Can prevent system sleep and manipulate display settings
+- 🚩 **Hardware Identification**: Accesses BIOS serial numbers and hardware info
+- 🚩 **Process Control**: Can enumerate and terminate system processes
+
+##### 📝 Repository Analysis
+
+| Repository Attribute | Observation | Risk Indication |
+|----------------------|-------------|----------------|
+| Creation Date | December 2023 | Recent creation despite high version number |
+| Content | Nearly empty (only README.md) | Repository likely just a placeholder |
+| Activity | Very limited (2 commits) | No development activity matching binary complexity |
+| Latest Commit | March 2025 | Very recent activity |
+
+##### 🧪 Vulnerability Assessment
+
+- 🚩 **No Provenance Information**: Package lacks SLSA provenance data
+- 🚩 **No Vulnerability Reporting**: Package has no reported vulnerabilities (likely due to limited usage)
+- 🚩 **No Popularity Data**: Indicates minimal legitimate usage
+
+#### 🔎 Detailed Technical Analysis
+
+##### 🔍 Imported System Modules
+The package imports numerous sensitive modules:
+- `psutil` (process manipulation)
+- `win32api`, `win32security` (Windows system API access)
+- `subprocess` (command execution)
+
+##### 🔄 Auto-Update Exploitation Path
+1. Auto-update system (`GitUpdater.py`) detects version differences
+2. Downloads code from remotely controlled repository via multiple proxy servers
+3. Creates isolated Python environment
+4. Executes the downloaded code with system privileges
+
+```python
+# GithubMultiDownloader.py contains a list of proxy servers for evading detection
+download_url_us = [
+    ['https://gh.h233.eu.org/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
+    ['https://gh.ddlc.top/https://github.com', '美国',
+     '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
+    ['https://dl.ghpig.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
+    # ... additional proxy servers omitted
+]
+```
+
+```python
+# Code from GitUpdater.py showing remote execution capabilities
+def start_app(self):
+    communicate.update_running.emit(True, True)
+    logger.info(f'start_app enter')
+    try:
+        new_ver = self.starting_version
+        entry = 'main.py'
+
+        script_path = os.path.join('repo', new_ver, entry)
+        # [...snip...]
+        process = subprocess.Popen(
+            [python_path, script_path, f'--parent_pid={os.getpid()}'],
+            creationflags=subprocess.CREATE_NO_WINDOW,
+            close_fds=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+```
+
+##### 📝 Recommendations
+
+1. 🛑 **IMMEDIATELY REMOVE THIS PACKAGE** if installed: `pip uninstall ok-script`
+2. 🔍 Scan systems for indicators of compromise
+3. 🔐 Check for unauthorized network connections
+4. 📊 Monitor system for unusual process activity
+5. 🧹 Verify no scheduled tasks or persistent mechanisms were installed
+6. 🚫 Add package to organizational blocklists
+
+#### 🧠 Analysis Techniques Used
+
+- Binary file type analysis
+- Source code review for dangerous capabilities
+- Repository metadata analysis
+- GitHub commit history investigation
+- Publisher reputation assessment
+
+---
+
+**Conclusion**: This package exhibits multiple high-risk indicators consistent with malware. The combination of obfuscated binary code, system manipulation capabilities, and auto-update mechanisms strongly suggests this package is designed for unauthorized access and remote control of affected systems.
