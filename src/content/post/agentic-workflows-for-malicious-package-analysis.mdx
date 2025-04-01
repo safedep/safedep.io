@@ -42,22 +42,24 @@ Given below is an unedited result of Claude Desktop running our agentic workflow
 
 #### 📊 Package Overview
 
-| Attribute | Value |
-|-----------|-------|
-| Package Name | ok-script |
-| Version | 0.0.504 |
-| Repository | https://github.com/ok-oldking/ok-script |
-| Risk Level | 🔴 **HIGH** |
+| Attribute    | Value                                   |
+| ------------ | --------------------------------------- |
+| Package Name | ok-script                               |
+| Version      | 0.0.504                                 |
+| Repository   | https://github.com/ok-oldking/ok-script |
+| Risk Level   | 🔴 **HIGH**                             |
 
 #### 🔍 Key Findings
 
 ##### 📁 Suspicious Binary Files
+
 - 🚩 **Disguised Binary Executable** detected:
   - `ok/__init__.cp312-win_amd64.pyd` (2.7MB)
   - File classified as `application/vnd.microsoft.portable-executable` with extension `.exe`
   - Loaded at package import time via the `__init__.py` file
 
 ##### 🔄 Dangerous Auto-Update Mechanism
+
 - 🚩 The package contains a sophisticated auto-update system (`GitUpdater.py`) that:
   - Downloads code from remote repositories autonomously
   - Executes code in new virtual environments
@@ -74,6 +76,7 @@ def wait_kill_pid(pid):
 ```
 
 ##### 💻 System Manipulation Capabilities
+
 - 🚩 **Admin Detection**: Functions to check for administrator privileges
 - 🚩 **System Control**: Can prevent system sleep and manipulate display settings
 - 🚩 **Hardware Identification**: Accesses BIOS serial numbers and hardware info
@@ -81,12 +84,12 @@ def wait_kill_pid(pid):
 
 ##### 📝 Repository Analysis
 
-| Repository Attribute | Observation | Risk Indication |
-|----------------------|-------------|----------------|
-| Creation Date | December 2023 | Recent creation despite high version number |
-| Content | Nearly empty (only README.md) | Repository likely just a placeholder |
-| Activity | Very limited (2 commits) | No development activity matching binary complexity |
-| Latest Commit | March 2025 | Very recent activity |
+| Repository Attribute | Observation                   | Risk Indication                                    |
+| -------------------- | ----------------------------- | -------------------------------------------------- |
+| Creation Date        | December 2023                 | Recent creation despite high version number        |
+| Content              | Nearly empty (only README.md) | Repository likely just a placeholder               |
+| Activity             | Very limited (2 commits)      | No development activity matching binary complexity |
+| Latest Commit        | March 2025                    | Very recent activity                               |
 
 ##### 🧪 Vulnerability Assessment
 
@@ -97,12 +100,15 @@ def wait_kill_pid(pid):
 #### 🔎 Detailed Technical Analysis
 
 ##### 🔍 Imported System Modules
+
 The package imports numerous sensitive modules:
+
 - `psutil` (process manipulation)
 - `win32api`, `win32security` (Windows system API access)
 - `subprocess` (command execution)
 
 ##### 🔄 Auto-Update Exploitation Path
+
 1. Auto-update system (`GitUpdater.py`) detects version differences
 2. Downloads code from remotely controlled repository via multiple proxy servers
 3. Creates isolated Python environment
