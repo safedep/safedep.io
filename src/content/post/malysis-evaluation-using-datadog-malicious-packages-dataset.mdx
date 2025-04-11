@@ -1,0 +1,139 @@
+---
+publishDate: 2025-04-10T00:00:00Z
+title: 'Analysis of 5000+ Malicious Open Source Packages'
+image: /images/analysis-dd-dataset-banner.png
+excerpt: Analysis of malicious open source packages from Datadog's malicious packages dataset. Each of these packages was found in the wild and confirmed to be malicious. The goal of this analysis is to understand the nature of malicious OSS packages and how they are distributed in the wild.
+tags:
+  - npm
+  - pypi
+  - analysis
+  - malware
+  - research
+---
+
+# TL;DR
+
+- Analysis of a total of 5,576 open source packages from [DataDog Malicious Packages Dataset](https://github.com/DataDog/malicious-software-packages-dataset)
+- 96.2% of the packages were detected as malicious by our code scanning engine.
+- 64% (3,611) were from `npm` and 35% (1,965) were from `PyPI` among the malicious packages
+- 71.9% of the detections were with high confidence with multiple signals and evidence
+- [T1041 – Exfiltration Over C2 Channel](https://attack.mitre.org/techniques/T1041/) was the most common TTP
+- The top two behaviors were `exfiltration via Burp Collaborator` and `pre-install command execution in NPM scripts`.
+- 90% of the malicious packages were very small in size (< 10KB)
+- 44 clear typosquatting attempts on popular libraries (e.g. `beautifulsoup‑numpy`, `djangoo`)
+- 10 YARA rules matched > 75% of the malicious packages indicating common TTPs
+
+## Key Findings at a Glance
+
+### TTPs
+
+The Top 10 YARA rules that matched > 75% of the malicious packages are shown below. The rules were curated from the [YARA Forge](https://yarahq.github.io/) project. This is an indicator of most common TTPs used by malicious actors.
+
+![](/images/dd-analysis-yara.png)
+
+The `burp_collab` rule match is an indicator of attacker leveraging [Burp Collaborator](https://portswigger.net/burp/documentation/collaborator) for exfiltration of data. In our past research, we identified [multiple malicious packages](burp-collaborator-for-dependency-confusion-attack) that uses Burp Collaborator for exfiltration of data.
+
+The following table shows the [MITRE ATT&CK mapping](https://attack.mitre.org/) for the top behaviors.
+
+| Behavior                            | MITRE ATT&CK ID                                    | Tactic              |
+| ----------------------------------- | -------------------------------------------------- | ------------------- |
+| Burp Collaborator usage             | T1041 – Exfiltration Over C2 Channel               | Exfiltration        |
+| npm preinstall arbitrary exec       | T1059 – Command and Script Interpreter             | Execution           |
+| System info harvesting              | T1082 – System Information Discovery               | Discovery           |
+| External IP discovery (`ipify.org`) | T1016.001 – Internet Connection Discovery          | Discovery           |
+| Runtime phone home / beacon         | T1071.001 – Web Protocols (C2)                     | Command and Control |
+| Hardcoded host for exfiltration     | T1567.002 – Exfiltration over Web Service          | Exfiltration        |
+| `setuptools` custom command exec    | T1059.006 – Command and Script Interpreter: Python | Execution           |
+| Hard‑coded IP callbacks             | T1071.001 – Web Protocols (C2)                     | Command and Control |
+| System info + upload                | T1567.002 – Exfiltration over Web Service          | Exfiltration        |
+| Sensitive file access               | T1552.001 – Credentials in Files                   | Credential Access   |
+
+### Signals by File Extension
+
+The distribution file extensions that that contributed to evidences (signals) based on which a package was classified as malicious are shown below.
+
+![](/images/dd-analysis-files.png)
+
+**Note:** The `JSON` files are classified due to extensive use of `npm` install hooks in `package.json` files.
+
+### Size of Malicious Packages
+
+Interestingly, the size of the malicious packages is very small with 90% of them being less than `10KB`.
+
+![](/images/dd-analysis-size.png)
+
+### Typosquatting
+
+Typosquatting is a technique used by attackers to trick users into installing malicious packages. In this technique,
+attackers create packages that are similar to popular packages but with a few characters changed.
+Below are the most common typosquatting attempts on popular libraries:
+
+| Typosquat Name      | Target Package Name                 | Registry | Count |
+| ------------------- | ----------------------------------- | -------- | ----- |
+| expresss            | express                             | npm      | 7     |
+| reqests             | requests                            | PyPI     | 5     |
+| djangoo             | django                              | PyPI     | 4     |
+| lodashs             | lodash                              | npm      | 4     |
+| reactjs             | react                               | npm      | 3     |
+| beautifulsoup‑numpy | beautifulsoup4 + numpy (combo bait) | PyPI     | 3     |
+| pandas3             | pandas                              | PyPI     | 3     |
+| flaskk              | flask                               | PyPI     | 2     |
+| asyncioo            | asyncio                             | PyPI     | 2     |
+| webpackjs           | webpack                             | npm      | 2     |
+
+Common patterns observed:
+
+- Double letters or missing letters (`expresss`, `reqests`, `djangoo`, `flaskk`) remain the easiest way attackers catch fat‑finger installs.
+- Version oriented bait (`pandas3`) and combo bait (`beautifulsoup‑numpy`) try to appear "new" or "feature‑rich."
+
+### Dependency Confusion
+
+[Dependency Confusion Attacks](https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610) were another most common
+technique observed in the dataset. Following are some of the examples based on unusually high version numbers:
+
+| Package Name       | Version   |
+| ------------------ | --------- |
+| `32red-admin`      | `999.9.9` |
+| `32red-analytics`  | `999.9.9` |
+| `32red-api`        | `999.9.9` |
+| `32red-api-client` | `999.9.9` |
+| `32red-auth`       | `999.9.9` |
+
+While the examples are insufficient, the common observation is red teamers often use high version numbers
+in dependency confusion attempts to gain access to the target organization.
+
+## Background
+
+We at [SafeDep](https://safedep.io) build and maintain a code analysis engine optimized for scanning open source packages for malicious code. This engine uses a hybrid approach consisting of
+
+1. [YARA Forge](https://yarahq.github.io/) rules for detecting known malicious patterns
+2. Static code analysis for identifying code blocks that perform specific operations (e.g. `network:connect`, `fs:write`, `process:exec` etc.)
+3. LLM based code analysis for basic block of code that are potentially malicious based on [1] and [2]
+
+We use this code analysis engine to continuously scan all open source packages published to supported registries such as `npm`, `PyPI`, `RubyGems` etc. Data from this analysis engine is used by [vet](https://github.com/safedep/vet), our free and open source supply chain security tool to protect users against malicious OSS packages in near realtime. 
+
+### Evaluation Dataset
+
+The LLM usage in the analysis workflow makes the overall system probabilistic due to the inherent nature of LLMs. To be able to maintain and improve quality of analysis, we needed an evaluation dataset. [DataDog's Malicious Packages Dataset](https://github.com/DataDog/malicious-software-packages-dataset) was a right fit for our needs.
+
+## Methodology
+
+The analysis was performed using the [SafeDep Package Analysis](https://docs.safedep.io/cloud/malware-analysis) engine with necessary customizations to support the analysis of malicious packages from `zip` files instead of analysing artifacts directly from package registries. The reason being, many of the malicious packages in the dataset are already removed from the package registries due to being malicious.
+
+Following customizations were made
+
+- Originally supports OSS package scanning directly from package registries
+- A custom script to extract zip files with `infected` password from input DataDog's malicious packages dataset into local file system
+- A custom adapter to read package files from local file system
+- Scan the local packages using the SafeDep Package Analysis engine
+
+While the scanning engine that we used is not open source at this time, anyone can use it with [vet](https://github.com/safedep/vet), our free and open source supply chain security tool. Developers can build custom tools using the [Package Analysis API](https://docs.safedep.io/cloud/malware-analysis).
+
+## Conclusion
+
+While the goal of this analysis was to evaluate and create a benchmark for our code analysis engine, the results are useful for the community to understand the nature of malicious open source packages and how they are distributed in the wild. In fact, this analysis helps us fine tune our analysis engine to be more accurate and reduce false positives. Interested readers can use the data for their own analysis and research.
+
+- [vet](https://github.com/safedep/vet) integrates with the analysis API to protect against malicious OSS packages in CI/CD pipelines.
+- [Documentation](https://docs.safedep.io/cloud/malware-analysis) on how to use malicious package analysis service
+- [vetpkg.dev/mal](https://vetpkg.dev/mal) is an example app built to show most recently analyzed OSS packages
+
