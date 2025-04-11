@@ -2,7 +2,7 @@
 publishDate: 2025-04-10T00:00:00Z
 title: 'Analysis of 5000+ Malicious Open Source Packages'
 image: /images/analysis-dd-dataset-banner.png
-excerpt: Analysis of malicious open source packages from Datadog's malicious packages dataset. Each of these packages was found in the wild and confirmed to be malicious. The goal of this analysis is to understand the nature of malicious OSS packages and how they are distributed in the wild.
+excerpt: Analysis of malicious open source packages from Datadog's malicious packages dataset. Each of these packages were found in the wild and confirmed to be malicious. The goal of this analysis is to understand the nature of malicious OSS packages and how they are distributed in the wild.
 tags:
   - npm
   - pypi
@@ -13,15 +13,15 @@ tags:
 
 # TL;DR
 
-- Analysis of a total of 5,576 open source packages from [DataDog Malicious Packages Dataset](https://github.com/DataDog/malicious-software-packages-dataset)
+- We analyzed a total of 5,576 open source packages from [DataDog Malicious Packages Dataset](https://github.com/DataDog/malicious-software-packages-dataset).
 - 96.2% of the packages were detected as malicious by our code scanning engine.
-- 64% (3,611) were from `npm` and 35% (1,965) were from `PyPI` among the malicious packages
-- 71.9% of the detections were with high confidence with multiple signals and evidence
-- [T1041 – Exfiltration Over C2 Channel](https://attack.mitre.org/techniques/T1041/) was the most common TTP
+- 64% (3,611) were from `npm` and 35% (1,965) were from `PyPI` among the malicious packages.
+- 71.9% of the detections were with high confidence with multiple signals and evidence.
+- [T1041 – Exfiltration Over C2 Channel](https://attack.mitre.org/techniques/T1041/) was the most common TTP.
 - The top two behaviors were `exfiltration via Burp Collaborator` and `pre-install command execution in NPM scripts`.
-- 90% of the malicious packages were very small in size (< 10KB)
-- 44 clear typosquatting attempts on popular libraries (e.g. `beautifulsoup‑numpy`, `djangoo`)
-- 10 YARA rules matched > 75% of the malicious packages indicating common TTPs
+- 90% of the malicious packages were very small in size (< 10KB).
+- 44 clear typosquatting attempts on popular libraries (e.g. `beautifulsoup‑numpy`, `djangoo`).
+- 10 YARA rules matched > 75% of the malicious packages indicating common TTPs.
 
 ## Key Findings at a Glance
 
@@ -31,7 +31,7 @@ The Top 10 YARA rules that matched > 75% of the malicious packages are shown bel
 
 ![](/images/dd-analysis-yara.png)
 
-The `burp_collab` rule match is an indicator of attacker leveraging [Burp Collaborator](https://portswigger.net/burp/documentation/collaborator) for exfiltration of data. In our past research, we identified [multiple malicious packages](burp-collaborator-for-dependency-confusion-attack) that uses Burp Collaborator for exfiltration of data.
+The `burp_collab` rule match is an indicator of attackers leveraging [Burp Collaborator](https://portswigger.net/burp/documentation/collaborator) for exfiltration of data. In our past research, we identified [multiple malicious packages](burp-collaborator-for-dependency-confusion-attack) that use Burp Collaborator for exfiltration of data.
 
 The following table shows the [MITRE ATT&CK mapping](https://attack.mitre.org/) for the top behaviors.
 
@@ -50,7 +50,7 @@ The following table shows the [MITRE ATT&CK mapping](https://attack.mitre.org/) 
 
 ### Signals by File Extension
 
-The distribution file extensions that that contributed to evidences (signals) based on which a package was classified as malicious are shown below.
+The distribution of file extensions that contributed to evidence (signals) based on which a package was classified as malicious are shown below.
 
 ![](/images/dd-analysis-files.png)
 
@@ -104,7 +104,7 @@ in dependency confusion attempts to gain access to the target organization.
 
 ## Background
 
-We at [SafeDep](https://safedep.io) build and maintain a code analysis engine optimized for scanning open source packages for malicious code. This engine uses a hybrid approach consisting of
+We at [SafeDep](https://safedep.io) build and maintain a code analysis engine optimized for scanning open source packages for malicious code. This engine uses a hybrid approach consisting of:
 
 1. [YARA Forge](https://yarahq.github.io/) rules for detecting known malicious patterns
 2. Static code analysis for identifying code blocks that perform specific operations (e.g. `network:connect`, `fs:write`, `process:exec` etc.)
@@ -120,7 +120,7 @@ The LLM usage in the analysis workflow makes the overall system probabilistic du
 
 The analysis was performed using the [SafeDep Package Analysis](https://docs.safedep.io/cloud/malware-analysis) engine with necessary customizations to support the analysis of malicious packages from `zip` files instead of analysing artifacts directly from package registries. The reason being, many of the malicious packages in the dataset are already removed from the package registries due to being malicious.
 
-Following customizations were made
+The following customizations were made:
 
 - Originally supports OSS package scanning directly from package registries
 - A custom script to extract zip files with `infected` password from input DataDog's malicious packages dataset into local file system
