@@ -12,13 +12,7 @@ import Headline from '~/components/ui/Headline.astro';
 import { Image } from 'astro:assets';
 import SafeDepProductConcept from '~/assets/images/safedep-product-concept-5.svg';
 import Integrations from '~/components/widgets/Integrations.astro';
-import {
-  bookADemoLink,
-  mainCallToActionText,
-  mainCallToActionTitle,
-  inheritedRiskForOssLink,
-  registerLink,
-} from '~/navigation';
+import { bookADemoLink, mainCallToActionText, mainCallToActionTitle, inheritedRiskForOssLink } from '~/navigation';
 
 const metadata = {
   title: 'SafeDep',
@@ -33,12 +27,12 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Try for Free',
-        href: registerLink,
+        text: 'Star us on GitHub',
+        href: 'https://github.com/safedep/vet',
         target: '_blank',
-        icon: 'tabler:comet',
+        icon: 'tabler:brand-github',
       },
-      { text: 'Learn more', href: '#features' },
+      { text: 'Enterprise Contact', href: '/contact' },
     ]}
   >
     <Fragment slot="title">
@@ -71,19 +65,6 @@ const metadata = {
       />
     </Fragment>
   </Hero>
-
-  <!-- API examples -->
-  <div class="justify-center pb-8">
-    <Headline
-      title="Developer Platform Native"
-      tagline="#API #First"
-      subtitle="SafeDep provides a HTTP/JSON and gRPC API for security engineers to integrate OSS risk management into internal developer platform using multi-language SDKs"
-    />
-    <img src="/images/api-demo-1-ts.svg" alt="SafeDep API Example" class="mx-auto rounded-md" />
-    <div class="flex pt-4 justify-center">
-      <a href={registerLink} target="_blank" class="btn btn-primary">Get API Access</a>
-    </div>
-  </div>
 
   <!-- Product concept section -->
   <div class="justify-center">
