@@ -76,6 +76,7 @@ export default defineConfig({
   },
 
   markdown: {
+    syntaxHighlight: 'prism',
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, lazyImagesRehypePlugin],
   },
