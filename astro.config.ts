@@ -76,7 +76,13 @@ export default defineConfig({
   },
 
   markdown: {
-    syntaxHighlight: 'prism',
+    shikiConfig: {
+      theme: 'dracula',
+      defaultColor: false,
+      langs: [],
+      wrap: true,
+      transformers: [],
+    },
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, lazyImagesRehypePlugin],
   },
