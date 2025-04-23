@@ -1,0 +1,22 @@
+/* Style for inline code blocks */
+.prose :not(pre) > code {
+  @apply bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  color: inherit;
+  display: inline;
+}
+
+/* Remove before and after pseudo-elements from inline code */
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  content: none !important;
+}
+
+/* Style for code blocks */
+.prose pre {
+  @apply my-4;
+}
+
+.prose pre code {
+  @apply p-0;
+  background: none;
+} 
