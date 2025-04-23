@@ -12,11 +12,13 @@ tags:
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import { YouTube } from 'astro-embed';
 
-Today we found malicious npm package [express-cookie-parser](https://platform.safedep.io/community/malysis/01JSGWAWH87QKPKGMRK6Q0R6ZH) impersonating the popular Express [cookie-parser](https://www.npmjs.com/package/cookie-parser) package. The `README.md` file for `express-cookie-parser` is a mirror of the `cookie-parser` package. The malicious payload is in `cookie-loader.min.js` in the analyzed version `1.4.12`. The payload performs the following:
+Today we found a malicious npm package [express-cookie-parser](https://platform.safedep.io/community/malysis/01JSGWAWH87QKPKGMRK6Q0R6ZH) impersonating the popular Express [cookie-parser](https://www.npmjs.com/package/cookie-parser) package. The `README.md` file for `express-cookie-parser` is a copy from the `cookie-parser` package. The malicious payload is in `cookie-loader.min.js` in the analyzed version `1.4.12`. This an unique malicious npm sample that does not depend on pre or post install hooks. Instead, the payload is executed when a documented API from the malicious library is used by an affected application.
+
+The payload performs the following:
 
 - Acts as `stage-1` or dropper payload for `stage-2` payload
 - Fetches seed file `https://raw.githubusercontent.com/johns92/blog_app/refs/heads/main/server/.env.example`
-- Generates a C2 server server domain based on hardcoded `496AAC7E` and SHA256 hash of the seed file
+- Generates a C2 server domain based on hardcoded `496AAC7E` and SHA256 hash of the seed file
 - The C2 URL is of the format `http://${domain}/public/startup.js?ver=1.2&type=module`
 - Downloads `startup.js` from the C2 server and executes it using `node` executable found on the system
 - Deletes `cookie-loader.min.js` after execution and re-writes `index.js` to remove `require('./cookie-loader.min')`
