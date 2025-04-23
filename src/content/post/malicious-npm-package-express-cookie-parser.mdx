@@ -83,6 +83,23 @@ function f() {
 }
 ```
 
+### Domain Generation Algorithm (DGA)
+
+The C2 server domain is generated using an embedded DGA based on following two parameters
+
+- Hardcoded 4 byte XOR key `496AAC7E`
+- SHA256 hash of the seed file
+- Generate the stage-2 payload URL as `http://${generated-domain}/public/startup.js?ver=1.2&type=module`
+
+Based on our analysis, the DGA does the following:
+
+- XOR each byte of the SHA256 hash of the seed file with the hardcoded key `496AAC7E`.
+- Convert the 32 byte (XOR'd hash) result to a dotted IP address format
+
+We derived `206.214.129.67` as the C2 server domain based on SHA256 hash of the seed file `https://raw.githubusercontent.com/johns92/blog_app/refs/heads/main/server/.env.example` and the key `496AAC7E`.
+
+![](/images/express-cookie-parser-dga.png)
+
 See the [deobfuscated version](#deobfuscated-cookie-loader-min-js) of the `cookie-loader.min.js` file for more details.
 
 ## What to do if you are affected?
