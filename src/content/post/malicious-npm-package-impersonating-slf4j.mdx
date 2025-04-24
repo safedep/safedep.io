@@ -18,7 +18,7 @@ Today we found [slf4j-api-js](https://platform.safedep.io/community/malysis/01JS
 - Stays resident after installation
 - Collects system information and sends it to the C2 server
 
-### Investigation
+## Investigation
 
 We decided to analyze `slf4j-api-js@1.0.0` closely to identify the malicious behavior. The `package.json` is the most common attack vector for malicious packages as we have seen in [analyzing 5000+ malicious packages](malysis-evaluation-using-datadog-malicious-packages-dataset). For this sample, the `package.json` had a `postinstall` script
 
