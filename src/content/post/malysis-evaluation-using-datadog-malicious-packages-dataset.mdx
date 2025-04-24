@@ -11,6 +11,8 @@ tags:
   - research
 ---
 
+import NotesCard from '../../components/blog/NotesCard.astro';
+
 # TL;DR
 
 - We analyzed a total of 5,576 open source packages from [DataDog Malicious Packages Dataset](https://github.com/DataDog/malicious-software-packages-dataset).
@@ -54,7 +56,9 @@ The distribution of file extensions that contributed to evidence (signals) based
 
 ![](/images/dd-analysis-files.png)
 
-**Note:** The `JSON` files are classified due to extensive use of `npm` install hooks in `package.json` files.
+<NotesCard type="note">
+  The `JSON` files are classified due to extensive use of `npm` install hooks in `package.json` files.
+</NotesCard>
 
 ### Size of Malicious Packages
 

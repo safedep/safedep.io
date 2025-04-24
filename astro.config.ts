@@ -76,6 +76,13 @@ export default defineConfig({
   },
 
   markdown: {
+    shikiConfig: {
+      theme: 'dracula',
+      defaultColor: false,
+      langs: [],
+      wrap: true,
+      transformers: [],
+    },
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, lazyImagesRehypePlugin],
   },

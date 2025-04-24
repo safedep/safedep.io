@@ -19,22 +19,56 @@ export interface Props {
 const { post, url } = Astro.props;
 ---
 
-<section class="py-8 sm:py-16 lg:py-20 mx-auto">
+<section class="py-4 sm:py-8 lg:py-10 mx-auto">
   <article>
     <header class={post.image ? '' : ''}>
-      <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
-        <p>
-          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
-          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+      {
+        post.image ? (
+          <Image
+            src={post.image}
+            class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+            widths={[400, 900]}
+            sizes="(max-width: 900px) 400px, 900px"
+            alt={post?.excerpt || ''}
+            width={900}
+            height={506}
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="border-t dark:border-slate-700" />
+          </div>
+        )
+      }
+      <h1
+        class="px-4 sm:px-6 max-w-1xl mx-auto text-3xl md:text-4xl font-bold leading-tighter tracking-tighter font-heading text-center"
+      >
+        {post.title}
+      </h1>
+      {
+        post.excerpt && (
+          <div class=" max-w-3xl mx-auto relative my-4 p-4 rounded-lg bg-gray-50 dark:bg-slate-800 border-l-4 border-primary dark:border-blue-600">
+            <p class="flex-grow text-muted dark:text-slate-400 text-lg italic">{post.excerpt}</p>
+            <Icon name="tabler:quote" class="absolute top-2 right-2 w-6 h-6 text-gray-200 dark:text-slate-700" />
+          </div>
+        )
+      }
+      <div class="mb-1 flex justify-center">
+        <span class="text-sm text-center">
           {
             post.author && (
               <>
                 {' '}
-                · <Icon name="tabler:user" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
+                <Icon name="tabler:user" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
                 <span class="inline-block">{typeof post.author === 'string' ? post.author : post.author.name}</span>
+                {'·'}
               </>
             )
           }
+          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
+          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+
           {
             post.category && (
               <>
@@ -53,44 +87,13 @@ const { post, url } = Astro.props;
               </>
             )
           }
-        </p>
+        </span>
       </div>
-
-      <h1
-        class="px-4 sm:px-6 max-w-3xl mx-auto text-4xl md:text-5xl font-bold leading-tighter tracking-tighter font-heading"
-      >
-        {post.title}
-      </h1>
-      <p
-        class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-muted dark:text-slate-400 text-justify"
-      >
-        {post.excerpt}
-      </p>
 
       {
         post.author && typeof post.author === 'object' && (
           <div class="max-w-3xl mx-auto px-4 sm:px-6 mb-8 flex justify-end">
             <AuthorCard author={post.author} />
-          </div>
-        )
-      }
-
-      {
-        post.image ? (
-          <Image
-            src={post.image}
-            class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
-            widths={[400, 900]}
-            sizes="(max-width: 900px) 400px, 900px"
-            alt={post?.excerpt || ''}
-            width={900}
-            height={506}
-            loading="eager"
-            decoding="async"
-          />
-        ) : (
-          <div class="max-w-3xl mx-auto px-4 sm:px-6">
-            <div class="border-t dark:border-slate-700" />
           </div>
         )
       }
