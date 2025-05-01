@@ -112,7 +112,9 @@ const { post, url } = Astro.props;
     </div>
 
     <!-- Table of contents for larger screens, only shows on articles with headings -->
-    <div class="hidden lg:block fixed top-32 right-4 w-64 p-4 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 max-h-[calc(100vh-180px)] overflow-y-auto toc-container">
+    <div
+      class="hidden lg:block fixed top-32 right-4 w-64 p-4 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 max-h-[calc(100vh-180px)] overflow-y-auto toc-container"
+    >
       <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Table of Contents</h4>
       <div class="toc-content text-sm"></div>
     </div>
@@ -167,7 +169,7 @@ const { post, url } = Astro.props;
         tocContent.appendChild(toc);
 
         // Set up scroll listener
-        const scrollListener = function() {
+        const scrollListener = function () {
           const articleEnd = article.offsetTop + article.offsetHeight;
           const windowBottom = window.scrollY + window.innerHeight;
 
@@ -194,8 +196,10 @@ const { post, url } = Astro.props;
           if (codeBlock.querySelector('button')) return;
 
           const copyButton = document.createElement('button');
-          copyButton.className = 'absolute top-2 right-2 p-1 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700';
-          copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+          copyButton.className =
+            'absolute top-2 right-2 p-1 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700';
+          copyButton.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
           copyButton.ariaLabel = 'Copy code to clipboard';
 
           copyButton.addEventListener('click', () => {
@@ -203,11 +207,13 @@ const { post, url } = Astro.props;
             navigator.clipboard.writeText(code);
 
             // Visual feedback
-            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            copyButton.innerHTML =
+              '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
             copyButton.classList.add('text-green-500');
 
             setTimeout(() => {
-              copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+              copyButton.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
               copyButton.classList.remove('text-green-500');
             }, 2000);
           });
@@ -219,13 +225,13 @@ const { post, url } = Astro.props;
       }
 
       // Initialize on DOMContentLoaded (initial page load)
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         generateTableOfContents();
         addCopyButtonsToCodeBlocks();
       });
 
       // Handle Astro view transitions
-      document.addEventListener('astro:page-load', function() {
+      document.addEventListener('astro:page-load', function () {
         generateTableOfContents();
         addCopyButtonsToCodeBlocks();
       });

@@ -106,22 +106,22 @@
 }
 
 .prose .note::before {
-  content: "Note";
+  content: 'Note';
   @apply text-blue-600 dark:text-blue-400;
 }
 
 .prose .warning::before {
-  content: "Warning";
+  content: 'Warning';
   @apply text-yellow-600 dark:text-yellow-400;
 }
 
 .prose .tip::before {
-  content: "Tip";
+  content: 'Tip';
   @apply text-green-600 dark:text-green-400;
 }
 
 .prose .caution::before {
-  content: "Caution";
+  content: 'Caution';
   @apply text-red-600 dark:text-red-400;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .prose pre.command-line code::before {
-  content: "$ ";
+  content: '$ ';
   @apply text-gray-500;
 }
 

@@ -3,6 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Commands
+
 - Development: `npm run dev` or `npm start`
 - Build: `npm run build`
 - Preview: `npm run preview`
@@ -13,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Verify all: `npm run check` (runs all checks)
 
 ## Code Style
+
 - TypeScript with strict null checks
 - Indentation: 2 spaces
 - Quotes: Single quotes
@@ -20,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Components: Use .astro files for UI components
 - Blog content: MDX files with required frontmatter
 - Styling: TailwindCSS (see tailwind.config.js)
-- Font stack: 
+- Font stack:
   - Rubik Variable for headings and UI text
   - JetBrains Mono Variable for code/monospace elements
   - Inter Variable for supplementary text
