@@ -118,19 +118,24 @@ const { post, url } = Astro.props;
     </div>
 
     <script>
-      // Script to generate table of contents
-      document.addEventListener('DOMContentLoaded', function() {
+      // Function to generate table of contents
+      function generateTableOfContents() {
         const article = document.querySelector('article');
         const tocContent = document.querySelector('.toc-content');
         const tocContainer = document.querySelector('.toc-container');
         
         if (!article || !tocContent || !tocContainer) return;
         
+        // Clear existing content to prevent duplication
+        tocContent.innerHTML = '';
+        
         const headings = Array.from(article.querySelectorAll('h2, h3, h4'));
         
         if (headings.length < 3) {
           tocContainer.style.display = 'none';
           return;
+        } else {
+          tocContainer.style.display = 'block';
         }
         
         const toc = document.createElement('ul');
@@ -159,8 +164,8 @@ const { post, url } = Astro.props;
         
         tocContent.appendChild(toc);
         
-        // Hide TOC if scrolled to bottom of article
-        window.addEventListener('scroll', function() {
+        // Set up scroll listener
+        const scrollListener = function() {
           const articleEnd = article.offsetTop + article.offsetHeight;
           const windowBottom = window.scrollY + window.innerHeight;
           
@@ -171,14 +176,21 @@ const { post, url } = Astro.props;
             tocContainer.style.opacity = '1';
             tocContainer.style.pointerEvents = 'auto';
           }
-        });
-      });
+        };
+        
+        // Remove existing listener before adding to prevent duplicates
+        window.removeEventListener('scroll', scrollListener);
+        window.addEventListener('scroll', scrollListener);
+      }
       
-      // Add copy button to code blocks
-      document.addEventListener('DOMContentLoaded', function() {
+      // Function to add copy buttons to code blocks
+      function addCopyButtonsToCodeBlocks() {
         const codeBlocks = document.querySelectorAll('pre:not(.command-line)');
         
         codeBlocks.forEach((codeBlock) => {
+          // Skip if button already exists
+          if (codeBlock.querySelector('button')) return;
+          
           const copyButton = document.createElement('button');
           copyButton.className = 'absolute top-2 right-2 p-1 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700';
           copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
@@ -202,6 +214,18 @@ const { post, url } = Astro.props;
           codeBlock.style.position = 'relative';
           codeBlock.appendChild(copyButton);
         });
+      }
+      
+      // Initialize on DOMContentLoaded (initial page load)
+      document.addEventListener('DOMContentLoaded', function() {
+        generateTableOfContents();
+        addCopyButtonsToCodeBlocks();
+      });
+      
+      // Handle Astro view transitions
+      document.addEventListener('astro:page-load', function() {
+        generateTableOfContents();
+        addCopyButtonsToCodeBlocks();
       });
     </script>
     <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
