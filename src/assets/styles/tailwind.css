@@ -18,6 +18,9 @@
   .text-muted {
     color: var(--aw-color-text-muted);
   }
+  .font-mono {
+    font-family: 'JetBrains Mono Variable', monospace;
+  }
 }
 
 @layer components {
@@ -35,6 +38,11 @@
 
   .btn-tertiary {
     @apply btn border-none shadow-none text-muted hover:text-gray-900 dark:text-gray-400 dark:hover:text-white;
+  }
+
+  .btn-code {
+    @apply btn font-medium bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 hover:border-gray-600 dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800 dark:hover:border-gray-700;
+    letter-spacing: -0.01em;
   }
 }
 

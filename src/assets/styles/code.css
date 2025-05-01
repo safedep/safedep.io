@@ -1,9 +1,12 @@
 /* Style for inline code blocks */
 .prose :not(pre) > code {
-  @apply bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  @apply bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-weight: 500;
   color: inherit;
   display: inline;
   overflow-wrap: break-word;
+  letter-spacing: -0.025em;
 }
 
 /* Remove before and after pseudo-elements from inline code */
@@ -14,10 +17,22 @@
 
 /* Style for code blocks */
 .prose pre {
-  @apply my-4;
+  @apply my-4 rounded-lg shadow-md;
+  background-color: #0d1117;
+  border: 1px solid rgba(67, 96, 224, 0.15);
 }
 
 .prose pre code {
-  @apply p-0;
+  @apply p-0 text-sm;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-weight: 450;
+  letter-spacing: -0.01em;
   background: none;
+  line-height: 1.6;
+}
+
+/* Add styling for security-related code highlights */
+.security-highlight {
+  @apply bg-yellow-100 dark:bg-yellow-900/30 px-1 py-0.5 rounded;
+  border-left: 2px solid #4360e0;
 }
