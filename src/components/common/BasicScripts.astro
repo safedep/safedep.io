@@ -50,7 +50,7 @@ import { UI } from 'astrowind:config';
       document.getElementById('header')?.classList.remove('h-screen');
       document.getElementById('header')?.classList.remove('expanded');
       document.getElementById('header')?.classList.remove('bg-page');
-      document.querySelector('#header nav')?.classList.add('hidden');
+      // Navigation is now controlled by CSS for mobile
       document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
     });
 
@@ -60,7 +60,7 @@ import { UI } from 'astrowind:config';
       document.getElementById('header')?.classList.toggle('h-screen');
       document.getElementById('header')?.classList.toggle('expanded');
       document.getElementById('header')?.classList.toggle('bg-page');
-      document.querySelector('#header nav')?.classList.toggle('hidden');
+      // We're now controlling the nav visibility through CSS (mobile-menu class)
       document.querySelector('#header > div > div:last-child')?.classList.toggle('hidden');
     });
 
@@ -112,7 +112,7 @@ import { UI } from 'astrowind:config';
       document.getElementById('header')?.classList.remove('h-screen');
       document.getElementById('header')?.classList.remove('expanded');
       document.getElementById('header')?.classList.remove('bg-page');
-      document.querySelector('#header nav')?.classList.add('hidden');
+      // We're now controlling the nav visibility through CSS (mobile-menu class)
       document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
     });
 
@@ -148,7 +148,7 @@ import { UI } from 'astrowind:config';
     document.body.classList.remove('overflow-hidden');
     document.getElementById('header')?.classList.remove('h-screen');
     document.getElementById('header')?.classList.remove('expanded');
-    document.querySelector('#header nav')?.classList.add('hidden');
+    // Navigation is now controlled by CSS for mobile
   };
 
   window.onload = onLoad;

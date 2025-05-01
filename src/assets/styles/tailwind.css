@@ -74,6 +74,22 @@
   display: block;
 }
 
+/* Mobile menu styles */
+@media (max-width: 767px) {
+  #header.expanded .mobile-menu {
+    display: block;
+    position: fixed;
+    top: 70px;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background-color: var(--aw-color-bg-page);
+    padding: 1rem;
+    overflow-y: auto;
+  }
+}
+
 [astro-icon].icon-light > * {
   stroke-width: 1.2;
 }
