@@ -160,45 +160,99 @@ import { UI } from 'astrowind:config';
     onPageShow();
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function initCounters() {
     const counters = document.querySelectorAll('.counter');
-
-    const startCounter = (entry) => {
-      if (entry.isIntersecting) {
-        const counter = entry.target;
-        const targetText = counter.getAttribute('data-target');
-        const target = parseFloat(targetText) || 0;
-        const suffix = targetText.replace(/[0-9.]/g, '');
-        if (isNaN(target)) {
-          console.error('Invalid target value:', targetText);
-          return;
-        }
-
-        let count = 0;
-        const increment = target / 100;
-
-        const updateCounter = () => {
-          count += increment;
-          if (count < target) {
-            counter.innerText = Math.floor(count) + suffix;
-            requestAnimationFrame(updateCounter);
-          } else {
-            counter.innerText = target + suffix;
-          }
-        };
-
-        updateCounter();
-        observer.unobserve(counter);
+    
+    // Skip if no counters or if already initialized
+    if (!counters.length) return;
+    
+    // Function to animate a counter
+    function animateCounter(counter) {
+      // Skip if already animated
+      if (counter.classList.contains('animated')) return;
+      
+      const targetText = counter.getAttribute('data-target');
+      const target = parseFloat(targetText) || 0;
+      const suffix = targetText.replace(/[0-9.]/g, '');
+      
+      if (isNaN(target)) {
+        console.error('Invalid target value:', targetText);
+        return;
       }
-    };
-
+      
+      // Mark as animated to prevent re-animation
+      counter.classList.add('animated');
+      
+      let startTime;
+      const duration = 2000; // Animation duration in ms
+      
+      function updateCounter(timestamp) {
+        if (!startTime) startTime = timestamp;
+        
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smoother animation
+        const easeOutQuad = progress * (2 - progress);
+        const currentValue = Math.floor(target * easeOutQuad);
+        
+        counter.innerText = currentValue + suffix;
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        } else {
+          counter.innerText = target + suffix;
+        }
+      }
+      
+      requestAnimationFrame(updateCounter);
+    }
+    
+    // Set up Intersection Observer
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(startCounter);
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            // Don't unobserve - this allows re-animation if we implement a reset
+          }
+        });
       },
-      { threshold: 0.3 }
+      { 
+        threshold: 0.2,
+        rootMargin: '0px 0px -10% 0px' // Start animation a bit earlier
+      }
     );
-
-    counters.forEach((counter) => observer.observe(counter));
-  });
+    
+    // Observe all counters
+    counters.forEach(counter => {
+      // Reset any previous animation state
+      counter.classList.remove('animated');
+      counter.innerText = '0';
+      observer.observe(counter);
+    });
+    
+    // Handle cases where counters are already in view on load
+    setTimeout(() => {
+      counters.forEach(counter => {
+        const rect = counter.getBoundingClientRect();
+        const isVisible = (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+        
+        if (isVisible && !counter.classList.contains('animated')) {
+          animateCounter(counter);
+        }
+      });
+    }, 100);
+  }
+  
+  // Initialize counters on DOM load
+  document.addEventListener('DOMContentLoaded', initCounters);
+  
+  // Reinitialize counters after navigation
+  document.addEventListener('astro:after-swap', initCounters);
 </script>

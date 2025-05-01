@@ -109,6 +109,15 @@
   @apply rotate-45 translate-y-[-8px] translate-x-[14px];
 }
 
+/* Counter animation styles */
+.counter {
+  transition: color 0.3s ease;
+}
+
+.counter.animated {
+  @apply text-accent dark:text-accent;
+}
+
 /* To deprecated */
 
 .dd *:first-child {
