@@ -21,7 +21,7 @@ const image = (await findImage(post.image)) as ImageMetadata | undefined;
 const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
 ---
 
-<article class={`max-w-md mx-auto md:max-w-none grid gap-6 md:gap-8 ${image ? 'md:grid-cols-2' : ''} items-center`}>
+<article class={`max-w-md mx-auto md:max-w-none grid gap-6 md:gap-8 ${image ? 'md:grid-cols-2' : ''} items-center bg-white dark:bg-gray-900 p-4 md:p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow duration-200`}>
   {
     image &&
       (link ? (
@@ -104,7 +104,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
       </h2>
     </header>
 
-    {post.excerpt && <p class="flex-grow text-muted dark:text-slate-400 text-lg line-clamp-3">{post.excerpt}</p>}
+    {post.excerpt && <p class="flex-grow text-muted dark:text-slate-400 text-base line-clamp-3 border-l-2 border-primary dark:border-blue-600 pl-3 italic ml-1">{post.excerpt}</p>}
     {
       post.tags && Array.isArray(post.tags) ? (
         <footer class="mt-5 flex justify-center md:justify-start">

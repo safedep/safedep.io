@@ -99,10 +99,111 @@ const { post, url } = Astro.props;
       }
     </header>
     <div
-      class="mx-auto px-6 sm:px-6 max-w-3xl prose prose-md lg:prose-xl dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] prose-li:my-0"
+      class="mx-auto px-6 sm:px-6 max-w-4xl prose prose-md lg:prose-lg dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] prose-li:my-0 
+      prose-code:text-blue-600 dark:prose-code:text-blue-400 
+      prose-pre:bg-gray-50 dark:prose-pre:bg-slate-800/60
+      prose-blockquote:border-l-primary dark:prose-blockquote:border-l-blue-500
+      prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-gray-700 prose-h2:pb-1 prose-h2:text-2xl lg:prose-h2:text-3xl
+      prose-h3:text-xl lg:prose-h3:text-2xl
+      prose-p:text-gray-700 dark:prose-p:text-gray-300
+      prose-li:marker:text-primary dark:prose-li:marker:text-blue-500"
     >
       <slot />
     </div>
+    
+    <!-- Table of contents for larger screens, only shows on articles with headings -->
+    <div class="hidden lg:block fixed top-32 right-4 w-64 p-4 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 max-h-[calc(100vh-180px)] overflow-y-auto toc-container">
+      <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Table of Contents</h4>
+      <div class="toc-content text-sm"></div>
+    </div>
+
+    <script>
+      // Script to generate table of contents
+      document.addEventListener('DOMContentLoaded', function() {
+        const article = document.querySelector('article');
+        const tocContent = document.querySelector('.toc-content');
+        const tocContainer = document.querySelector('.toc-container');
+        
+        if (!article || !tocContent || !tocContainer) return;
+        
+        const headings = Array.from(article.querySelectorAll('h2, h3, h4'));
+        
+        if (headings.length < 3) {
+          tocContainer.style.display = 'none';
+          return;
+        }
+        
+        const toc = document.createElement('ul');
+        toc.className = 'space-y-1';
+        
+        headings.forEach((heading) => {
+          const headingId = heading.id || heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          heading.id = headingId;
+          
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `#${headingId}`;
+          a.textContent = heading.textContent;
+          a.className = 'hover:text-primary dark:hover:text-blue-400 transition-colors';
+          
+          // Indent based on heading level
+          if (heading.tagName === 'H3') {
+            a.className += ' ml-3';
+          } else if (heading.tagName === 'H4') {
+            a.className += ' ml-6';
+          }
+          
+          li.appendChild(a);
+          toc.appendChild(li);
+        });
+        
+        tocContent.appendChild(toc);
+        
+        // Hide TOC if scrolled to bottom of article
+        window.addEventListener('scroll', function() {
+          const articleEnd = article.offsetTop + article.offsetHeight;
+          const windowBottom = window.scrollY + window.innerHeight;
+          
+          if (windowBottom >= articleEnd) {
+            tocContainer.style.opacity = '0';
+            tocContainer.style.pointerEvents = 'none';
+          } else {
+            tocContainer.style.opacity = '1';
+            tocContainer.style.pointerEvents = 'auto';
+          }
+        });
+      });
+      
+      // Add copy button to code blocks
+      document.addEventListener('DOMContentLoaded', function() {
+        const codeBlocks = document.querySelectorAll('pre:not(.command-line)');
+        
+        codeBlocks.forEach((codeBlock) => {
+          const copyButton = document.createElement('button');
+          copyButton.className = 'absolute top-2 right-2 p-1 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700';
+          copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+          copyButton.ariaLabel = 'Copy code to clipboard';
+          
+          copyButton.addEventListener('click', () => {
+            const code = codeBlock.querySelector('code').innerText;
+            navigator.clipboard.writeText(code);
+            
+            // Visual feedback
+            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            copyButton.classList.add('text-green-500');
+            
+            setTimeout(() => {
+              copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+              copyButton.classList.remove('text-green-500');
+            }, 2000);
+          });
+          
+          // Make code block relative for absolute positioning of the button
+          codeBlock.style.position = 'relative';
+          codeBlock.appendChild(copyButton);
+        });
+      });
+    </script>
     <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
       <PostTags tags={post.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
       <SocialShare url={url} text={post.title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
