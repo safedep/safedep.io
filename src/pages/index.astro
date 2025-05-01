@@ -10,7 +10,8 @@ import Stats from '~/components/widgets/Stats.astro';
 import Headline from '~/components/ui/Headline.astro';
 
 import { Image } from 'astro:assets';
-import SafeDepProductConcept from '~/assets/images/safedep-product-concept-5.svg';
+import SafeDepControlPlaneDark from '~/assets/images/safedep-control-plane-dark.png';
+import SafeDepControlPlaneLight from '~/assets/images/safedep-control-plane-light.png';
 import Integrations from '~/components/widgets/Integrations.astro';
 import { bookADemoLink, mainCallToActionText, mainCallToActionTitle, inheritedRiskForOssLink } from '~/navigation';
 
@@ -74,16 +75,26 @@ const metadata = {
       subtitle={'Build your own open source risk management program using SafeDep.' +
         ' Enforce your opinionated security guardrails within your developer platform without friction'}
     />
-    <div class="relative m-auto max-w-5xl">
+    <div class="relative m-auto max-w-3xl">
       <Image
-        class="mx-auto rounded-md w-full"
-        widths={[400, 768, 1024, 2040]}
-        sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+        class="mx-auto rounded-md w-full block dark:hidden shadow-md"
+        widths={[400, 768, 1024]}
+        sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, 1024px"
         loading="eager"
         width={1024}
         height={576}
-        src={SafeDepProductConcept}
-        alt="SafeDep Product Concept"
+        src={SafeDepControlPlaneLight}
+        alt="SafeDep Policy Control Plane"
+      />
+      <Image
+        class="mx-auto rounded-md w-full hidden dark:block shadow-md"
+        widths={[400, 768, 1024]}
+        sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, 1024px"
+        loading="eager"
+        width={1024}
+        height={576}
+        src={SafeDepControlPlaneDark}
+        alt="SafeDep Policy Control Plane"
       />
     </div>
   </div>
