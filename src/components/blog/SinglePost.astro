@@ -115,7 +115,13 @@ const { post, url } = Astro.props;
     <div
       class="hidden lg:block fixed top-32 right-4 w-64 p-4 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 max-h-[calc(100vh-180px)] overflow-y-auto toc-container"
     >
-      <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Table of Contents</h4>
+      <div class="flex justify-between items-center mb-3">
+        <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Table of Contents</h4>
+        <button class="toc-close-btn p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <span class="sr-only">Close table of contents</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
       <div class="toc-content text-sm"></div>
     </div>
 
@@ -228,12 +234,34 @@ const { post, url } = Astro.props;
       document.addEventListener('DOMContentLoaded', function () {
         generateTableOfContents();
         addCopyButtonsToCodeBlocks();
+        setupTocCloseButton();
       });
 
+      // Function to handle the TOC close button
+      function setupTocCloseButton() {
+        const tocContainer = document.querySelector('.toc-container');
+        const closeButton = document.querySelector('.toc-close-btn');
+        
+        if (!tocContainer || !closeButton) return;
+        
+        closeButton.addEventListener('click', function() {
+          tocContainer.style.display = 'none';
+          
+          // Store the user preference in localStorage
+          localStorage.setItem('tocClosed', 'true');
+        });
+        
+        // Check if user previously closed the TOC
+        if (localStorage.getItem('tocClosed') === 'true') {
+          tocContainer.style.display = 'none';
+        }
+      }
+      
       // Handle Astro view transitions
       document.addEventListener('astro:page-load', function () {
         generateTableOfContents();
         addCopyButtonsToCodeBlocks();
+        setupTocCloseButton();
       });
     </script>
     <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
