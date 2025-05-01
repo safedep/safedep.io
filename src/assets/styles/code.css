@@ -1,9 +1,12 @@
 /* Style for inline code blocks */
 .prose :not(pre) > code {
-  @apply bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  @apply bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-weight: 500;
   color: inherit;
   display: inline;
   overflow-wrap: break-word;
+  letter-spacing: -0.025em;
 }
 
 /* Remove before and after pseudo-elements from inline code */
@@ -14,10 +17,163 @@
 
 /* Style for code blocks */
 .prose pre {
-  @apply my-4;
+  @apply my-6 rounded-lg shadow-md overflow-x-auto max-w-full;
+  background-color: #0d1117;
+  border: 1px solid rgba(67, 96, 224, 0.15);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(67, 96, 224, 0.3) transparent;
+}
+
+.prose pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background-color: rgba(67, 96, 224, 0.3);
+  border-radius: 4px;
 }
 
 .prose pre code {
-  @apply p-0;
+  @apply px-4 py-3 text-sm block;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-weight: 450;
+  letter-spacing: -0.01em;
   background: none;
+  line-height: 1.6;
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* Add line numbers to code blocks */
+.prose pre.line-numbers {
+  counter-reset: line;
+}
+
+.prose pre.line-numbers code {
+  @apply grid;
+}
+
+.prose pre.line-numbers code .line {
+  counter-increment: line;
+  @apply relative pl-12;
+}
+
+.prose pre.line-numbers code .line::before {
+  content: counter(line);
+  @apply absolute left-0 w-8 text-right pr-2 text-gray-500 text-xs pt-px;
+}
+
+/* Add styling for security-related code highlights */
+.security-highlight {
+  @apply bg-yellow-100 dark:bg-yellow-900/30 px-1 py-0.5 rounded;
+  border-left: 2px solid #4360e0;
+}
+
+/* Technical notes and callouts */
+.prose .note,
+.prose .warning,
+.prose .tip,
+.prose .caution {
+  @apply p-4 my-6 rounded-lg border-l-4;
+  position: relative;
+}
+
+.prose .note {
+  @apply bg-blue-50 dark:bg-blue-900/20 border-blue-500 dark:border-blue-400;
+}
+
+.prose .warning {
+  @apply bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 dark:border-yellow-400;
+}
+
+.prose .tip {
+  @apply bg-green-50 dark:bg-green-900/20 border-green-500 dark:border-green-400;
+}
+
+.prose .caution {
+  @apply bg-red-50 dark:bg-red-900/20 border-red-500 dark:border-red-400;
+}
+
+.prose .note::before,
+.prose .warning::before,
+.prose .tip::before,
+.prose .caution::before {
+  @apply font-bold text-lg mb-1 block;
+}
+
+.prose .note::before {
+  content: 'Note';
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.prose .warning::before {
+  content: 'Warning';
+  @apply text-yellow-600 dark:text-yellow-400;
+}
+
+.prose .tip::before {
+  content: 'Tip';
+  @apply text-green-600 dark:text-green-400;
+}
+
+.prose .caution::before {
+  content: 'Caution';
+  @apply text-red-600 dark:text-red-400;
+}
+
+/* Command line styling */
+.prose pre.command-line {
+  @apply bg-gray-900;
+}
+
+.prose pre.command-line code::before {
+  content: '$ ';
+  @apply text-gray-500;
+}
+
+/* File path styling */
+.prose .file-path {
+  @apply font-mono text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded font-medium text-gray-800 dark:text-gray-200;
+}
+
+/* Key concept styling */
+.prose .key-concept {
+  @apply font-semibold text-primary dark:text-blue-400;
+}
+
+/* Table improvements for technical content */
+.prose table {
+  @apply my-6 w-full text-sm border-collapse overflow-hidden rounded-lg;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose table thead {
+  @apply bg-gray-100 dark:bg-slate-800;
+}
+
+.prose table th {
+  @apply px-4 py-3 text-left font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700;
+}
+
+.prose table td {
+  @apply px-4 py-2 border-b border-gray-200 dark:border-gray-700;
+}
+
+.prose table tr:last-child td {
+  @apply border-b-0;
+}
+
+/* Code filename header */
+.prose pre.with-filename {
+  @apply mt-0;
+}
+
+.prose .filename {
+  @apply px-4 py-2 text-xs font-medium text-gray-400 bg-gray-800 border-b border-gray-700 rounded-t-lg -mb-1;
+  display: inline-block;
 }

@@ -77,9 +77,9 @@ export default defineConfig({
 
   markdown: {
     shikiConfig: {
-      theme: 'dracula',
+      theme: 'github-dark',
       defaultColor: false,
-      langs: [],
+      langs: ['typescript', 'javascript', 'bash', 'python', 'java', 'go', 'json', 'yaml', 'html', 'css', 'markdown'],
       wrap: true,
       transformers: [],
     },
