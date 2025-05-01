@@ -113,7 +113,7 @@ const { post, url } = Astro.props;
 
     <!-- Table of contents for larger screens, only shows on articles with headings -->
     <div
-      class="hidden lg:block fixed top-32 right-4 w-64 p-4 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 max-h-[calc(100vh-180px)] overflow-y-auto toc-container"
+      class="hidden lg:block fixed top-32 right-6 w-56 p-3 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 max-h-[calc(100vh-180px)] overflow-y-auto toc-container"
     >
       <div class="flex justify-between items-center mb-3">
         <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Table of Contents</h4>
@@ -122,8 +122,16 @@ const { post, url } = Astro.props;
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
-      <div class="toc-content text-sm"></div>
+      <div class="toc-content text-xs"></div>
     </div>
+    
+    <!-- Button to reopen TOC when closed -->
+    <button
+      class="hidden lg:hidden fixed top-32 right-6 p-2 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors toc-reopen-btn"
+      aria-label="Show table of contents"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
 
     <script>
       // Function to generate table of contents
@@ -140,16 +148,29 @@ const { post, url } = Astro.props;
         const headings = Array.from(article.querySelectorAll('h2, h3, h4')).filter((heading) => {
           return heading.textContent.trim() === 'Table of Contents' ? false : true;
         });
-
+        
+        const reopenButton = document.querySelector('.toc-reopen-btn');
+        
+        // Hide both TOC and reopen button if not enough headings
         if (headings.length < 3) {
           tocContainer.style.display = 'none';
+          if (reopenButton) reopenButton.style.display = 'none';
           return;
         } else {
-          tocContainer.style.display = 'block';
+          // Otherwise, check the user's preference
+          const tocClosed = localStorage.getItem('tocClosed') === 'true';
+          
+          if (tocClosed) {
+            tocContainer.style.display = 'none';
+            if (reopenButton) reopenButton.style.display = 'block';
+          } else {
+            tocContainer.style.display = 'block';
+            if (reopenButton) reopenButton.style.display = 'none';
+          }
         }
 
         const toc = document.createElement('ul');
-        toc.className = 'space-y-1';
+        toc.className = 'space-y-0.5';
 
         headings.forEach((heading) => {
           const headingId = heading.id || heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -163,9 +184,9 @@ const { post, url } = Astro.props;
 
           // Indent based on heading level
           if (heading.tagName === 'H3') {
-            a.className += ' ml-3';
+            a.className += ' ml-2';
           } else if (heading.tagName === 'H4') {
-            a.className += ' ml-6';
+            a.className += ' ml-4';
           }
 
           li.appendChild(a);
@@ -234,26 +255,42 @@ const { post, url } = Astro.props;
       document.addEventListener('DOMContentLoaded', function () {
         generateTableOfContents();
         addCopyButtonsToCodeBlocks();
-        setupTocCloseButton();
+        setupTocToggleButtons();
       });
 
-      // Function to handle the TOC close button
-      function setupTocCloseButton() {
+      // Function to handle the TOC toggle buttons
+      function setupTocToggleButtons() {
         const tocContainer = document.querySelector('.toc-container');
         const closeButton = document.querySelector('.toc-close-btn');
+        const reopenButton = document.querySelector('.toc-reopen-btn');
         
-        if (!tocContainer || !closeButton) return;
+        if (!tocContainer || !closeButton || !reopenButton) return;
         
-        closeButton.addEventListener('click', function() {
+        function closeToc() {
           tocContainer.style.display = 'none';
-          
+          reopenButton.style.display = 'block';
           // Store the user preference in localStorage
           localStorage.setItem('tocClosed', 'true');
-        });
+        }
         
-        // Check if user previously closed the TOC
+        function openToc() {
+          tocContainer.style.display = 'block';
+          reopenButton.style.display = 'none';
+          // Update the user preference in localStorage
+          localStorage.setItem('tocClosed', 'false');
+        }
+        
+        // Close button event listener
+        closeButton.addEventListener('click', closeToc);
+        
+        // Reopen button event listener
+        reopenButton.addEventListener('click', openToc);
+        
+        // Initialize based on stored preference
         if (localStorage.getItem('tocClosed') === 'true') {
-          tocContainer.style.display = 'none';
+          closeToc();
+        } else {
+          openToc();
         }
       }
       
@@ -261,7 +298,7 @@ const { post, url } = Astro.props;
       document.addEventListener('astro:page-load', function () {
         generateTableOfContents();
         addCopyButtonsToCodeBlocks();
-        setupTocCloseButton();
+        setupTocToggleButtons();
       });
     </script>
     <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
