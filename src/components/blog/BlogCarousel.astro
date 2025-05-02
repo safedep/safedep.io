@@ -3,7 +3,7 @@ import type { Post } from '~/types';
 import Item from '~/components/blog/GridItem.astro';
 
 export interface Props {
-  posts: Array<Post>;
+  posts: Post[];
 }
 
 const { posts } = Astro.props;
