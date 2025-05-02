@@ -1,0 +1,123 @@
+---
+import type { Post } from '~/types';
+import Item from '~/components/blog/GridItem.astro';
+
+export interface Props {
+  posts: Array<Post>;
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="relative">
+  <div class="swiper-container overflow-hidden w-full opacity-0 transition-opacity duration-300" id="carouselContainer">
+    <div class="swiper-wrapper">
+      {
+        posts.map((post) => (
+          <div class="swiper-slide px-2 w-full">
+            <Item post={post} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Navigation buttons -->
+  <button
+    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-slate-800 rounded-full p-2 shadow-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors opacity-0"
+    id="prevButton"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
+  <button
+    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-slate-800 rounded-full p-2 shadow-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors opacity-0"
+    id="nextButton"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+
+  let swiperInstance = null;
+
+  function initializeSwiper() {
+    if (swiperInstance) {
+      swiperInstance.destroy();
+    }
+
+    swiperInstance = new Swiper('.swiper-container', {
+      modules: [Navigation],
+      slidesPerView: 1,
+      spaceBetween: 24,
+      navigation: {
+        nextEl: '#nextButton',
+        prevEl: '#prevButton',
+      },
+      breakpoints: {
+        480: {
+          slidesPerView: 1.5,
+          spaceBetween: 16,
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 24,
+        },
+      },
+      observer: true,
+      observeParents: true,
+      on: {
+        init: function () {
+          const container = document.getElementById('carouselContainer');
+          const buttons = document.querySelectorAll('#prevButton, #nextButton');
+          if (container) container.classList.remove('opacity-0');
+          buttons.forEach((btn) => btn.classList.remove('opacity-0'));
+        },
+      },
+    });
+  }
+
+  // Initialize after a short delay to ensure DOM is ready
+  setTimeout(initializeSwiper, 100);
+
+  // Re-initialize on route changes
+  document.addEventListener('astro:page-load', () => {
+    setTimeout(initializeSwiper, 100);
+  });
+</script>
+
+<style>
+  .swiper-container {
+    padding: 0 2rem;
+    margin: 0 -1rem;
+    width: 100%;
+  }
+
+  .swiper-slide {
+    height: auto;
+    display: flex;
+    width: 100%;
+  }
+
+  .swiper-slide > * {
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .swiper-container {
+      padding: 0 1rem;
+    }
+  }
+</style>

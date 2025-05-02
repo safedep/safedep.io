@@ -22,11 +22,11 @@ The static code analysis workflow currently consists of
 4. OSS Project and package metadata
 5. LLM based classification with our knowledge (prompt rules) and package specific context
 
-While we are continuously extending this system by improving our code analysis based tools and eliminating known false positives, we believe static analysis will always have false positives and negatives. While the inherent benefit of static code analysis approach is to look at *code* -- the source of truth, it is restricted by [Halting Problem](https://en.wikipedia.org/wiki/Halting_problem) and in our use-case, by the [Rice's Theorem](https://en.wikipedia.org/wiki/Rice%27s_theorem). For us, the security research & engineering problem is to make the right trade-off that makes the system effective in real life with the need for human intervention (manual analysis) reducing over time.
+While we are continuously extending this system by improving our code analysis based tools and eliminating known false positives, we believe static analysis will always have false positives and negatives. While the inherent benefit of static code analysis approach is to look at _code_ -- the source of truth, it is restricted by [Halting Problem](https://en.wikipedia.org/wiki/Halting_problem) and in our use-case, by the [Rice's Theorem](https://en.wikipedia.org/wiki/Rice%27s_theorem). For us, the security research & engineering problem is to make the right trade-off that makes the system effective in real life with the need for human intervention (manual analysis) reducing over time.
 
-We started exploring the idea of building a complementary system that can verify and correlate static analysis findings. Thats where dynamic analysis comes in ie. the ability to *run* an open source package in an observed environment and determine its safety status based on *real* behavior at runtime. For us, the design goals of this system were:
+We started exploring the idea of building a complementary system that can verify and correlate static analysis findings. Thats where dynamic analysis comes in ie. the ability to _run_ an open source package in an observed environment and determine its safety status based on _real_ behavior at runtime. For us, the design goals of this system were:
 
-1. *Run* an open source package in a sandboxed environment
+1. _Run_ an open source package in a sandboxed environment
 2. Observe all runtime behavior
 3. Correlate with static analysis results and classify as malicious (or not) based on runtime evidences
 
@@ -40,8 +40,8 @@ We ended up building a solution by leveraging OSS tools with our custom platform
 
 ## Key Challenges
 
-- How do you *run* an open source package that is essentially a library?
-- What is a *baseline* runtime behavior that can be used to identify anomalies?
+- How do you _run_ an open source package that is essentially a library?
+- What is a _baseline_ runtime behavior that can be used to identify anomalies?
 - Creating a repository of runtime behavior (rules) for [MITRE ATT&CK](https://attack.mitre.org/)
 - Guarantee isolation and containment of package execution while observing & collecting data
 - Achieve scale required to analyze every package published to a supported ecosystem (e.g. `npm`)
@@ -51,7 +51,7 @@ We ended up building a solution by leveraging OSS tools with our custom platform
 
 As a first step, our goal was to build a system that runs in parallel to our existing static code analysis infrastructure and perform the following
 
-1. *Run* an open source package
+1. _Run_ an open source package
 2. Collect runtime behavior data (events)
 3. Persist runtime behavior data to a database
 4. Research and identify a classification system for malicious packages based on runtime behavior data
@@ -68,7 +68,7 @@ We however took inspiration on some of the solutions in this project especially 
 
 We had to solve the following problems before we can start working on an implementation
 
-1. How to *run* an open source package
+1. How to _run_ an open source package
 2. What sandboxing technology to use?
 3. How to monitor runtime behavior
 
@@ -88,7 +88,9 @@ An example malicious package that cannot be analyzed by simply running `npm inst
 
 One of our design goals is to have the dynamic analysis system deployed initially in parallel to the existing static analysis system. This is to enable us to perform the R&D required to manually observe the runtime behaviour of known malicious packages and establish a baseline for non-malicious `npm`, `python` and other packages at install time.
 
-![Dynamic Analysis Solution Architecture](/images/dynamic-analysis-solution-architecture.png)
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analysis Solution Architecture](/images/dynamic-analysis-solution-architecture.png)
+</div>
 
 To ensure simplicity of design and loose coupling, we introduced
 
@@ -122,7 +124,9 @@ We decided to go for Docker container based sandbox with DIND. The choice primar
 4. Limit communication over local unix sockets to be able to restrict DIND pods completely with NSP
 5. Leverage familiar Docker client APIs to create containers, execute commands and destroy containers
 
-![Dynamic Analysis Executor DIND](/images/dynamic-analysis-executor-dind.png)
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analysis Executor DIND](/images/dynamic-analysis-executor-dind.png)
+</div>
 
 While the sandbox implementation choice was primarily for engineering simplicity and scalability, we did consider the threats as part of the infrastructure.
 
@@ -149,7 +153,7 @@ We decided to go ahead with Falco as our observability technology. The choice wa
 
 Going ahead with Falco was pretty much obvious for us because we are rolling out an R&D focussed experimental service. It doesn’t makes sense to invest in heavy lifting required for building and productionizing an eBPF based solution till we reach the limitations of the currently available options. In any case, Falco is a CNCF graduated project which indicates the maturity of the solution and meets all our current requirements especially the ability to write custom rules to match various system call parameters.
 
-![Dynamic Analysis Falco](/images/dynamic-analysis-falco.png)
+<div className="dark:invert dark:brightness-90">![Dynamic Analysis Falco](/images/dynamic-analysis-falco.png)</div>
 
 - Falco and Event Handler deployed as Kubernetes DaemonSet
 - Falco and Event Handler share `emptyDir` volume for Falco gRPC socket
@@ -175,19 +179,27 @@ Lets start with quick stats and challenges
 
 The executor, consisting of NATS listener and DIND container shows low CPU usage indicating potential over provisioning of resources.
 
-![Dynamic Analysis Executor CPU](/images/dynamic-analysis-executor-cpu.png)
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analysis Executor CPU](/images/dynamic-analysis-executor-cpu.png)
+</div>
 
 The Falco and Event Handler pods (DaemonSet) on the other hand shows CPU spikes. This is almost certainly due to Falco containers that has higher CPU load due to rule matching on system calls.
 
-![Dynamic Analysis Falco CPU](/images/dynamic-analysis-falco-cpu.png)
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analysis Falco CPU](/images/dynamic-analysis-falco-cpu.png)
+</div>
 
 Executor (NATS Listener and DIND) memory usage is pretty stable with occasional spikes. It will be curious to identify which packages caused these spikes. At this point, we are guessing that they are caused by packages that required platform specific compilation during installation.
 
-![Dynamic Analysis Executor Memory](/images/dynamic-analysis-executor-memory.png)
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analysis Executor Memory](/images/dynamic-analysis-executor-memory.png)
+</div>
 
 Falco containers however shows sign of memory leaks. However they are normal due to heavy usage of buffers used to copy eBPF events from kernel to user space. Our Go based Event Handler may also contribute due to high latency of event processing and the way Go GC works. However, deeper analysis is required to identify the root cause of this memory usage patterns.
 
-![Dynamic Analysis Falco Memory](/images/dynamic-analysis-falco-memory.png)
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analysis Falco Memory](/images/dynamic-analysis-falco-memory.png)
+</div>
 
 ## Whats next?
 
