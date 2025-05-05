@@ -12,7 +12,7 @@ tags:
 
 # TL;DR
 
-At SafeDep we build and operate a large scale open source package monitoring and static code analysis infrastructure. The goal of this infrastructure is to continuously analyse open source packages published in package registries such as `npm`, `pypi`, `rubygems`, `Go Proxy` etc. and find malicious packages. This service in turn powers tools like `vet` that provides developer and CI/CD guardrails against malicious open source packages. To learn more about this service, refer to [Malicious Package Analysis](https://docs.safedep.io/cloud/malware-analysis) docs.
+At SafeDep we build and operate a large scale open source package monitoring and static code analysis infrastructure. The goal of this infrastructure is to continuously analyse open source packages published in package registries such as `npm`, `pypi`, `rubygems`, `Go Proxy` etc. and find malicious packages. This service in turn powers tools like [vet](https://github.com/safedep/vet) that provides developer and CI/CD guardrails against malicious open source packages. To learn more about this service, refer to [Malicious Package Analysis](https://docs.safedep.io/cloud/malware-analysis) docs.
 
 The static code analysis workflow currently consists of
 
@@ -118,7 +118,7 @@ We considered the following threats as part of the sandbox design because we are
 
 We decided to go for Docker container based sandbox with DIND. The choice primarily stems from
 
-1. Our platform runs on Kubernetes but we want to treat this as just anther “workload” and not a low level service (eg. demonset)
+1. Our platform runs on Kubernetes but we want to treat this as just _another workload_ and not a low level service (eg. daemonset)
 2. Having DIND as a sidecar with the Executor and scaling horizontally with the Executor
 3. Keeping options open to deploy the “full stack” sandbox (Executor + DIND) in a separate VPC
 4. Limit communication over local unix sockets to be able to restrict DIND pods completely with NSP
@@ -195,7 +195,7 @@ Executor (NATS Listener and DIND) memory usage is pretty stable with occasional 
   ![Dynamic Analysis Executor Memory](/images/dynamic-analysis-executor-memory.png)
 </div>
 
-Falco containers however shows sign of memory leaks. However they are normal due to heavy usage of buffers used to copy eBPF events from kernel to user space. Our Go based Event Handler may also contribute due to high latency of event processing and the way Go GC works. However, deeper analysis is required to identify the root cause of this memory usage patterns.
+Falco containers however shows sign of memory leak. This may be related to a [known issue](https://github.com/falcosecurity/falco/issues/2495). Our Go based Event Handler may also contribute due to high throughput of event processing and the way Go GC works. Deeper analysis is required to identify the root cause of this memory usage patterns.
 
 <div className="dark:invert dark:brightness-90">
   ![Dynamic Analysis Falco Memory](/images/dynamic-analysis-falco-memory.png)
@@ -203,19 +203,19 @@ Falco containers however shows sign of memory leaks. However they are normal due
 
 ## Whats next?
 
-The technology stack that we built and deployed for runtime analysis is tuned for scale. As per the initial design goal, we have the necessary infrastructure in place to start correlating runtime behaviour with our static analysis results. We now can independently perform research on OSS package install time behaviour at scale. However, we believe the core value to our users and the large community lies in
+The technology stack that we built and deployed for runtime analysis is tuned for scale. As per the initial design goal, we have the necessary infrastructure in place to start correlating runtime behavior with our static analysis results. We now can independently perform research on OSS package install time behavior at scale. However, we believe the core value to our users and the large community lies in
 
 1. Eliminating noise
-2. Identifying real malicious packages through its runtime behaviour
+2. Identifying real malicious packages through its runtime behavior
 3. Correlate with static analysis infrastructure and reduce false positives
 
-There are multiple challenges to solve when it comes to classifying runtime behaviour that we have observed so far such as
+There are multiple challenges to solve when it comes to classifying runtime behavior that we have observed so far such as
 
 - Command execution is not unusual during installation stage e.g. `esbuild` `node-gyp` `make` and other build tools required to build platform specific binaries by Python, Node or other ecosystem packages
-- Package managers have their own initialisation footprint that varies across versions due to which baselining is tricky
-- Build telemetry is indistinguishable from malicious C2 behaviour especially when it comes to operating at scale without deep packet inspection
+- Package managers have their own initialization footprint that varies across versions due to which base-lining is tricky
+- Build telemetry is indistinguishable from malicious C2 behavior especially when it comes to operating at scale without deep packet inspection
 
-For us the next steps are to identify heuristics and create an approach for baselining ecosystem specific package installation behaviour to identify anomalies. Future work also involves
+For us the next steps are to identify heuristics and create an approach for base-lining ecosystem specific package installation behavior to identify anomalies. Future work also involves
 
 1. Identify sophisticated malicious packages that do not trigger on installation such as https://safedep.io/malicious-npm-package-express-cookie-parser/
 2. Improve coverage of code execution
