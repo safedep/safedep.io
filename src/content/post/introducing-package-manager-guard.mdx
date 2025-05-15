@@ -1,0 +1,65 @@
+---
+publishDate: 2025-05-15T00:00:00Z
+title: 'Introducing Package Manager Guard (PMG)'
+image: /images/pmg-gh-banner.png
+excerpt: Introducing Package Manager Guard (PMG), a new tool to protect developers from malicious packages at the time of installation. Seamless integration with popular package managers like npm, pnpm etc.
+tags:
+  - pmg
+  - malware
+  - security
+---
+
+import { YouTube } from 'astro-embed';
+
+Let's say you are building an Express.js application. You need a cookie parser middleware. But instead
+of installing the original [cookie-parser](https://www.npmjs.com/package/cookie-parser) package, you install
+[express-cookie-parser](/malicious-npm-package-express-cookie-parser) which is a malicious package, although
+removed from the npm registry. We developers want to get the job done while in the flow state. We hate going
+outside our terminals and IDEs to check if a package we are installing is malicious or not. This behavior is
+exploited by malicious actors to compromise developers through [typosquatting](https://en.wikipedia.org/wiki/Typosquatting)
+and other supply chain attacks. To protect the software supply chain, we need to protect developers from malicious
+packages at the time of installation. This is where Package Manager Guard (PMG) comes in.
+
+## What is PMG?
+
+[PMG](https://github.com/safedep/pmg) is a tool to protect developers from malicious packages at the time of installation. It is a CLI tool that
+wraps popular package managers like `npm`, `pnpm`, etc. It prevents installation of malicious packages by scanning
+the package at the time of installation.
+
+## How do I use PMG?
+
+The easiest way to install PMG is using `homebrew`. For other installation options, please refer to the 
+[PMG GitHub repository](https://github.com/safedep/pmg).
+
+```shell
+brew install safedep/tap/pmg
+```
+
+The goal of PMG is to be as hidden and *out of the way* as possible while protecting developers from installing
+malicious packages. For a seamless experience, add PMG as an alias for your package manager.
+
+```shell
+alias npm="pmg npm"
+alias pnpm="pmg pnpm"
+```
+
+That's it! PMG will now protect you from installing malicious packages.
+
+## Demo
+
+TODO
+
+## Bugs and Feedback
+
+If you find any bugs or have any feedback, please file an issue on the [PMG GitHub repository](https://github.com/safedep/pmg/issues). 
+You can also join [SafeDep Community Discord](https://docs.safedep.io/community) to discuss PMG and other SafeDep products.
+
+
+
+
+
+
+
+
+
+
