@@ -1,7 +1,7 @@
 ---
 publishDate: 2025-05-16T00:00:00Z
 title: 'Discovering abnormal activity in Dynamic Analyzer Data'
-image: /images/da-blog-banner.png
+image: /images/abnormal-patterns.webp
 excerpt: In this blog, we explore how analyzing install-time behaviors using Dynamic Analyzer data helps uncover abnormal activities in open-source packages. By examining rare network connections and unusual binary executions during package installation, we identify potential malicious actors and suspicious IP addresses. Leveraging tools like VirusTotal and reverse DNS lookups, we demonstrate effective techniques to detect threats early and enhance software supply chain security at scale.
 author: Kunal Singh
 tags:
@@ -78,6 +78,6 @@ But, this behavior is dangerous. Our `External Binary` distribution is:
 You will see binaries like `bsc.exe`, `memcmp_invalid_`, `purs.bin`, `test_program`, etc. are very suspicious.  
 They can be used to harm the system as soon as the package is installed.
 
-## Conclusion:
+## Conclusion
 
 By analyzing low-frequency network connections and binary executions, we efficiently identify high-risk packages. Future work will correlate these signals with static analysis results to improve detection accuracy.
