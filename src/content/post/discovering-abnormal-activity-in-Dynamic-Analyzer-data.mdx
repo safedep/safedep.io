@@ -2,7 +2,7 @@
 publishDate: 2025-05-16T00:00:00Z
 title: 'Discovering abnormal activity in Dynamic Analyzer Data'
 image: /images/da-blog-banner.png
-excerpt:  "hello"
+excerpt: In this blog, we explore how analyzing install-time behaviors using Dynamic Analyzer data helps uncover abnormal activities in open-source packages. By examining rare network connections and unusual binary executions during package installation, we identify potential malicious actors and suspicious IP addresses. Leveraging tools like VirusTotal and reverse DNS lookups, we demonstrate effective techniques to detect threats early and enhance software supply chain security at scale.
 author: Kunal Singh
 tags:
   - dynamic-analysis
@@ -13,50 +13,49 @@ tags:
 
 # Discovering Abnormal Activity in Dynamic Analyzer Data
 
-We have logged nearly 27M events in 15 days, analyzing 387,260 packages. Focusing on Install-time behaviors to spot malicious packages. We have shared about the Dynamic Analyzer in this [blog post](/dynamic-analysis-oss-package-at-scale).
+We have logged nearly 27 Million events in 15 days, analyzing 387,260 packages. We are focusing on install-time behaviors to spot malicious packages. We have shared more about the Dynamic Analyzer in this [blog post](/dynamic-analysis-oss-package-at-scale).
 
-Since events are aggregated in such a large numbers, we need a way to find `abnormal` activity, in simple terms, we need a wasy to find odd-one-out from the data, To quicky spot any bad actors. Since critical actions when accur in large numbers is less prone to malicous behaviour.
+Since events are aggregated in such large numbers, we need a way to find **abnormal** activity-in simple terms, we need a way to find the odd one out from the data to quickly spot any bad actors. Critical actions, when they occur in large numbers, are less likely to be malicious.
 
-We have multiple `Aggregator` tables to store parts of data for efficiend distribtuion analysis. 
-
+We have multiple `Aggregator` tables to store parts of data for efficient distribution analysis.  
 Today we are going to see these aggregators:
-
 - Network Connection, IP Aggregator
 - Binary execution on install.
 
+
 ### Abnormal Netowrk Connection
 
-While a package is installed, it is bournd to make some network connection, espically to `npm` and `pypi` registires, to name a few. But when whey make extra connection then that a think to notice. We logs every _IP address_ for these conection, and my analysing the distribution of these _IP address_. 
+While a package is installed, it is bound to make some network connections, especially to `npm` and `pypi` registries, to name a few. But when they make extra connections, that’s something to notice. We log every *IP address* for these connections, and by analyzing the distribution of these *IP addresses*, we can spot anomalies.
 
-You can see the wistribution of 624 IP address, and thir accurence count bellow: 
+You can see the distribution of 624 IP addresses, and their occurrence count below:
 
 <div className="dark:invert dark:brightness-90">
   ![Dynamic Analyzer IP Address Distribution](/images/ip_address.png)
 </div>
 
-We can clearly observe the fact that, some connection accured only 1 or 2 times. These connections are very intrsting and can be a potential malicious behaviour. 
+We can clearly observe that some connections occurred only 1 or 2 times. These connections are very interesting and can be potential malicious behavior.  
 
-Few Connection, their `IP` Address which accur only 1 time are: 
+A few connections, their `IP` addresses which occurred only 1 time, are:
 
 <div className="dark:invert dark:brightness-90">
   ![Dynamic Analyzer Malicious IP Address](/images/malicious-ip-address-table.png)
 </div>
 
-Using [VirusTotal](https://www.virustotal.com/) we can see the how, IP `167.99.69.236` is classified as malware by multiple sources. 
+Using [VirusTotal](https://www.virustotal.com/) we can see how IP `167.99.69.236` is classified as malware by multiple sources.
 
 <div className="dark:brightness-90">
   ![Dynamic Analyzer VirusTotal IP examples](/images/virustotal-ip.png)
 </div>
 
-Its was time to do `reverse DNS lookup` and find where these connection are going, althought not every IP address can be resolved to host, due to many reasons. But some of Host names were:
+It was time to do a `reverse DNS lookup` and find where these connections are going. Although not every IP address can be resolved to a host, due to many reasons, some of the hostnames were:
 
 <div className="dark:invert dark:brightness-90">
   ![Dynamic Analyzer Malicious Host examples](/images/malicious-host.png)
 </div>
 
-Its clear from the data, that Hostname like `kbss.felk.cvut.cz`, `oast.online`, `oast.site`, `oast.live`, `mail.sms-system-alert.com`, are very suspicious. `OAST` (Out-of-band application security testing) domains are anyway very suspicios, and should not be included any any production application. 
+It’s clear from the data that hostnames like `kbss.felk.cvut.cz`, `oast.online`, `oast.site`, `oast.live`, `mail.sms-system-alert.com` are very suspicious. `OAST` (Out-of-band application security testing) domains are especially suspicious and should not be included in any production application.
 
-After analysis, all `oast.*` domains and `sms-system-alert.com` as found to be malicious,  confirmed by `VirusTotal` with multiple sources, `kbss.felk.cvut.cz` is ok. 
+After analysis, all `oast.*` domains and `sms-system-alert.com` were found to be malicious, confirmed by `VirusTotal` with multiple sources. `kbss.felk.cvut.cz` is OK.
 
 <div className="dark:brightness-90">
   <figure>
@@ -65,20 +64,20 @@ After analysis, all `oast.*` domains and `sms-system-alert.com` as found to be m
   </figure>
 </div>
 
-TODO: talk about the package which made that connection
-
 ### Abnormal Binary Execution
 
-Packages introducing external binary on installing is common think, for exmaple top binaries installed during instaling and executed such as `esbuild`, `workerd`, `rustc`, `cmake`, `ninja`, `zig` and many more...
+Packages introducing external binaries on installing is a common thing. For example, top binaries installed during installation and executed include `esbuild`, `workerd`, `rustc`, `cmake`, `ninja`, `zig`, and many more...
 
-But, this behaviour is dangerous. Our `External Binary` distribution is: 
+But, this behavior is dangerous. Our `External Binary` distribution is:
 
 <div className="dark:invert dark:brightness-90">
   ![Dynamic Analyzer External Binary Distribution](/images/external-binary.png)
 </div>
 
-You will see, binaries like `bsc.exe`, `memcmp_invalid_`, `purs.bin`, `test_program` etc. are very suspicious. 
 
-They can be used to hard the system as soon as package is installed. 
+You will see binaries like `bsc.exe`, `memcmp_invalid_`, `purs.bin`, `test_program`, etc. are very suspicious.  
+They can be used to harm the system as soon as the package is installed.
 
 ## Conclusion:
+
+By analyzing low-frequency network connections and binary executions, we efficiently identify high-risk packages. Future work will correlate these signals with static analysis results to improve detection accuracy.
