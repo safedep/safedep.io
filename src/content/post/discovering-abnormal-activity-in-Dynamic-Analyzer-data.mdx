@@ -28,7 +28,7 @@ Today we are going to see these aggregators:
 
 While a package is installed, it is bournd to make some network connection, espically to `npm` and `pypi` registires, to name a few. But when whey make extra connection then that a think to notice. We logs every _IP address_ for these conection, and my analysing the distribution of these _IP address_. 
 
-You can see the **Distribution** of 624 IP address, and thir accurence count bellow: 
+You can see the wistribution of 624 IP address, and thir accurence count bellow: 
 
 <div className="dark:invert dark:brightness-90">
   ![Dynamic Analyzer IP Address Distribution](/images/ip_address.png)
@@ -44,7 +44,7 @@ Few Connection, their `IP` Address which accur only 1 time are:
 
 Using [VirusTotal](https://www.virustotal.com/) we can see the how, IP `167.99.69.236` is classified as malware by multiple sources. 
 
-<div className="dark:invert dark:brightness-90">
+<div className="dark:brightness-90">
   ![Dynamic Analyzer VirusTotal IP examples](/images/virustotal-ip.png)
 </div>
 
@@ -56,24 +56,29 @@ Its was time to do `reverse DNS lookup` and find where these connection are goin
 
 Its clear from the data, that Hostname like `kbss.felk.cvut.cz`, `oast.online`, `oast.site`, `oast.live`, `mail.sms-system-alert.com`, are very suspicious. `OAST` (Out-of-band application security testing) domains are anyway very suspicios, and should not be included any any production application. 
 
-Its confirmed by `VirusTotal` also: 
+After analysis, all `oast.*` domains and `sms-system-alert.com` as found to be malicious,  confirmed by `VirusTotal` with multiple sources, `kbss.felk.cvut.cz` is ok. 
 
-<div className="dark:invert dark:brightness-90">
-  <div style="display: flex; flex-direction: column; gap: 1rem;">
+<div className="dark:brightness-90">
+  <figure>
+    <figcaption>sms-system-alert.com</figcaption>
     <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-      <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
-      <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
-      <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
-    </div>
-  </div>
+  </figure>
 </div>
+
+TODO: talk about the package which made that connection
 
 ### Abnormal Binary Execution
 
-- Monitoring binary executions to detect malware & security threats.
+Packages introducing external binary on installing is common think, for exmaple top binaries installed during instaling and executed such as `esbuild`, `workerd`, `rustc`, `cmake`, `ninja`, `zig` and many more...
+
+But, this behaviour is dangerous. Our `External Binary` distribution is: 
 
 <div className="dark:invert dark:brightness-90">
-  ![Dynamic Analyzer External Binary Distribution](/images/external_binary.png)
+  ![Dynamic Analyzer External Binary Distribution](/images/external-binary.png)
 </div>
 
+You will see, binaries like `bsc.exe`, `memcmp_invalid_`, `purs.bin`, `test_program` etc. are very suspicious. 
+
+They can be used to hard the system as soon as package is installed. 
+
+## Conclusion:
