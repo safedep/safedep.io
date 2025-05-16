@@ -1,0 +1,79 @@
+---
+publishDate: 2025-05-16T00:00:00Z
+title: 'Discovering abnormal activity in Dynamic Analyzer Data'
+image: /images/da-blog-banner.png
+excerpt:  "hello"
+author: Kunal Singh
+tags:
+  - dynamic-analysis
+  - oss
+  - malware
+  - security
+---
+
+# Discovering Abnormal Activity in Dynamic Analyzer Data
+
+We have logged nearly 27M events in 15 days, analyzing 387,260 packages. Focusing on Install-time behaviors to spot malicious packages. We have shared about the Dynamic Analyzer in this [blog post](/dynamic-analysis-oss-package-at-scale).
+
+Since events are aggregated in such a large numbers, we need a way to find `abnormal` activity, in simple terms, we need a wasy to find odd-one-out from the data, To quicky spot any bad actors. Since critical actions when accur in large numbers is less prone to malicous behaviour.
+
+We have multiple `Aggregator` tables to store parts of data for efficiend distribtuion analysis. 
+
+Today we are going to see these aggregators:
+
+- Network Connection, IP Aggregator
+- Binary execution on install.
+
+### Abnormal Netowrk Connection
+
+While a package is installed, it is bournd to make some network connection, espically to `npm` and `pypi` registires, to name a few. But when whey make extra connection then that a think to notice. We logs every _IP address_ for these conection, and my analysing the distribution of these _IP address_. 
+
+You can see the **Distribution** of 624 IP address, and thir accurence count bellow: 
+
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analyzer IP Address Distribution](/images/ip_address.png)
+</div>
+
+We can clearly observe the fact that, some connection accured only 1 or 2 times. These connections are very intrsting and can be a potential malicious behaviour. 
+
+Few Connection, their `IP` Address which accur only 1 time are: 
+
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analyzer Malicious IP Address](/images/malicious-ip-address-table.png)
+</div>
+
+Using [VirusTotal](https://www.virustotal.com/) we can see the how, IP `167.99.69.236` is classified as malware by multiple sources. 
+
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analyzer VirusTotal IP examples](/images/virustotal-ip.png)
+</div>
+
+Its was time to do `reverse DNS lookup` and find where these connection are going, althought not every IP address can be resolved to host, due to many reasons. But some of Host names were:
+
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analyzer Malicious Host examples](/images/malicious-host.png)
+</div>
+
+Its clear from the data, that Hostname like `kbss.felk.cvut.cz`, `oast.online`, `oast.site`, `oast.live`, `mail.sms-system-alert.com`, are very suspicious. `OAST` (Out-of-band application security testing) domains are anyway very suspicios, and should not be included any any production application. 
+
+Its confirmed by `VirusTotal` also: 
+
+<div className="dark:invert dark:brightness-90">
+  <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+      <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
+      <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
+      <img src="/images/sms-domain.png" alt="Dynamic Analyzer Malicious Host examples" style="width: 100%;" />
+    </div>
+  </div>
+</div>
+
+### Abnormal Binary Execution
+
+- Monitoring binary executions to detect malware & security threats.
+
+<div className="dark:invert dark:brightness-90">
+  ![Dynamic Analyzer External Binary Distribution](/images/external_binary.png)
+</div>
+
